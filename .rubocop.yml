@@ -1,0 +1,157 @@
+# inherit_from: .rubocop_todo.yml
+
+require:
+  - rubocop-rails
+  - rubocop-rspec
+AllCops:
+  NewCops: disable
+  Include:
+    - "**/*.gemspec"
+    - "**/*.podspec"
+    - "**/*.jbuilder"
+    - "**/*.rake"
+    - "**/*.opal"
+    - "**/Gemfile"
+    - "**/Rakefile"
+    - "**/Capfile"
+    - "**/Guardfile"
+    - "**/Podfile"
+    - "**/Thorfile"
+    - "**/Vagrantfile"
+    - "**/Berksfile"
+    - "**/Cheffile"
+    - "**/Vagabondfile"
+    # I needed this to get the FactoryBot corrections to run, but I'm not sure it should be here.
+    - "**/*.rb"
+  Exclude:
+    - "bin/**"
+    - "config/**/*"
+    - "db/**/*"
+    - "script/**"
+    - "vendor/**/*"
+    - "node_modules/**/*"
+    - "**/schema.rb"
+    - "Gemfile.lock"
+    - ".rubocop.yml"
+    - "client/node_modules/**/*"
+  DisplayCopNames: true
+  StyleGuideCopsOnly: false
+  TargetRubyVersion: 2.7
+RSpec:
+  Enabled: true
+  Include:
+    - _test.rb
+    - "(?:^|/)test/"
+RSpec/FactoryBot:
+  Enabled: true
+  Include:
+    - spec/factories/*.rb
+Rails:
+  Enabled: true
+Style/CollectionMethods:
+  Enabled: true
+  PreferredMethods:
+    collect: map
+    collect!: map!
+    find: detect
+    find_all: select
+    reduce: inject
+Style/CommentAnnotation:
+  Enabled: false
+Layout/DotPosition:
+  EnforcedStyle: leading
+Style/Encoding:
+  Description: Use UTF-8 as the source file encoding.
+  StyleGuide: https://github.com/bbatsov/ruby-style-guide#utf-8
+  Enabled: false
+Style/For:
+  Enabled: true
+Naming/MethodName:
+  EnforcedStyle: snake_case
+Style/FormatString:
+  Enabled: false
+Style/Lambda:
+  Enabled: false
+Style/PercentLiteralDelimiters:
+  Enabled: false
+Naming/PredicateName:
+  ForbiddenPrefixes:
+    - is_
+Style/RaiseArgs:
+  Enabled: false
+Style/SignalException:
+  Enabled: false
+Style/SymbolProc:
+  IgnoredMethods:
+    - respond_to
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false
+Style/TrailingCommaInHashLiteral:
+  Enabled: false
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: no_comma
+Naming/VariableName:
+  EnforcedStyle: snake_case
+Style/TrivialAccessors:
+  Enabled: false
+  ExactNameMatch: false
+  AllowPredicates: false
+Style/WhileUntilModifier:
+  Enabled: false
+Style/WordArray:
+  Enabled: false
+  WordRegex: !ruby/regexp /\A[\p{Word}]+\z/
+Metrics/AbcSize:
+  Description:
+    A calculated magnitude based on number of assignments, branches, and
+    conditions.
+  Enabled: true
+  Max: 40
+Metrics/BlockNesting:
+  Enabled: false
+Metrics/ClassLength:
+  Max: 1500
+Metrics/CyclomaticComplexity:
+  Enabled: false
+Metrics/MethodLength:
+  Max: 20
+Metrics/ParameterLists:
+  Enabled: false
+Metrics/PerceivedComplexity:
+  Enabled: false
+Layout/ExtraSpacing:
+  Enabled: false
+Layout/LineLength:
+  Max: 160
+Style/Alias:
+  Enabled: false
+Style/ArrayJoin:
+  Enabled: false
+Style/AsciiComments:
+  Enabled: false
+Style/Documentation:
+  Enabled: false
+Style/EachWithObject:
+  Enabled: true
+Style/ModuleFunction:
+  Enabled: false
+Style/PerlBackrefs:
+  Enabled: false
+Style/Proc:
+  Enabled: false
+Style/ClassAndModuleChildren:
+  Enabled: false
+Metrics/BlockLength: # don't care about block length for specs or jbuilder
+  Exclude:
+    - "spec/**/*.rb"
+    - "test/**/*.rb"
+    - "**/*.jbuilder"
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: aligned
+Style/MultilineBlockChain:
+  Enabled: false
+Style/BlockDelimiters:
+  EnforcedStyle: line_count_based
+Layout/HashAlignment:
+  EnforcedHashRocketStyle: key
+  EnforcedColonStyle: key
