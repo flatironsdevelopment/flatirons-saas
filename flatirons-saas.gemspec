@@ -24,7 +24,7 @@ Gem::Specification.new do |spec|
     Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
   end
 
-  spec.required_ruby_version '2.7.4'
+  spec.required_ruby_version = '>= 2.7'
   spec.add_dependency 'rails', '>= 7.0.3'
   spec.add_development_dependency 'factory_bot_rails'
   spec.add_development_dependency 'rspec-rails'
