@@ -2,7 +2,7 @@
 
 module Flatirons
   module Saas
-    module ActiveRecord
+    module Concerns
       #
       # Soft Delete Concern
       #
@@ -96,7 +96,7 @@ module Flatirons
               association_data.restore(recursive: true)
             end
           end
-          next unless association_data.nil? && association.macro.to_s == 'has_one'
+          return unless association_data.nil? && association.macro.to_s == 'has_one'
 
           association_class_name = association.options[:class_name].presence || association.name.to_s.camelize
           association_foreign_key = association.options[:foreign_key].presence || "#{self.class.name.to_s.underscore}_id"
