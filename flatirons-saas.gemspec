@@ -25,9 +25,16 @@ Gem::Specification.new do |spec|
   end
 
   spec.required_ruby_version = '>= 2.7'
+  spec.add_dependency 'money-rails', '~>1.12'
+  spec.add_dependency 'pg', '~> 1.1'
   spec.add_dependency 'rails', '>= 7.0.3'
   spec.add_development_dependency 'factory_bot_rails'
   spec.add_development_dependency 'rspec-rails'
-  spec.add_development_dependency 'stripe'
+  spec.add_development_dependency 'rubocop'
+  spec.add_development_dependency 'rubocop-rails'
+  spec.add_development_dependency 'rubocop-rspec'
+  spec.add_development_dependency 'shoulda-matchers'
+  spec.add_development_dependency 'solargraph'
+  spec.add_dependency 'stripe'
   spec.add_development_dependency 'yard'
 end

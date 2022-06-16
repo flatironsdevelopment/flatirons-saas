@@ -1,0 +1,11 @@
+common: &default_settings
+  STRIPE_PRICE_KEY: "stripe price key"
+  STRIPE_SECRET_KEY: "your stripe secret key"
+
+test:
+  <<: *default_settings
+
+development:
+  RAILS_ENV: "development"
+  RACK_ENV: "development"
+  <<: *default_settings

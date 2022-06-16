@@ -1,0 +1,26 @@
+version: "2.3"
+services:
+  db:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    volumes:
+      - .:/home/postgres:Z
+    environment:
+      POSTGRES_DB: flatirons-sass_development
+      POSTGRES_USER: forge
+      POSTGRES_PASSWORD: forge
+    networks:
+      - flatirons_sass_default
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    networks:
+      - flatirons_sass_default
+networks:
+  flatirons_sass_default:
+    external: true
