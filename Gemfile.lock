@@ -5,6 +5,7 @@ PATH
       money-rails (~> 1.12)
       pg (~> 1.1)
       rails (>= 7.0.3)
+      stripe
 
 GEM
   remote: https://rubygems.org/
@@ -265,7 +266,6 @@ DEPENDENCIES
   solargraph
   sprockets-rails
   sqlite3
-  stripe
   yard
 
 RUBY VERSION

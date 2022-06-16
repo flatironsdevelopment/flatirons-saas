@@ -1,5 +1,4 @@
 # encoding : utf-8
-require 'money-rails'
 
 MoneyRails.configure do |config|
   Money.locale_backend = :i18n
