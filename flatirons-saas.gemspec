@@ -37,6 +37,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'solargraph'
   spec.add_dependency 'stripe'
   spec.add_development_dependency 'faker'
+  spec.add_development_dependency 'simplecov'
   spec.add_development_dependency 'with_model'
   spec.add_development_dependency 'yard'
 end
