@@ -8,7 +8,7 @@ jobs:
           - main
     working_directory: ~/flatirons-saas
     environment:
-      CC_TEST_REPORTER_ID: aefddec23502f518ed61d97dc46936471790a30d1ee1c8d26f50acaf67c46325
+      CC_TEST_REPORTER_ID: TODO
     docker:
       - image: cimg/ruby:2.7.4-node
         environment:
