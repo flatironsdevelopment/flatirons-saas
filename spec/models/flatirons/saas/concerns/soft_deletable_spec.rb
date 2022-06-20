@@ -13,7 +13,7 @@ describe 'SoftDeletable' do
 
     # The model block is the Active Record model’s class body.
     model do
-      include Flatirons::Saas::Concerns::SoftDeletable
+      soft_deletable
       has_many :blog_comments, dependent: :destroy
       has_one :blog_image, dependent: :destroy
       has_many :blog_likes
@@ -30,7 +30,7 @@ describe 'SoftDeletable' do
     end
 
     model do
-      include Flatirons::Saas::Concerns::SoftDeletable
+      soft_deletable
       belongs_to :blog_post
     end
   end
@@ -43,7 +43,7 @@ describe 'SoftDeletable' do
     end
 
     model do
-      include Flatirons::Saas::Concerns::SoftDeletable
+      soft_deletable
       belongs_to :blog_post
     end
   end
@@ -57,7 +57,7 @@ describe 'SoftDeletable' do
     end
 
     model do
-      include Flatirons::Saas::Concerns::SoftDeletable
+      soft_deletable
       belongs_to :blog_post
       validates_presence_of :url
     end

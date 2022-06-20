@@ -19,6 +19,18 @@ module Flatirons
           klazz.extend Callbacks
         end
 
+        module Load
+          def soft_deletable?
+            included_modules.include?(Flatirons::Saas::Concerns::SoftDeletable)
+          end
+
+          def soft_deletable
+            return if soft_deletable?
+
+            include Flatirons::Saas::Concerns::SoftDeletable
+          end
+        end
+
         module Callbacks
           def self.extended(klazz)
             klazz.define_callbacks :soft_restore
