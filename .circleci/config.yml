@@ -1,0 +1,68 @@
+---
+version: 2
+jobs:
+  build:
+    filters:
+      branches:
+        only:
+          - main
+    working_directory: ~/flatirons-saas
+    environment:
+      CC_TEST_REPORTER_ID: aefddec23502f518ed61d97dc46936471790a30d1ee1c8d26f50acaf67c46325
+    docker:
+      - image: cimg/ruby:2.7.4-node
+        environment:
+          PGHOST: localhost
+          PGUSER: fuse
+          RAILS_ENV: test
+          REDIS_URL: "redis://127.0.0.1:6379/0"
+          SIDEKIQ_REDIS_SIZE: "20"
+          SKIP_PREFLIGHT_CHECK: true
+          STRIPE_APP: "CI"
+          STRIPE_SECRET_KEY: "TODO"
+      - image: circleci/postgres:10
+        environment:
+          POSTGRES_USER: fuse
+          POSTGRES_DB: fuse_test
+          POSTGRES_PASSWORD: ""
+          POSTGRES_HOST_AUTH_METHOD: "trust"
+    steps:
+      - checkout
+      - run:
+          name: Update SO dependencies repositories
+          command: sudo apt-get update -y
+      - type: cache-restore
+        name: Restore bundle cache
+        key: fuse-{{ checksum "Gemfile.lock" }}
+      - run:
+          name: Bundle install
+          command: bundle install --path vendor/bundle
+      - run:
+          name: Run migrations
+          command: bundle exec rake db:migrate
+      - type: cache-save
+        name: Store bundle cache
+        key: fuse-{{ checksum "Gemfile.lock" }}
+        paths:
+          - vendor/bundle
+      - run: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Install Code Climate test reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+      - run:
+          name: Drop DB
+          command: bundle exec rake db:drop
+      - run:
+          name: Create DB
+          command: bundle exec rake db:setup
+      - run:
+          name: Run Rspec tests
+          command: |
+            ./cc-test-reporter before-build
+            bundle exec rspec
+            ./cc-test-reporter after-build
+      - run:
+          name: Rubocop
+          command: bundle exec rubocop
