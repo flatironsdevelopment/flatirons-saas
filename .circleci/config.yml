@@ -22,9 +22,9 @@ jobs:
           STRIPE_SECRET_KEY: "TODO"
       - image: circleci/postgres:10
         environment:
-          POSTGRES_USER: fuse
-          POSTGRES_DB: fuse_test
-          POSTGRES_PASSWORD: ""
+          POSTGRES_USER: forge
+          POSTGRES_DB: flatirons_saas_test
+          POSTGRES_PASSWORD: "forge"
           POSTGRES_HOST_AUTH_METHOD: "trust"
     steps:
       - checkout
