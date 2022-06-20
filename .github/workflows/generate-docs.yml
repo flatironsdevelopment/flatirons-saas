@@ -2,7 +2,7 @@ name: Build & deploy documentation
 on: # 1
   push:
     branches:
-      - *
+      - '**'
 jobs:
   build:
     runs-on: ubuntu-latest
