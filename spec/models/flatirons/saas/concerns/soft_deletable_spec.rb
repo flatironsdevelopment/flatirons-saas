@@ -4,20 +4,50 @@ require 'rails_helper'
 
 describe 'SoftDeletable' do
   with_model :BlogPost do
-    # The table block (and an options hash) is passed to Active Record migration’s `create_table`.
     table do |t|
       t.string :title
       t.timestamp :deleted_at
       t.timestamps null: false
     end
 
-    # The model block is the Active Record model’s class body.
     model do
       soft_deletable
       has_many :blog_comments, dependent: :destroy
       has_one :blog_image, dependent: :destroy
       has_many :blog_likes
       validates_presence_of :title
+
+      before_soft_restore :test_before_soft_restore
+      around_soft_restore :test_around_soft_restore
+      after_soft_restore :test_after_soft_restore
+
+      before_soft_destroy :test_before_soft_destroy
+      around_soft_destroy :test_around_soft_destroy
+      after_soft_destroy :test_after_soft_destroy
+
+      def test_before_soft_restore
+        true
+      end
+
+      def test_around_soft_restore
+        yield
+      end
+
+      def test_after_soft_restore
+        true
+      end
+
+      def test_before_soft_destroy
+        true
+      end
+
+      def test_around_soft_destroy
+        yield
+      end
+
+      def test_after_soft_destroy
+        true
+      end
     end
   end
 
@@ -131,6 +161,105 @@ describe 'SoftDeletable' do
     context 'deleted_at is nil' do
       let!(:deleted_at) { nil }
 
+      it 'should run callbacks' do
+        expect(blog_post).to receive(:test_before_soft_destroy)
+        expect(blog_post).to receive(:test_around_soft_destroy) do |&block|
+          block.call
+        end
+        expect(blog_post).to receive(:test_after_soft_destroy)
+        expect(blog_post.soft_destroy).to be
+
+        expect(blog_post).to receive(:test_before_soft_restore)
+        expect(blog_post).to receive(:test_around_soft_restore) do |&block|
+          block.call
+        end
+        expect(blog_post).to receive(:test_after_soft_restore)
+        expect(blog_post.soft_restore).to be
+      end
+
+      it 'should ignore deleted' do
+        expect(BlogPost.count).to eq(1)
+        expect(BlogComment.count).to eq(2)
+        expect(BlogLike.count).to eq(2)
+        expect(BlogImage.count).to eq(1)
+      end
+
+      it 'should not destroy undependent associated records' do
+        expect(BlogLike.count).to eq(2)
+        expect(blog_post.soft_destroy).to_not be_nil
+
+        expect(blog_post.soft_destroy).to_not be_nil
+        expect(BlogLike.count).to eq(2)
+        expect(blog_post.blog_likes.count).to eq(2)
+      end
+
+      context 'when recursive is true' do
+        it 'should destroy the model and destroy the associated records' do
+          expect(blog_post.soft_destroy).to be
+
+          expect(blog_post.deleted_at).to_not be_nil
+          expect(BlogPost.count).to eq(0)
+          expect(BlogComment.count).to eq(0)
+          expect(BlogImage.count).to eq(0)
+          expect(blog_post.blog_comments.count).to eq(0)
+        end
+
+        it 'should restore the model and restore the associated records' do
+          expect(BlogPost.count).to eq(1)
+          expect(BlogComment.count).to eq(2)
+          expect(BlogImage.count).to eq(1)
+
+          expect(blog_post.soft_destroy).to be
+
+          expect(blog_post.deleted_at).to_not be_nil
+          expect(BlogPost.count).to eq(0)
+          expect(BlogComment.count).to eq(0)
+          expect(BlogImage.count).to eq(0)
+
+          expect(blog_post.soft_restore).to_not be_nil
+
+          expect(blog_post.deleted_at).to be_nil
+          expect(BlogPost.count).to eq(1)
+          expect(BlogComment.count).to eq(2)
+          expect(BlogImage.count).to eq(1)
+          expect(blog_post.blog_comments.count).to eq(2)
+          expect(blog_post.blog_image).to be
+        end
+      end
+
+      context 'when recursive is false' do
+        it 'should destroy the model and not destroy the associated records' do
+          expect(blog_post.soft_destroy(recursive: false)).to be
+
+          expect(blog_post.deleted_at).to_not be_nil
+          expect(BlogPost.count).to eq(0)
+          expect(BlogComment.count).to eq(2)
+          expect(BlogImage.count).to eq(1)
+        end
+
+        it 'should restore the model and not restore the associated records' do
+          expect(blog_post.soft_destroy(recursive: true)).to be
+
+          expect(blog_post.deleted_at).to_not be_nil
+          expect(blog_post.blog_comments.count).to eq(0)
+          expect(blog_post.blog_image.deleted_at).to_not be_nil
+          expect(blog_post.reload.blog_image).to be_nil
+
+          expect(BlogPost.count).to eq(0)
+          expect(BlogComment.count).to eq(0)
+          expect(BlogImage.count).to eq(0)
+
+          expect(blog_post.soft_restore(recursive: false)).to_not be_nil
+
+          expect(blog_post.deleted_at).to be_nil
+          expect(blog_post.blog_comments.count).to eq(0)
+          expect(blog_post.reload.blog_image).to be_nil
+
+          expect(BlogPost.count).to eq(1)
+          expect(BlogComment.count).to eq(0)
+          expect(BlogImage.count).to eq(0)
+        end
+      end
       it 'should ignore deleted' do
         expect(BlogPost.count).to eq(1)
         expect(BlogComment.count).to eq(2)

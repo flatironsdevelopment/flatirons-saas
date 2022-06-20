@@ -66,7 +66,7 @@ module Flatirons
         #
         def soft_destroy(recursive: true)
           result = transaction do
-            run_callbacks(:soft_destroy) do
+            run_callbacks :soft_destroy do
               destroy_associated_records if recursive
               soft_destroy_model
             end
@@ -83,7 +83,7 @@ module Flatirons
         #
         def soft_restore(recursive: true)
           result = transaction do
-            run_callbacks(:soft_restore) do
+            run_callbacks :soft_restore do
               restore_associated_records if recursive
               soft_restore_model
             end
