@@ -141,7 +141,7 @@ module Flatirons
           end
           return unless association_data.nil? && association.macro.to_s == 'has_one'
 
-          resolve_has_one_assiciation(association).try(:soft_restore, recursive: true)
+          resolve_has_one_assiciation(association).try(:soft_restore)
         end
 
         def destroy_associated_records

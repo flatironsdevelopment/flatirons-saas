@@ -70,6 +70,20 @@ describe 'SoftDeletable' do
     expect(BlogImage).to be
   end
 
+  it 'should be soft deletable' do
+    expect(BlogPost.soft_deletable?).to be true
+    expect(BlogComment.soft_deletable?).to be true
+    expect(BlogLike.soft_deletable?).to be true
+    expect(BlogImage.soft_deletable?).to be true
+  end
+
+  it 'should not include soft_deletable twice' do
+    expect(BlogPost.soft_deletable).to be_nil
+    expect(BlogComment.soft_deletable).to be_nil
+    expect(BlogLike.soft_deletable).to be_nil
+    expect(BlogImage.soft_deletable).to be_nil
+  end
+
   context 'Post with comments and likes' do
     let!(:blog_post) { BlogPost.create(title: 'Blog Post', deleted_at: deleted_at) }
     let!(:first_blog_comment) { BlogComment.create(blog_post: blog_post, text: 'First BlogComment', deleted_at: deleted_at) }
