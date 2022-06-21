@@ -18,7 +18,10 @@ SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([
                                                                   SimpleCov::Formatter::HTMLFormatter,
                                                                   SimpleCov::Formatter::CoberturaFormatter,
                                                                 ])
-SimpleCov.start
+SimpleCov.start do
+  enable_coverage :branch
+  primary_coverage :line
+end
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
