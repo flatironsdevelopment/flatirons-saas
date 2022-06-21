@@ -111,7 +111,7 @@ module Flatirons
           update_column(:deleted_at, nil) if has_attribute? :deleted_at # rubocop:disable Rails/SkipsModelValidations
         end
 
-        def resolve_has_one_assiciation(association)
+        def resolve_has_one_association(association)
           association_class_name = association.options[:class_name].presence || association.name.to_s.camelize
           association_foreign_key = association.options[:foreign_key].presence || "#{self.class.name.to_s.underscore}_id"
           Object.const_get(association_class_name).where("#{association_foreign_key} = ?", id)
@@ -141,7 +141,7 @@ module Flatirons
           end
           return unless association_data.nil? && association.macro.to_s == 'has_one'
 
-          resolve_has_one_assiciation(association).try(:soft_restore)
+          resolve_has_one_association(association).try(:soft_restore)
         end
 
         def destroy_associated_records
@@ -160,7 +160,7 @@ module Flatirons
           end
           return unless association_data.nil? && association.macro.to_s == 'has_one'
 
-          resolve_has_one_assiciation(association).try(:soft_destroy)
+          resolve_has_one_association(association).try(:soft_destroy)
         end
       end
     end

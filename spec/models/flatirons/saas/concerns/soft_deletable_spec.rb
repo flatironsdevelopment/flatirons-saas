@@ -184,7 +184,7 @@ describe 'SoftDeletable' do
         expect(BlogImage.count).to eq(1)
       end
 
-      it 'should not destroy undependent associated records' do
+      it 'should not destroy independent associated records' do
         expect(BlogLike.count).to eq(2)
         expect(blog_post.soft_destroy).to_not be_nil
 
@@ -267,7 +267,7 @@ describe 'SoftDeletable' do
         expect(BlogImage.count).to eq(1)
       end
 
-      it 'should not destroy undependent associated records' do
+      it 'should not destroy independent associated records' do
         expect(BlogLike.count).to eq(2)
         expect(blog_post.soft_destroy).to_not be_nil
 
