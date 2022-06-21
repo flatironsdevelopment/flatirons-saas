@@ -10,3 +10,4 @@
 /spec/dummy/tmp/
 .vscode
 coverage
+*.gem

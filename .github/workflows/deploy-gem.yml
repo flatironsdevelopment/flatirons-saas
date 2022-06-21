@@ -1,0 +1,21 @@
+name: Build & deploy documentation
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Update gh-pages with docs
+    steps:
+      - name: Checkout this repo # 2
+        uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: "2.7"
+      - run: |
+        chmod +x "${GITHUB_WORKSPACE}/.github/scripts/deploy-gem.sh"
+        "${GITHUB_WORKSPACE}/.github/scripts/deploy-gem.sh" "${GITHUB_TOKEN}" "flatironsdevelopment"
+
+      
