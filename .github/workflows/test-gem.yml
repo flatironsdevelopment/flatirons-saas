@@ -1,12 +1,14 @@
 name: Build and Test
 on:
   push:
-    branches:
-      - master
     paths-ignore:
+      - "README.md"
       - "**/*.md"
+    branches:
+      - main
   pull_request:
     paths-ignore:
+      - "README.md"
       - "**/*.md"
 jobs:
   test:
