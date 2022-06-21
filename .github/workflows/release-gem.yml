@@ -1,19 +1,9 @@
-name: Build and Publish
+name: Release
 on:
-  push:
-    tags:
-      - '*.*.*'
+  workflow_call:
 jobs:
   build:
-    runs-on: ubuntu-latest
-    name: Gem Release
     steps:
-      - name: Checkout this repo
-        uses: actions/checkout@v2
-      - name: Set up Ruby
-        uses: actions/setup-ruby@v1
-        with:
-          ruby-version: "2.7"
       - name: Release
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
