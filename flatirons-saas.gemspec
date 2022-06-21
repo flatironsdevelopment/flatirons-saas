@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors     = ['Gabriel Siqueira']
   spec.email       = ['gabrielleandrojunior@live.com']
   spec.homepage    = 'https://flatironsdevelopment.com'
-  spec.summary     = 'Summary of Flatirons::Saas.'
-  spec.description = 'Description of Flatirons::Saas.'
+  spec.summary     = 'Flatirons::Saas.'
+  spec.description = 'Flatirons::Saas.'
   spec.license = 'MIT'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the "allowed_push_host"
@@ -24,7 +24,7 @@ Gem::Specification.new do |spec|
     Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
   end
 
-  spec.required_ruby_version = '>= 2.7'
+  spec.required_ruby_version = '~> 2.7'
   spec.add_dependency 'money-rails', '~> 1.12'
   spec.add_dependency 'pg', '~> 1.1'
   spec.add_dependency 'rails', '~> 6.1.4'
