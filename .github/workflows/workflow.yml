@@ -1,17 +1,16 @@
-name: Build and Test
+name: Workflow
 on:
   push:
-    paths-ignore:
-      - "README.md"
-      - "**/*.md"
     branches:
       - main
+    tags:
+      - '*.*.*'
   pull_request:
     paths-ignore:
       - "README.md"
       - "**/*.md"
 jobs:
-  test:
+  build-release:
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -34,9 +33,7 @@ jobs:
       - run: bundle exec rake db:setup
       - run: bundle exec rspec
       - run: bundle exec rubocop
-      - run: cat coverage/coverage.xml
       - run: cp coverage/coverage.xml coverage.cobertura.xml
-      - run: cat coverage.cobertura.xml
       - name: Code Coverage Summary Report
         uses: irongut/CodeCoverageSummary@v1.2.0
         with:
@@ -52,3 +49,6 @@ jobs:
         with:
           recreate: true
           path: code-coverage-results.md
+      - name: Release
+        uses: ./release-gem.yml
+        if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
