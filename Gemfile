@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 # Specify your gem's dependencies in flatirons-saas.gemspec.
 gemspec
 
-ruby '~ 2.7'
+ruby '~> 2.7'
 
 gem 'sprockets-rails'
 
