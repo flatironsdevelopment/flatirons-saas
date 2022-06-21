@@ -1,5 +1,6 @@
-[![CircleCI](https://dl.circleci.com/status-badge/img/gh/flatironsdevelopment/flatirons-saas/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/flatironsdevelopment/flatirons-saas/tree/main)
-
+![Github Action Workflow](https://github.com/flatironsdevelopment/flatirons-saas/actions/workflows/test-gem.yml/badge.svg)
+![Github Action Workflow](https://github.com/flatironsdevelopment/flatirons-saas/actions/workflows/deploy-gem.yml/badge.svg)
+![Github Action Workflow](https://github.com/flatironsdevelopment/flatirons-saas/actions/workflows/generate-docs.yml/badge.svg)
 # Flatirons::Saas
 Short description and motivation.
 
