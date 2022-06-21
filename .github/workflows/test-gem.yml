@@ -1,0 +1,52 @@
+name: Build and Test
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - "**/*.md"
+  pull_request:
+    paths-ignore:
+      - "**/*.md"
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:10
+        env:
+          POSTGRES_USER: forge
+          POSTGRES_PASSWORD: forge
+          POSTGRES_DB: flatirons_saas_test
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "2.7" # Not needed with a .ruby-version file
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - run: bundle exec rake db:drop
+      - run: bundle exec rake db:setup
+      - run: bundle exec rspec
+      - run: bundle exec rubocop
+      - run: cat coverage/coverage.xml
+      - run: cp coverage/coverage.xml coverage.cobertura.xml
+      - run: cat coverage.cobertura.xml
+      - name: Code Coverage Summary Report
+        uses: irongut/CodeCoverageSummary@v1.2.0
+        with:
+          filename: coverage.cobertura.xml
+          badge: true
+          fail_below_min: true
+          format: markdown
+          output: both
+          thresholds: "60 80"
+      - name: Add Coverage PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          recreate: true
+          path: code-coverage-results.md

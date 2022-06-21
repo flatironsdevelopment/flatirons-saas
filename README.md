@@ -1,25 +1,16 @@
+[![GitHub version](https://badge.fury.io/gh/flatironsdevelopment%2Fflatirons-saas.svg)](https://badge.fury.io/gh/flatironsdevelopment%2Fflatirons-saas)
+![Github Action Workflow](https://github.com/flatironsdevelopment/flatirons-saas/actions/workflows/test-gem.yml/badge.svg)
+![Github Action Workflow](https://github.com/flatironsdevelopment/flatirons-saas/actions/workflows/deploy-gem.yml/badge.svg)
+![Github Action Workflow](https://github.com/flatironsdevelopment/flatirons-saas/actions/workflows/generate-docs.yml/badge.svg)
+
 # Flatirons::Saas
-Short description and motivation.
+Common functionalities that can be reused across projects
 
-## Usage
-How to use my plugin.
+## Documentation
 
-## Installation
-Add this line to your application's Gemfile:
+- [Getting Started](https://github.com/flatironsdevelopment/flatirons-saas/wiki/Getting-started)
 
-```ruby
-gem "flatirons-saas"
-```
-
-And then execute:
-```bash
-$ bundle
-```
-
-Or install it yourself as:
-```bash
-$ gem install flatirons-saas
-```
+- [Soft Deletable](https://github.com/flatironsdevelopment/flatirons-saas/wiki/SoftDeletable)
 
 ## Contributing
 Contribution directions go here.

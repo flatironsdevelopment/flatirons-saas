@@ -1,0 +1,22 @@
+name: Build and Publish
+on:
+  push:
+    tags:
+      - '*.*.*'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Gem Release
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: "2.7"
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: |
+          chmod +x "${GITHUB_WORKSPACE}/.github/scripts/deploy-gem.sh"
+          "${GITHUB_WORKSPACE}/.github/scripts/deploy-gem.sh" "${GITHUB_TOKEN}" "flatironsdevelopment"

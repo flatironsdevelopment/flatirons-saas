@@ -10,6 +10,9 @@ module Flatirons
         g.fixture_replacement :factory_bot
         g.factory_bot dir: 'spec/factories'
       end
+      ActiveSupport.on_load(:active_record) do
+        extend Flatirons::Saas::Concerns::SoftDeletable::Load
+      end
     end
   end
 end
