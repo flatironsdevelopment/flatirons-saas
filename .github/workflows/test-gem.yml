@@ -6,6 +6,8 @@ on:
     branches:
       - main
   pull_request:
+    paths-ignore:
+      - "**/*.md"
 jobs:
   test:
     runs-on: ubuntu-latest
