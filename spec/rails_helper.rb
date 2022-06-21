@@ -19,7 +19,6 @@ SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([
                                                                   SimpleCov::Formatter::CoberturaFormatter,
                                                                 ])
 SimpleCov.start do
-  enable_coverage :branch
   primary_coverage :line
 end
 
