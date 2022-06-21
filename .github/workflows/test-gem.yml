@@ -1,5 +1,9 @@
 name: Build and Test Ruby Gem on Pushes
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
 jobs:
   test:
     runs-on: ubuntu-latest
