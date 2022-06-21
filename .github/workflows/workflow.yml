@@ -50,5 +50,9 @@ jobs:
           recreate: true
           path: code-coverage-results.md
       - name: Release
-        uses: ./release-gem.yml
         if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: |
+          chmod +x "${GITHUB_WORKSPACE}/.github/scripts/deploy-gem.sh"
+          "${GITHUB_WORKSPACE}/.github/scripts/deploy-gem.sh" "${GITHUB_TOKEN}" "flatironsdevelopment"
