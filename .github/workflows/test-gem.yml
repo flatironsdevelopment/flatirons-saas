@@ -34,6 +34,7 @@ jobs:
     - run: bundle exec rubocop
     - run: cat coverage/coverage.xml
     - run: cp coverage/coverage.xml coverage.cobertura.xml
+    - run: cat coverage.cobertura.xml
     - name: Code Coverage Summary Report
       uses: irongut/CodeCoverageSummary@v1.2.0
       with:
@@ -41,9 +42,6 @@ jobs:
         badge: true
         fail_below_min: true
         format: markdown
-        hide_branch_rate: false
-        hide_complexity: true
-        indicators: true
         output: both
         thresholds: '60 80'
     - name: Add Coverage PR Comment
