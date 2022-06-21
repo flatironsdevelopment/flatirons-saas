@@ -1,4 +1,4 @@
-name: Build and Publish Ruby Gem on Tag Pushes
+name: Build and Publish
 on:
   push:
     tags:

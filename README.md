@@ -1,6 +1,8 @@
+[![GitHub version](https://badge.fury.io/gh/flatironsdevelopment%2Fflatirons-saas.svg)](https://badge.fury.io/gh/flatironsdevelopment%2Fflatirons-saas)
 ![Github Action Workflow](https://github.com/flatironsdevelopment/flatirons-saas/actions/workflows/test-gem.yml/badge.svg)
 ![Github Action Workflow](https://github.com/flatironsdevelopment/flatirons-saas/actions/workflows/deploy-gem.yml/badge.svg)
 ![Github Action Workflow](https://github.com/flatironsdevelopment/flatirons-saas/actions/workflows/generate-docs.yml/badge.svg)
+
 # Flatirons::Saas
 Common functionalities that can be reused across projects
 
