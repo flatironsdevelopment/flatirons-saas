@@ -10,7 +10,7 @@ on:
       - "README.md"
       - "**/*.md"
 jobs:
-  test:
+  build-release:
     runs-on: ubuntu-latest
     services:
       postgres:
