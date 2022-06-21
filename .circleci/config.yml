@@ -37,9 +37,6 @@ jobs:
       - run:
           name: Bundle install
           command: bundle install --path vendor/bundle
-      - run:
-          name: Run migrations
-          command: bundle exec rake db:migrate
       - type: cache-save
         name: Store bundle cache
         key: fuse-{{ checksum "Gemfile.lock" }}
@@ -52,6 +49,9 @@ jobs:
       - run:
           name: Create DB
           command: bundle exec rake db:setup
+      - run:
+          name: Run migrations
+          command: bundle exec rake db:migrate
       - run:
           name: Run Rspec tests
           command: |

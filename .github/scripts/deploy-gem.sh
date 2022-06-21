@@ -6,24 +6,12 @@ OWNER=$2
 echo "GITHUB_TOKEN=$GITHUB_TOKEN"
 echo "OWNER=$OWNER"
 
-if [[ -z "${GITHUB_TOKEN}" ]]; then
-  echo "Github token not provided";
-  exit 2;
-fi
-if [[ -z "${OWNER}" ]]; then
-  echo "Missing owner";
-  exit 2;
-fi
-
 echo "Verifying the version matches the gem version"
 VERSION_TAG=$(echo $GITHUB_REF | cut -d / -f 3)
 GEM_VERSION=$(ruby -e "require 'rubygems'; gemspec = Dir.entries('.').find { |file| file =~ /.*\.gemspec/ }; spec = Gem::Specification::load(gemspec); puts spec.version")
-# if [[ $VERSION_TAG != $GEM_VERSION ]]; then
-#   echo "Version tag does not match gem version"
-#   exit 2;
-# fi
-echo $VERSION_TAG
-echo $GEM_VERSION
+
+echo "VERSION_TAG=$VERSION_TAG"
+echo "GEM_VERSION=$GEM_VERSION"
 
 echo "Setting up access to Github Package Registry"
 mkdir -p ~/.gem

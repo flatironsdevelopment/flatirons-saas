@@ -1,14 +1,14 @@
-name: Release
+name: Build and Publish Ruby Gem on Tag Pushes
 on:
   push:
-    branches:
-      - "**"
+    tags:
+      - '*.*.*'
 jobs:
   build:
     runs-on: ubuntu-latest
     name: Gem Release
     steps:
-      - name: Checkout this repo # 2
+      - name: Checkout this repo
         uses: actions/checkout@v2
       - name: Set up Ruby
         uses: actions/setup-ruby@v1
