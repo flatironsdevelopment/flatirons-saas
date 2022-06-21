@@ -16,7 +16,7 @@ jobs:
           ruby-version: "2.7"
       - name: Release
         run: |
-          ls -la "${GITHUB_WORKSPACE}/.github"
+          ls -la "${GITHUB_WORKSPACE}/.github/scripts"
           chmod +x "${GITHUB_WORKSPACE}/.github/scripts/deploy-gem.sh"
           "${GITHUB_WORKSPACE}/.github/scripts/deploy-gem.sh" "${GITHUB_TOKEN}" "flatironsdevelopment"
 

@@ -3,8 +3,8 @@ GITHUB_TOKEN=$1
 OWNER=$2
 
 #--DEBUG
-echo $GITHUB_TOKEN
-echo $OWNER
+echo "GITHUB_TOKEN=$GITHUB_TOKEN"
+echo "OWNER=$OWNER"
 
 if [[ -z "${GITHUB_TOKEN}" ]]; then
   echo "Github token not provided";
