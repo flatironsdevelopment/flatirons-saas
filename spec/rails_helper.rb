@@ -13,6 +13,11 @@ require 'stripe_mock'
 require 'factory_bot_rails'
 require 'with_model'
 require 'simplecov'
+require 'simplecov-cobertura'
+SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([
+                                                                  SimpleCov::Formatter::HTMLFormatter,
+                                                                  SimpleCov::Formatter::CoberturaFormatter,
+                                                                ])
 SimpleCov.start
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
