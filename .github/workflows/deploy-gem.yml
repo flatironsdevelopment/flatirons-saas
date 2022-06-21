@@ -1,4 +1,4 @@
-name: Build & deploy documentation
+name: Release
 on:
   push:
     branches:
@@ -6,7 +6,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Update gh-pages with docs
+    name: Gem Release
     steps:
       - name: Checkout this repo # 2
         uses: actions/checkout@v2
@@ -16,6 +16,7 @@ jobs:
           ruby-version: "2.7"
       - name: Release
         run: |
+          ls -la "${GITHUB_WORKSPACE}"
           chmod +x "${GITHUB_WORKSPACE}/.github/scripts/deploy-gem.sh"
           "${GITHUB_WORKSPACE}/.github/scripts/deploy-gem.sh" "${GITHUB_TOKEN}" "flatironsdevelopment"
 
