@@ -33,7 +33,7 @@ jobs:
     - run: bundle exec rspec
     - run: bundle exec rubocop
     - run: cat coverage/coverage.xml
-    - run: cp coverage/**/coverage.xml coverage.cobertura.xml
+    - run: cp coverage/coverage.xml coverage.cobertura.xml
     - name: Code Coverage Summary Report
       uses: irongut/CodeCoverageSummary@v1.2.0
       with:
