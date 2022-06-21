@@ -14,8 +14,9 @@ jobs:
         uses: actions/setup-ruby@v1
         with:
           ruby-version: "2.7"
-      - run: |
-        chmod +x "${GITHUB_WORKSPACE}/.github/scripts/deploy-gem.sh"
-        "${GITHUB_WORKSPACE}/.github/scripts/deploy-gem.sh" "${GITHUB_TOKEN}" "flatironsdevelopment"
+      - name: Release
+        run: |
+          chmod +x "${GITHUB_WORKSPACE}/.github/scripts/deploy-gem.sh"
+          "${GITHUB_WORKSPACE}/.github/scripts/deploy-gem.sh" "${GITHUB_TOKEN}" "flatironsdevelopment"
 
       
