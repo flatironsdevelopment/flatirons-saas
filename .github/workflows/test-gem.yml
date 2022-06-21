@@ -1,13 +1,11 @@
 name: Build and Test
 on:
   push:
+    paths-ignore:
+      - "**/*.md"
     branches:
       - main
-    paths-ignore:
-      - "**/*.md"
   pull_request:
-    paths-ignore:
-      - "**/*.md"
 jobs:
   test:
     runs-on: ubuntu-latest
