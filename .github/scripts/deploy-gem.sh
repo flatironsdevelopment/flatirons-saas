@@ -16,12 +16,13 @@ if [[ -z "${OWNER}" ]]; then
 fi
 
 echo "Verifying the version matches the gem version"
-#VERSION_TAG=$(echo $GITHUB_REF | cut -d / -f 3)
+VERSION_TAG=$(echo $GITHUB_REF | cut -d / -f 3)
 GEM_VERSION=$(ruby -e "require 'rubygems'; gemspec = Dir.entries('.').find { |file| file =~ /.*\.gemspec/ }; spec = Gem::Specification::load(gemspec); puts spec.version")
 # if [[ $VERSION_TAG != $GEM_VERSION ]]; then
 #   echo "Version tag does not match gem version"
 #   exit 2;
 # fi
+echo $VERSION_TAG
 echo $GEM_VERSION
 
 echo "Setting up access to Github Package Registry"
