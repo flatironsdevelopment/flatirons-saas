@@ -1,0 +1,41 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/dummy_users/subscriptions":
+    get:
+      summary: List dummy user subscriptions
+      tags:
+      - Subscription
+      description: Lists current user subscriptions.
+      security:
+      - bearer: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    stripe_subscription_id:
+                      type: string
+                    subscriptable_type:
+                      type: string
+                    subscriptable_id:
+                      type: integer
+                    status:
+                      type: string
+                    deleted_at:
+                      type: string
+servers:
+- url: "{defaultHost}"
+  variables:
+    defaultHost:
+      default: http://localhost:3001
