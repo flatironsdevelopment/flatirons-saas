@@ -285,8 +285,8 @@ Devise.setup do |config|
   config.http_authenticatable = true
   config.warden do |manager|
     ## Render Devise Errors as JSON
-    require 'flatirons/saas/devise/failure_app'
-    manager.failure_app = Flatirons::Saas::FailureApp
+    # require 'flatirons/saas/devise/failure_app'
+    # manager.failure_app = Flatirons::Saas::FailureApp
   end
 
   # ==> Mountable engine configurations
