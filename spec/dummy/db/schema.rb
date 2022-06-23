@@ -10,9 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2022_06_23_174145) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "dummy_users", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.datetime "deleted_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["email"], name: "index_dummy_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_dummy_users_on_reset_password_token", unique: true
+  end
+
+  create_table "flatirons_saas_subscriptions", force: :cascade do |t|
+    t.string "stripe_subscription_id", null: false
+    t.string "status", null: false
+    t.string "subscriptable_type"
+    t.bigint "subscriptable_id"
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_flatirons_saas_subscriptions_on_deleted_at"
+    t.index ["status"], name: "index_flatirons_saas_subscriptions_on_status"
+    t.index ["stripe_subscription_id"], name: "index_flatirons_saas_subscriptions_on_stripe_subscription_id", unique: true
+    t.index ["subscriptable_type", "subscriptable_id"], name: "index_flatirons_saas_subscriptions_on_subscriptable"
+  end
 
 end
