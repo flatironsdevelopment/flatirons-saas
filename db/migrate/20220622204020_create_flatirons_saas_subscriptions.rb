@@ -5,6 +5,7 @@ class CreateFlatironsSaasSubscriptions < ActiveRecord::Migration[6.1]
       t.string :status, null: false
       t.references :subscriptable, polymorphic: true
       t.timestamp :deleted_at
+      t.timestamp :canceled_at
     end
     add_index :flatirons_saas_subscriptions, :stripe_subscription_id, unique: true
     add_index :flatirons_saas_subscriptions, :status

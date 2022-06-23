@@ -33,7 +33,13 @@ paths:
                     status:
                       type: string
                     deleted_at:
-                      type: string
+                      type:
+                      - string
+                      - nil
+                    canceled_at:
+                      type:
+                      - string
+                      - nil
 servers:
 - url: "{defaultHost}"
   variables:

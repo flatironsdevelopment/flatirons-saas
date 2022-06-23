@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(version: 2022_06_23_194739) do
     t.string "subscriptable_type"
     t.bigint "subscriptable_id"
     t.datetime "deleted_at"
+    t.datetime "canceled_at"
     t.index ["deleted_at"], name: "index_flatirons_saas_subscriptions_on_deleted_at"
     t.index ["status"], name: "index_flatirons_saas_subscriptions_on_status"
     t.index ["stripe_subscription_id"], name: "index_flatirons_saas_subscriptions_on_stripe_subscription_id", unique: true
