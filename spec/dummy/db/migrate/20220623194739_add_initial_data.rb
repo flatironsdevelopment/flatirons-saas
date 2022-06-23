@@ -3,7 +3,7 @@
 class AddInitialData < ActiveRecord::Migration[6.1]
   def up
     user = DummyUser.create(email: 'dummy.user@flatironsdevelopment.com', password: 'Password#123456')
-    subscription = Flatirons::Saas::Subscription.create(subscriptable: user, status: 'active', stripe_subscription_id: 'dummy_test')
+    Flatirons::Saas::Subscription.create(subscriptable: user, status: 'active', stripe_subscription_id: 'dummy_test')
   end
 
   def down
