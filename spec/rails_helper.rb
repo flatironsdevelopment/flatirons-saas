@@ -12,6 +12,9 @@ require 'shoulda/matchers'
 require 'stripe_mock'
 require 'factory_bot_rails'
 require 'with_model'
+
+Dir['spec/support/**/*.rb'].sort.each { |f| require File.expand_path(f) }
+
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
 # run as spec files by default. This means that files in spec/support that end
@@ -41,11 +44,15 @@ RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
   config.use_transactional_fixtures = true
+  config.infer_base_class_for_anonymous_controllers = false
   config.infer_spec_type_from_file_location!
   config.filter_rails_from_backtrace!
-  config.include FactoryBot::Syntax::Methods
-  config.include FactoryBot::Syntax::Methods
+
   config.extend WithModel
+  config.include FactoryBot::Syntax::Methods
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :view
+  config.include Devise::Test::IntegrationHelpers, type: :request
 end
 
 Shoulda::Matchers.configure do |config|
