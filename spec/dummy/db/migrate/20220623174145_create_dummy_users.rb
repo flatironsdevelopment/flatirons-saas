@@ -3,8 +3,6 @@
 class CreateDummyUsers < ActiveRecord::Migration[6.1]
   def change
     create_table :dummy_users do |t|
-      t.string :name, null: false
-
       ## Database authenticatable
       t.string :email,              null: false, default: ''
       t.string :encrypted_password, null: false, default: ''
