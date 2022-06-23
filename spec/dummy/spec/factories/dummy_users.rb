@@ -2,6 +2,7 @@
 
 FactoryBot.define do
   factory :dummy_user do
-    name { Faker.name }
+    email { Faker.email }
+    password { Faker.password }
   end
 end
