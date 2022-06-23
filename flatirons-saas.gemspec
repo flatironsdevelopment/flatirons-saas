@@ -29,6 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'pg', '~> 1.1'
   spec.add_dependency 'rails', '~> 6.1.4'
   spec.add_development_dependency 'factory_bot_rails', '~> 6.2'
+  spec.add_development_dependency 'rspec', '~> 3.11'
   spec.add_development_dependency 'rspec-rails', '~> 5.1'
   spec.add_development_dependency 'rubocop', '~> 1.30'
   spec.add_development_dependency 'rubocop-rails', '~> 2.15'
@@ -41,4 +42,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'simplecov-cobertura', '~> 2.1'
   spec.add_development_dependency 'with_model', '~> 2.1'
   spec.add_development_dependency 'yard', '~> 0.9'
+  spec.add_dependency 'devise', '~> 4.8'
+  spec.add_development_dependency 'rspec-json_expectations', '~> 2.2'
 end
