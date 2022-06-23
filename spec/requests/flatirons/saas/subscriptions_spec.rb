@@ -26,8 +26,8 @@ describe '/dummy_users/subscriptions', type: :request do
                    subscriptable_type: { type: :string },
                    subscriptable_id: { type: :integer },
                    status: { type: :string },
-                   deleted_at: { type: %i[string nil] },
-                   canceled_at: { type: %i[string nil] }
+                   deleted_at: {  type: :string, nullable: true },
+                   canceled_at: { type: :string, nullable: true }
                  },
                }
 
