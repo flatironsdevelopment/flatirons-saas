@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+require 'money-rails'
+require 'devise'
+require 'rswag'
+require 'devise/orm/active_record'
+require 'flatirons/saas/rails/routes'
+
 module Flatirons
   module Saas
     class Engine < ::Rails::Engine
@@ -15,7 +21,7 @@ module Flatirons
 
       ActiveSupport.on_load(:active_record) do
         extend Flatirons::Saas::Concerns::SoftDeletable::Load
-        extend Flatirons::Saas::Concerns::Productable::Load
+        extend Flatirons::Saas::Concerns::Subscriptable::Load
       end
     end
   end
