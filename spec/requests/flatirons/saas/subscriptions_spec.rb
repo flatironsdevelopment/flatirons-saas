@@ -26,8 +26,8 @@ describe '/dummy_users/subscriptions', type: :request do
                    subscriptable_type: { type: :string },
                    subscriptable_id: { type: :integer },
                    status: { type: :string },
-                   deleted_at: { type: :string }
-                 }
+                   deleted_at: { type: %i[string nil] }
+                 },
                }
 
         run_test! do |response|
@@ -42,7 +42,6 @@ describe '/dummy_users/subscriptions', type: :request do
               example: JSON.parse(response.body, symbolize_names: true)
             }
           }
-          pp example
         end
       end
     end
