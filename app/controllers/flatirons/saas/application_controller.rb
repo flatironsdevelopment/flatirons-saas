@@ -19,7 +19,7 @@ module Flatirons
       end
 
       def render_error(message, status)
-        render json: message, status: status
+        render json: { message: message }, status: status
       end
     end
   end
