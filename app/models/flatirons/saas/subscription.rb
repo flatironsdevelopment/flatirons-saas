@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 module Flatirons::Saas
+  # Subscription Active Record
+  #
+  # == Examples
+  #
+  #   # get all subscriptions
+  #   Flatirons::Saas:Subscription.all
+  #
   class Subscription < ApplicationRecord
     soft_deletable
 

@@ -6,12 +6,16 @@ module Flatirons::Saas
   class SubscriptionsController < ApplicationController
     before_action :authenticate!
 
+    # GET /resource/subscriptions
     def index
       render json: @current_resource.subscriptions
     end
 
     private
 
+    # Check if there is a signed in user before doing the action.
+    #
+    # If there is no signed in user, it will raise devise unauthorized error
     def authenticate!
       @mapping ||= request.env['flatirons.saas.mapping']
       authenticate_resource_for! @mapping[:symbol]

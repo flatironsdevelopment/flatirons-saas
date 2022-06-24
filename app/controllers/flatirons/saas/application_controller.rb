@@ -2,6 +2,7 @@
 
 module Flatirons
   module Saas
+    # All controllers are inherited from here.
     class ApplicationController < ::ActionController::Base
       respond_to :json
       skip_forgery_protection

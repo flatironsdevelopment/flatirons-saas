@@ -3,8 +3,16 @@
 module Flatirons
   module Saas
     module Concerns
+      # Subscriptable takes care of the relationship between any active record model and the subscriptions.
       #
-      # Subscriptable Concern
+      # ==Options
+      #
+      # TODO...
+      #
+      # == Examples
+      #
+      #   # get all subscriptions
+      #   User.find(1).subscriptions
       #
       module Subscriptable
         extend ActiveSupport::Concern

@@ -19,11 +19,11 @@ module ActionDispatch::Routing
     # ==== Devise integration
     #
     # +subscription_for+ is build to play with devise. For example,
-    # by calling +subscription_for+ with a devise_for, it automatically nests your subscriptions with the authenticated resource
+    # by calling +subscription_for+ with a +devise_for+, it automatically nests your subscriptions with the authenticated resource.
     #
     # ==== Examples
     #
-    # Let's say you have an User model configured to use subscriptable,
+    # Let's say you have an User model configured to use +subscriptable+,
     # After creating this inside your routes:
     #
     #   devise_for :users
@@ -32,7 +32,7 @@ module ActionDispatch::Routing
     # This method is going to look inside your User model and create the
     # needed routes:
     #
-    #  # Subscription routes for authenticated resource (default)
+    #   # Subscription routes for authenticated resource (default)
     #   user_subscriptions GET    /users/subscriptions             {controller:"flatirons/saas/subscriptions", action:"index"}
     #   user_subscriptions GET    /users/subscriptions/:id         {controller:"flatirons/saas/subscriptions", action:"show"}
     #   user_subscriptions POST   /users/subscriptions             {controller:"flatirons/saas/subscriptions", action:"create"}
@@ -65,6 +65,8 @@ module ActionDispatch::Routing
         end
       end
     end
+
+    private
 
     def subscription_scope(symbol, &block) # :nodoc:
       constraint = lambda do |request|
