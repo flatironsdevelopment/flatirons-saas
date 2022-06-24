@@ -28,17 +28,14 @@ describe 'RouteSet', type: :routing  do
     context 'devise is wrong configured with subscription_for' do
       it 'should raise devise resource type error' do
         User.subscriptable
-        user_devise = double
-        allow(Devise.mappings).to receive(:[]).and_return user_devise
-        allow(user_devise).to receive(:class_name).and_return 'OtherClassName'
         expect do
           routes = ActionDispatch::Routing::RouteSet.new
           routes.draw do
-            devise_for :users
+            devise_for :users, class_name: 'DummyUser'
             subscription_for :users
           end
         end
-          .to raise_error 'Devise resource type [OtherClassName] is not the same of subscription_for [User],'\
+          .to raise_error 'Devise resource type [DummyUser] is not the same of subscription_for [User],'\
           ' check your subscription_for/devise_for route configuration.'
       end
     end
