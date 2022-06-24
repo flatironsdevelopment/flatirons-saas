@@ -13,7 +13,7 @@ module Flatirons::Saas
 
     belongs_to :subscriptable, polymorphic: true
     validates :stripe_subscription_id, presence: true, uniqueness: true
-    validates :status, presence: true, inclusion: { in: statuses }
+    validates :status, presence: true
 
     enum status: { active: 'active', cancelled: 'cancelled' }
   end
