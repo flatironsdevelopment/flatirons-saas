@@ -6,11 +6,59 @@ describe 'RouteSet', type: :routing  do
   context 'users' do
     include_context 'with_user_model'
 
+    after(:each) do
+      Devise.mappings.delete(:user) if defined?(Devise)
+      Flatirons::Saas::Rails::Subscription.mappings.delete(:user)
+    end
+
+    context 'devise is not availabe' do
+      it 'should railse devise is not available' do
+        without_const('Devise') do
+          expect do
+            routes = ActionDispatch::Routing::RouteSet.new
+            routes.draw do
+              subscription_for :users
+            end
+          end
+            .to raise_error 'Devise is not available, please include devise gem to get work.'
+        end
+      end
+      it 'should railse devise for :users not found' do
+        User.subscriptable
+        user_devise = double
+        allow(Devise.mappings).to receive(:[]).and_return user_devise
+        allow(user_devise).to receive(:class_name).and_return 'OtherClassName'
+        expect do
+          routes = ActionDispatch::Routing::RouteSet.new
+          routes.draw do
+            devise_for :users
+            subscription_for :users
+          end
+        end
+          .to raise_error 'Devise resource type [OtherClassName] is not the same of subscription_for [User],'\
+          ' check your subscription_for/devise_for route configuration.'
+      end
+    end
+
+    context 'devise_for :users is not configured' do
+      it 'should railse devise for :users not found' do
+        User.subscriptable
+        expect do
+          routes = ActionDispatch::Routing::RouteSet.new
+          routes.draw do
+            subscription_for :users
+          end
+        end
+          .to raise_error 'Devise for :users not found, please check your subscription_for/devise_for route configuration.'
+      end
+    end
+
     context 'user is not subscritable' do
       it 'should railse does not respond to \'subscriptable\' method' do
         expect do
           routes = ActionDispatch::Routing::RouteSet.new
           routes.draw do
+            devise_for :users
             subscription_for :users
           end
         end
@@ -24,6 +72,7 @@ describe 'RouteSet', type: :routing  do
         expect do
           routes = ActionDispatch::Routing::RouteSet.new
           routes.draw do
+            devise_for :users
             subscription_for :users
           end
         end
@@ -36,6 +85,7 @@ describe 'RouteSet', type: :routing  do
         routes do
           route_set = ActionDispatch::Routing::RouteSet.new
           route_set.draw do
+            devise_for :users
             subscription_for :users
           end
           route_set
