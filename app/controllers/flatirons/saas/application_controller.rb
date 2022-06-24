@@ -18,8 +18,8 @@ module Flatirons
         render_error exception.message, :unprocessable_entity
       end
 
-      def render_error(message, status, additional_data = {})
-        render json: additional_data.merge({ message: message }), status: status
+      def render_error(message, status)
+        render json: message, status: status
       end
     end
   end
