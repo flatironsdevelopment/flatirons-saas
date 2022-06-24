@@ -5,11 +5,11 @@ class ProductableGenerator < ActiveRecord::Generators::Base
   source_root File.expand_path("templates", __dir__)
 
   def generate_migration
-   if model_exists?
-    migration_template "existing_productable_migration.rb", "db/migrate/add_productable_to_#{table_name}.rb", rails_version: rails_version
-  else
-    migration_template "productable_migration.rb", "db/migrate/create_products.rb", rails_version: rails_version
-   end
+    if model_exists?
+      migration_template "existing_productable_migration.rb", "db/migrate/add_productable_to_#{table_name}.rb", rails_version: rails_version
+    else
+      migration_template "productable_migration.rb", "db/migrate/create_#{table_name}.rb", rails_version: rails_version
+    end
   end
 
   def generate_model
