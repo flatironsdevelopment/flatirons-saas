@@ -23,6 +23,9 @@ describe 'RouteSet', type: :routing  do
             .to raise_error 'Devise is not available, please include devise gem to get work.'
         end
       end
+    end
+
+    context 'devise is wrong configured with subscription_for' do
       it 'should raise devise resource type error' do
         User.subscriptable
         user_devise = double
