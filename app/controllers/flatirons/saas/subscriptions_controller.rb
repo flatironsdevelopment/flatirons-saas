@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_dependency 'flatirons/saas/application_controller'
-
 module Flatirons::Saas
   class SubscriptionsController < ApplicationController
     before_action :authenticate!
