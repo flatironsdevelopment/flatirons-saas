@@ -13,6 +13,8 @@ gem 'sprockets-rails'
 # Start debugger with binding.b [https://github.com/ruby/debug]
 # gem "debug", ">= 1.0.0"
 group :test do
+  gem 'byebug', '~> 9.0', '>= 9.0.5'
+  gem 'generator_spec', '~> 0.9.4'
   gem 'stripe-ruby-mock',
       require: 'stripe_mock',
       git: 'https://github.com/rebelidealist/stripe-ruby-mock.git',
