@@ -316,7 +316,7 @@ DEPENDENCIES
   factory_bot_rails (~> 6.2)
   faker (~> 2.21)
   flatirons-saas!
-  generator_spec (~> 0.9.4)
+  generator_spec (~> 0.9)
   rspec (~> 3.11)
   rspec-json_expectations (~> 2.2)
   rspec-rails (~> 5.1)

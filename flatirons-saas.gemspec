@@ -45,5 +45,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'devise', '~> 4.8'
   spec.add_development_dependency 'rspec-json_expectations', '~> 2.2'
   spec.add_dependency 'rswag', '~> 2.5'
+  spec.add_development_dependency 'generator_spec', '~> 0.9'
   spec.add_development_dependency 'rswag-specs', '~> 2.5'
 end

@@ -1,0 +1,11 @@
+# frozen_string_literal: true
+
+class Create<%= table_name.camelize %> < ActiveRecord::Migration[<%= rails_version %>]
+  def change
+    create_table :<%= table_name %> do |t|
+      t.string :stripe_customer_id, null: false, unique: true
+
+      t.timestamps
+    end
+  end
+end
