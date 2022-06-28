@@ -14,10 +14,24 @@ module Flatirons
         end
 
         module Load
+          #
+          # Productable?
+          #
+          # Adds productable concern to a class that inherits from ```ActiveRecord::Base```
+          #
+          # @return [void]
+          #
           def productable?
             included_modules.include?(Flatirons::Saas::Concerns::Productable)
           end
 
+          #
+          # Productable
+          #
+          # Adds productable concern to a class that inherits from `ActiveRecord::Base`
+          #
+          # @return [void]
+          #
           def productable
             return if productable?
 

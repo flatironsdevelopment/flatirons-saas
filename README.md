@@ -11,6 +11,8 @@ Common functionalities that can be reused across projects
 
 - [Soft Deletable](https://github.com/flatironsdevelopment/flatirons-saas/wiki/SoftDeletable)
 
+- [Productable](https://github.com/flatironsdevelopment/flatirons-saas/wiki/Productable)
+
 ## Contributing
 Contribution directions go here.
 
