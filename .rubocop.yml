@@ -34,6 +34,7 @@ AllCops:
     - "Gemfile.lock"
     - ".rubocop.yml"
     - "client/node_modules/**/*"
+    - "**/tmp/**/*"
   DisplayCopNames: true
   StyleGuideCopsOnly: false
   TargetRubyVersion: 2.7

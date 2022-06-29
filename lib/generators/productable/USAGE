@@ -1,0 +1,8 @@
+Description:
+    Generates migration and model for a Productable Entity
+
+Example:
+    bin/rails generate productable MODEL
+
+    This will create:
+        migration/model/test files

@@ -12,6 +12,7 @@ module Flatirons
       end
       ActiveSupport.on_load(:active_record) do
         extend Flatirons::Saas::Concerns::SoftDeletable::Load
+        extend Flatirons::Saas::Concerns::Productable::Load
       end
     end
   end

@@ -9,5 +9,6 @@
 /spec/dummy/storage/
 /spec/dummy/tmp/
 .vscode
+.byebug_history
 coverage
 *.gem
