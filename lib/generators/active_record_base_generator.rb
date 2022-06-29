@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'rails/generators/active_record'
+
 class ActiveRecordBase < ::ActiveRecord::Generators::Base
   include ::Rails::Generators::Migration
 
