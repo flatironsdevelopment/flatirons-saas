@@ -3,8 +3,6 @@
 require 'money-rails'
 require 'devise'
 require 'rswag'
-require 'rails/generators'
-require 'rails/generators/active_record'
 require 'devise/orm/active_record'
 require 'flatirons/saas/rails/routes'
 
