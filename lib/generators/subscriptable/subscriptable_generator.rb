@@ -2,9 +2,9 @@
 
 require 'generators/active_record_base_generator'
 
-class ProductableGenerator < ActiveRecordBase
+class SubscriptableGenerator < ActiveRecordBase
   source_root File.expand_path('templates', __dir__)
   def template_suffix
-    'productable'
+    'subscriptable'
   end
 end
