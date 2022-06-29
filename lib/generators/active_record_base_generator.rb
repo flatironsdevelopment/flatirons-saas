@@ -5,16 +5,16 @@ require 'rails/generators/active_record'
 class ActiveRecordBase < ::ActiveRecord::Generators::Base
   include ::Rails::Generators::Migration
 
-  def migration_name
+  def template_suffix
     raise 'You need to implement this method'
   end
 
   def generate_migration
     if model_exists?
-      migration_template "existing_#{migration_name}_migration.erb", "db/migrate/add_#{migration_name}_to_#{table_name}.rb",
+      migration_template "existing_#{template_suffix}_migration.erb", "db/migrate/add_#{template_suffix}_to_#{table_name}.rb",
                          rails_version: rails_version
     else
-      migration_template "#{migration_name}_migration.erb", "db/migrate/create_#{table_name}.rb", rails_version: rails_version
+      migration_template "#{template_suffix}_migration.erb", "db/migrate/create_#{table_name}.rb", rails_version: rails_version
     end
   end
 
