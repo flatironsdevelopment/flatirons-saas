@@ -7,7 +7,6 @@ require 'rails/generators'
 require 'rails/generators/active_record'
 require 'devise/orm/active_record'
 require 'flatirons/saas/rails/routes'
-require 'flatirons/saas/generators/base_active_record_generator'
 
 module Flatirons
   module Saas
@@ -20,10 +19,6 @@ module Flatirons
         g.factory_bot dir: 'spec/factories'
         g.assets false
         g.helper false
-      end
-
-      config.app_generators do
-        require_relative 'generators/subscriptable/subscriptable_generator'
       end
 
       ActiveSupport.on_load(:active_record) do
