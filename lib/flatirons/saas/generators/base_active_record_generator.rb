@@ -39,7 +39,11 @@ module Flatirons
           end
 
           def model_path
-            @model_path ||= File.join('app', 'models', "#{name}.rb")
+            @model_path ||= File.join('app', 'models', "#{model_name}.rb")
+          end
+
+          def model_name
+            name.underscore
           end
         end
       end
