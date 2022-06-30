@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require 'stripe_mock'
 
 module Flatirons::Saas::Services
   describe StripeService do

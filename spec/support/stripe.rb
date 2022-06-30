@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'stripe_mock'
+
 shared_context 'stripe' do
   before(:all) do
     Flatirons::Saas.configure do |c|
