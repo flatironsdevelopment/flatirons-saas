@@ -5,6 +5,7 @@ require 'devise'
 require 'rswag'
 require 'devise/orm/active_record'
 require 'flatirons/saas/rails/routes'
+require 'flatirons/saas/services/stripe_service'
 
 module Flatirons
   module Saas
