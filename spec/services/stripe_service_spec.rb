@@ -9,8 +9,20 @@ module Flatirons::Saas
 
     let!(:service) { StripeService.new }
 
+    context 'when stripe API key is not set' do
+      it 'should raise an error' do
+        expect { service.create_customer 'test' }.to raise_error 'Stripe API key not configured'
+      end
+    end
+
     describe 'customer' do
       let!(:customer_name) { 'Flatirons' }
+
+      before(:each) do
+        Flatirons::Saas.configure do |c|
+          c.stripe_api_key = 'sk_test'
+        end
+      end
 
       it 'should create a stripe customer' do
         customer = service.create_customer customer_name
