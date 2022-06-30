@@ -3,7 +3,7 @@
 require 'rails_helper'
 require 'stripe_mock'
 
-module Flatirons::Saas
+module Flatirons::Saas::Services
   describe StripeService do
     include_context 'stripe'
 
