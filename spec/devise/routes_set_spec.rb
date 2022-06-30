@@ -53,7 +53,7 @@ describe 'RouteSet', type: :routing  do
       end
     end
 
-    context 'user is not subscritable' do
+    context 'user is not subscriptable' do
       it 'should raise does not respond to \'subscriptable\' method' do
         expect do
           routes = ActionDispatch::Routing::RouteSet.new
@@ -66,7 +66,7 @@ describe 'RouteSet', type: :routing  do
       end
     end
 
-    context 'user is subscritable' do
+    context 'user is subscriptable' do
       it 'should not raise error' do
         User.subscriptable
         expect do
