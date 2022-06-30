@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Flatirons::Saas
+module Flatirons::Saas::Services
   class StripeService
     def create_customer(name, extra_fields = {})
       Stripe::Customer.create extra_fields.merge({ name: name }), stripe_opts
