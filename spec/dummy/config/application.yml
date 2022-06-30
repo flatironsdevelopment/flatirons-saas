@@ -8,4 +8,3 @@ development:
   RAILS_ENV: "development"
   RACK_ENV: "development"
   <<: *default_settings
-  
