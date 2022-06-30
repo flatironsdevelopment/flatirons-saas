@@ -7,8 +7,10 @@ module Flatirons
 
       desc 'Flatirons saas install.'
 
-      def copy_initializer
+      def install
         copy_file 'flatirons_saas.erb', 'config/initializers/flatirons_saas.rb'
+        route "mount Flatirons::Saas::Engine => '/flatirons-saas'"
+        rake 'flatirons_saas:install:migrations'
       end
     end
   end
