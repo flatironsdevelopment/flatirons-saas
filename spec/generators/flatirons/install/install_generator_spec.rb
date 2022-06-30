@@ -2,10 +2,10 @@
 
 require 'rails_helper'
 require 'generator_spec'
-require 'generators/flatirons/initializer/initializer_generator'
+require 'generators/flatirons/install/install_generator'
 
 module Flatirons::Generators
-  RSpec.describe InitializerGenerator, type: :generator do
+  RSpec.describe InstallGenerator, type: :generator do
     destination File.expand_path('tmp')
 
     before(:all) do
