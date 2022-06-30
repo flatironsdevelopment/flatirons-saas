@@ -2,9 +2,10 @@
 
 require 'flatirons/saas/version'
 require 'flatirons/saas/engine'
+require 'flatirons/saas/configuration'
 
 module Flatirons
   module Saas
-    # Your code goes here...
+    extend Configuration
   end
 end
