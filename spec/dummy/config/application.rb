@@ -38,5 +38,6 @@ module Dummy
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+    config.action_dispatch.cookies_serializer = :json
   end
 end

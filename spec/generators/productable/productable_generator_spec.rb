@@ -5,7 +5,7 @@ require 'rails_helper'
 require 'generators/productable/productable_generator'
 
 describe ProductableGenerator, type: :generator do
-  destination File.expand_path('../tmp', __dir__)
+  destination File.expand_path('tmp')
   arguments %w(SomeProduct)
 
   before(:all) do
@@ -19,7 +19,7 @@ describe ProductableGenerator, type: :generator do
     it '#generate_migration' do
       assert_file 'app/models/some_product.rb'
       run_generator
-      migration_folder_contents = Dir.children('spec/generators/tmp/db/migrate').sort
+      migration_folder_contents = Dir.children('tmp/db/migrate').sort
       migration_file_name = migration_folder_contents.last
 
       expect(migration_folder_contents.size).to eq(2)
@@ -39,7 +39,7 @@ describe ProductableGenerator, type: :generator do
     end
 
     it '#generate_migration' do
-      migration_folder_contents = Dir.children('spec/generators/tmp/db/migrate')
+      migration_folder_contents = Dir.children('tmp/db/migrate')
       migration_file_name = migration_folder_contents.first
 
       expect(migration_folder_contents.size).to eq(1)
