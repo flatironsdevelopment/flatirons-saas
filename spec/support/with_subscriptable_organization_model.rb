@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
-shared_context 'with_organization_model' do
+shared_context 'with_subscriptable_organization_model' do
+  include_context 'stripe'
   with_model :Organization do
     table do |t|
       t.string :name
+      t.string :stripe_customer_id
       t.timestamps null: false
     end
 
@@ -12,5 +14,4 @@ shared_context 'with_organization_model' do
       subscriptable
     end
   end
-  let!(:organization) { Organization.create(name: 'Flatirons') }
 end
