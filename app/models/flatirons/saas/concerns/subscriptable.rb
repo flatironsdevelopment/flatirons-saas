@@ -19,7 +19,7 @@ module Flatirons
 
         included do
           has_many :subscriptions, class_name: 'Flatirons::Saas::Subscription', as: :subscriptable, dependent: :destroy
-          after_save :create_stripe_customer
+          after_commit :create_stripe_customer
         end
 
         def self.included(klazz)
