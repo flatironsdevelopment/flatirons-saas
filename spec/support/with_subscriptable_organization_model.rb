@@ -11,7 +11,7 @@ shared_context 'with_subscriptable_organization_model' do
 
     model do
       validates_presence_of :name
-      subscriptable
+      subscriptable delete_customer_on_destroy: true
     end
   end
 end

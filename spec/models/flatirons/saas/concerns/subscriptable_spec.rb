@@ -19,92 +19,178 @@ describe Flatirons::Saas::Concerns::Subscriptable do
 
   describe 'create_stripe_customer' do
     let!(:customer) { Stripe::Customer.create({ name: 'organization_1' }) }
+    let!(:organization) { Organization.new(name: 'Flatirons', stripe_customer_id: stripe_customer_id) }
 
-    context 'when stripe_customer_id attribute exists' do
-      let!(:organization) { Organization.new(name: 'Flatirons', stripe_customer_id: stripe_customer_id) }
+    context 'when stripe customer does not exist' do
+      let!(:stripe_customer_id) { nil }
 
-      context 'when stripe customer does not exist' do
-        let!(:stripe_customer_id) { nil }
-
-        describe 'customer creation' do
-          it 'should create stripe customer' do
-            service = instance_double(Flatirons::Saas::Services::StripeService)
-            allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
-            expect(service).to receive(:create_customer).with("#{Organization.table_name}_1", {}).and_return(customer)
-
-            organization.save
-
-            expect(organization.stripe_customer_id).to eq(customer.id)
-            expect(organization.reload.stripe_customer_id).to eq(customer.id)
-          end
-        end
-
-        describe 'callbacks' do
-          let!(:callbacks) { spy('callbacks') }
-
-          before(:each) do
-            callback_ref = callbacks
-            Organization.before_stripe_customer_creation  do
-              callback_ref.before_stripe_customer_creation
-            end
-            Organization.around_stripe_customer_creation  do |_, block|
-              block.call
-              callback_ref.around_stripe_customer_creation
-            end
-            Organization.after_stripe_customer_creation  do
-              callback_ref.after_stripe_customer_creation
-            end
-          end
-
-          it 'should run callbacks' do
-            service = instance_double(Flatirons::Saas::Services::StripeService)
-            allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
-            expect(service).to receive(:create_customer).with("#{Organization.table_name}_1", {}).and_return(customer)
-
-            organization.save
-
-            expect(callbacks).to have_received(:before_stripe_customer_creation)
-            expect(callbacks).to have_received(:around_stripe_customer_creation)
-            expect(callbacks).to have_received(:after_stripe_customer_creation)
-
-            expect(organization.stripe_customer_id).to eq(customer.id)
-            expect(organization.reload.stripe_customer_id).to eq(customer.id)
-          end
-        end
-      end
-
-      context 'when stripe customer exist' do
-        let!(:stripe_customer_id) { customer.id }
-
-        it 'should not create stripe customer' do
+      describe 'customer creation' do
+        it 'should create stripe customer' do
           service = instance_double(Flatirons::Saas::Services::StripeService)
           allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
-          expect(service).to_not receive(:create_customer)
+          expect(service).to receive(:create_customer).with("#{Organization.table_name}_1", {}).and_return(customer)
 
           organization.save
 
           expect(organization.stripe_customer_id).to eq(customer.id)
+          expect(organization.reload.stripe_customer_id).to eq(customer.id)
         end
       end
     end
 
-    context 'when stripe_customer_id attribute does not exist' do
-      with_model :OrganizationWithoutAttribute do
-        table do |t|
-          t.string :name
-          t.timestamps null: false
-        end
+    context 'when stripe customer exist' do
+      let!(:stripe_customer_id) { customer.id }
 
-        model do
-          validates_presence_of :name
-          subscriptable
+      it 'should not create stripe customer' do
+        service = instance_double(Flatirons::Saas::Services::StripeService)
+        allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+        expect(service).to_not receive(:create_customer)
+
+        organization.save
+
+        expect(organization.stripe_customer_id).to eq(customer.id)
+      end
+    end
+
+    context 'when stripe_customer_id attribute does not exist' do
+      let!(:stripe_customer_id) { nil }
+
+      it 'should raise stripe_customer_id attribute not found.' do
+        allow(organization).to receive(:has_attribute?).with(:stripe_customer_id).and_return false
+
+        expect { organization.save }.to raise_error 'stripe_customer_id attribute not found.'
+      end
+    end
+
+    describe 'callbacks' do
+      let!(:stripe_customer_id) { nil }
+      let!(:callbacks) { spy('callbacks') }
+
+      before(:each) do
+        callback_ref = callbacks
+        Organization.before_stripe_customer_creation  do
+          callback_ref.before_stripe_customer_creation
+        end
+        Organization.around_stripe_customer_creation  do |_, block|
+          block.call
+          callback_ref.around_stripe_customer_creation
+        end
+        Organization.after_stripe_customer_creation  do
+          callback_ref.after_stripe_customer_creation
         end
       end
 
-      it 'should raise stripe_customer_id attribute not found.' do
-        organization = OrganizationWithoutAttribute.new(name: 'Flatirons')
+      it 'should run callbacks' do
+        service = instance_double(Flatirons::Saas::Services::StripeService)
+        allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+        expect(service).to receive(:create_customer).with("#{Organization.table_name}_1", {}).and_return(customer)
 
-        expect { organization.save }.to raise_error 'stripe_customer_id attribute not found.'
+        organization.save
+
+        expect(callbacks).to have_received(:before_stripe_customer_creation)
+        expect(callbacks).to have_received(:around_stripe_customer_creation)
+        expect(callbacks).to have_received(:after_stripe_customer_creation)
+
+        expect(organization.stripe_customer_id).to eq(customer.id)
+        expect(organization.reload.stripe_customer_id).to eq(customer.id)
+      end
+    end
+  end
+
+  describe 'destroy_stripe_customer' do
+    let!(:customer) { Stripe::Customer.create({ name: 'organization_1' }) }
+    let!(:organization) { Organization.create(name: 'Flatirons', stripe_customer_id: stripe_customer_id) }
+
+    context 'when stripe customer does not exist' do
+      let!(:stripe_customer_id) { nil }
+
+      it 'should not destroy the stripe customer' do
+        service = instance_double(Flatirons::Saas::Services::StripeService)
+        allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+        expect(service).to_not receive(:destroy_customer)
+
+        organization.destroy
+      end
+    end
+
+    context 'when stripe customer exist' do
+      let!(:stripe_customer_id) { customer.id }
+
+      it 'should destroy the stripe customer' do
+        service = instance_double(Flatirons::Saas::Services::StripeService)
+        allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+        expect(service).to receive(:destroy_customer).with(stripe_customer_id)
+
+        organization.destroy
+
+        expect(organization.stripe_customer_id).to eq(customer.id)
+      end
+    end
+
+    context 'when stripe_customer_id attribute does not exist' do
+      let!(:stripe_customer_id) { nil }
+
+      it 'should raise stripe_customer_id attribute not found.' do
+        allow(organization).to receive(:has_attribute?).with(:stripe_customer_id).and_return false
+
+        expect { organization.destroy }.to raise_error 'stripe_customer_id attribute not found.'
+      end
+    end
+
+    context 'when delete_customer_on_destroy option is not true' do
+      let!(:stripe_customer_id) { nil }
+
+      it 'should not destroy the stripe customer' do
+        service = instance_double(Flatirons::Saas::Services::StripeService)
+        allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+        allow(organization).to receive(:subscriptable_options).and_return({})
+
+        expect(service).to_not receive(:destroy_customer)
+
+        organization.destroy
+      end
+
+      it 'should not destroy the stripe customer' do
+        service = instance_double(Flatirons::Saas::Services::StripeService)
+        allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+        allow(organization).to receive(:subscriptable_options).and_return({ delete_customer_on_destroy: false })
+
+        expect(service).to_not receive(:destroy_customer)
+
+        organization.destroy
+      end
+    end
+
+    describe 'callbacks' do
+      let!(:stripe_customer_id) { customer.id }
+      let!(:callbacks) { spy('callbacks') }
+
+      before(:each) do
+        callback_ref = callbacks
+        Organization.before_stripe_customer_deletion  do
+          callback_ref.before_stripe_customer_deletion
+        end
+        Organization.around_stripe_customer_deletion  do |_, block|
+          block.call
+          callback_ref.around_stripe_customer_deletion
+        end
+        Organization.after_stripe_customer_deletion  do
+          callback_ref.after_stripe_customer_deletion
+        end
+      end
+
+      it 'should run callbacks' do
+        service = instance_double(Flatirons::Saas::Services::StripeService)
+        allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+        expect(service).to receive(:destroy_customer).with(stripe_customer_id)
+
+        organization.destroy
+
+        expect(callbacks).to have_received(:before_stripe_customer_deletion)
+        expect(callbacks).to have_received(:around_stripe_customer_deletion)
+        expect(callbacks).to have_received(:after_stripe_customer_deletion)
+
+        expect(organization.stripe_customer_id).to eq(customer.id)
       end
     end
   end

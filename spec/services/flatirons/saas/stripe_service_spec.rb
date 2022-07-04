@@ -16,21 +16,36 @@ module Flatirons::Saas::Services
     end
 
     describe 'customer' do
-      let!(:customer_name) { 'Flatirons' }
+      describe 'create_customer' do
+        let!(:customer_name) { 'Flatirons' }
 
-      it 'should create a stripe customer' do
-        customer = service.create_customer customer_name
-        expect(customer.name).to eq(customer_name)
-        expect(customer.id).to be
+        it 'should create a stripe customer' do
+          customer = service.create_customer customer_name
+          expect(customer.name).to eq(customer_name)
+          expect(customer.id).to be
+        end
+
+        context 'given extra fields' do
+          let!(:customer_email) { 'flatirons@flatironsdevelopment.com' }
+          it 'should create a stripe customer' do
+            customer = service.create_customer customer_name, { email: customer_email }
+            expect(customer.name).to eq(customer_name)
+            expect(customer.email).to eq(customer_email)
+            expect(customer.id).to be
+          end
+        end
       end
 
-      context 'given extra fields' do
-        let!(:customer_email) { 'flatirons@flatironsdevelopment.com' }
-        it 'should create a stripe customer' do
-          customer = service.create_customer customer_name, { email: customer_email }
-          expect(customer.name).to eq(customer_name)
-          expect(customer.email).to eq(customer_email)
-          expect(customer.id).to be
+      describe 'destroy_customer' do
+        let!(:customer) { Stripe::Customer.create({ name: 'flatirons' }) }
+
+        it 'should destroy the stripe customer' do
+          expect(Stripe::Customer.retrieve(customer.id).deleted?).to be false
+
+          deleted_customer = service.destroy_customer(customer.id)
+          expect(deleted_customer.deleted?).to be true
+
+          expect(Stripe::Customer.retrieve(customer.id).deleted?).to be true
         end
       end
     end
