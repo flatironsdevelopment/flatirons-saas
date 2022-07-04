@@ -1,5 +1,5 @@
 common: &default_settings
-  STRIPE_API_KEY: "sk_test_51KnWMELHxDCOABxzbLArxqOPDJT1AkfXSs5bZsQWlUyCHMv8qWyMAC4B0Do43n6JyUGahgQLbhHt0EQw0tvUnv7R00Mtv2rqbn"
+  STRIPE_API_KEY: "your stripe api key"
 
 test:
   <<: *default_settings
