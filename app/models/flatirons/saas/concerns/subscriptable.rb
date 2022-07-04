@@ -32,7 +32,7 @@ module Flatirons
         # @return [Flatirons::Saas::Services::StripeService]
         #
         def stripe_service
-          @stripe_service ||= Services::StripeService.new
+          @stripe_service ||= Flatirons::Saas::Services::StripeService.new
         end
 
         #

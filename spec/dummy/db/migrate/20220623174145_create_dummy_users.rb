@@ -11,6 +11,9 @@ class CreateDummyUsers < ActiveRecord::Migration[6.1]
       t.string   :reset_password_token
       t.datetime :reset_password_sent_at
 
+      # Subscriptable
+      t.string :stripe_customer_id, unique: true
+
       ## Rememberable
       t.datetime :remember_created_at
 
