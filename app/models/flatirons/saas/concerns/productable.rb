@@ -17,7 +17,7 @@ module Flatirons
           #
           # Productable?
           #
-          # Adds productable concern to a class that inherits from ```ActiveRecord::Base```
+          # Adds productable concern to a class that inherits from ActiveRecord::Base
           #
           # @return [void]
           #

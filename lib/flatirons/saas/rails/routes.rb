@@ -7,6 +7,10 @@ module Flatirons
         mattr_accessor :mappings
         @@mappings = {} # rubocop:disable Style/ClassVars
       end
+      module Product
+        mattr_accessor :mappings
+        @@mappings = {} # rubocop:disable Style/ClassVars
+      end
     end
   end
 end
@@ -58,9 +62,24 @@ module ActionDispatch::Routing
 
       resources.each do |resource|
         ref = extract_resource_ref resource, options
-        subscription_scope ref[:symbol] do
-          with_subscription_exclusive_scope ref do
+        routing_resource_scope(symbol: ref[:symbol], resource_class_name: 'Subscription') do
+          with_exclusive_scope ref do
             resources 'subscriptions', controller: 'flatirons/saas/subscriptions', only: %i[index create update]
+          end
+        end
+      end
+    end
+
+    def products_for(*resources)
+      options = resources.extract_options!
+      resources.map!(&:to_sym)
+
+      resources.each do |resource|
+
+        ref = extract_products_resource_ref resource, options
+        routing_resource_scope(symbol: ref[:symbol], resource_class_name: 'Product') do
+          with_exclusive_scope ref do
+            resources 'products', controller: 'flatirons/saas/products', only: %i[index]
           end
         end
       end
@@ -68,15 +87,16 @@ module ActionDispatch::Routing
 
     private
 
-    def subscription_scope(symbol, &block) # :nodoc:
+    def routing_resource_scope(**args, &block) # :nodoc:
+      symbol = args[:symbol]
       constraint = lambda do |request|
-        request.env['flatirons.saas.mapping'] = Flatirons::Saas::Rails::Subscription.mappings[symbol]
+        request.env['flatirons.saas.mapping'] = "Flatirons::Saas::Rails::#{args[:resource_class_name]}".constantize.mappings[symbol]
         true
       end
       constraints(constraint, &block)
     end
 
-    def with_subscription_exclusive_scope(ref) # :nodoc:
+    def with_exclusive_scope(ref) # :nodoc:
       new_path = ref[:path]
       new_as = ref[:name]
       current_scope = @scope.dup
@@ -92,12 +112,24 @@ module ActionDispatch::Routing
       symbol = name.to_sym
       klass = (options[:class_name] || resource.to_s.classify).to_s.constantize
       path = (options[:path] || resource).to_s
-
       ensure_devise! resource, symbol, klass
-      ensure_subscriptable! klass
+      ensure_modulable! klass, 'subscriptable'
 
       Flatirons::Saas::Rails::Subscription.mappings[symbol] = { symbol: symbol, name: name, path: path, klass: klass, resource: resource }
       Flatirons::Saas::Rails::Subscription.mappings[symbol]
+    end
+
+    def extract_products_resource_ref(resource, options) # :nodoc:
+      name = resource.to_s.singularize.to_s
+      symbol = name.to_sym
+      klass = (options[:class_name] || resource.to_s.classify).to_s.constantize
+      resource_klass = options[:resource_class_name]&.constantize || Product
+      path = (options[:path] || resource).to_s
+      ensure_devise_for_products! resource, symbol, klass
+      ensure_modulable! resource_klass, 'productable'
+
+      Flatirons::Saas::Rails::Product.mappings[symbol] = { symbol: symbol, name: name, path: path, klass: klass, resource: resource }
+      Flatirons::Saas::Rails::Product.mappings[symbol]
     end
 
     def ensure_devise!(resource, symbol, klass) # :nodoc:
@@ -107,15 +139,27 @@ module ActionDispatch::Routing
       klass_name = klass.name
       devise_mapping = Devise.mappings[symbol]
       devise_klass_name = devise_mapping.class_name
-
       unless devise_klass_name == klass_name # rubocop:disable Style/GuardClause
         raise "Devise resource type [#{devise_klass_name}] is not the same of subscription_for [#{klass_name}],"\
         ' check your subscription_for/devise_for route configuration.'
       end
     end
 
-    def ensure_subscriptable!(klass) # :nodoc:
-      raise "#{klass} does not respond to 'subscriptable' method." unless klass.respond_to?('subscriptable?') && klass.subscriptable?
+    def ensure_devise_for_products!(resource, symbol, klass) # :nodoc:
+      raise 'Devise is not available, please include devise gem to get work.' unless Object.const_defined?('Devise')
+      raise "Devise for :#{resource} not found, please check your products_for/devise_for route configuration." unless Devise.mappings[symbol]
+
+      klass_name = klass.name
+      devise_mapping = Devise.mappings[symbol]
+      devise_klass_name = devise_mapping.class_name
+      unless devise_klass_name == klass_name # rubocop:disable Style/GuardClause
+        raise "Devise resource type [#{devise_klass_name}] is not the same of products_for [#{klass_name}],"\
+        ' check your products_for/devise_for route configuration.'
+      end
+    end
+
+    def ensure_modulable!(klass, module_name) # :nodoc:
+      raise "#{klass} does not respond to '#{module_name}' method." unless klass.respond_to?("#{module_name}?") && klass.send("#{module_name}?")
     end
   end
 end

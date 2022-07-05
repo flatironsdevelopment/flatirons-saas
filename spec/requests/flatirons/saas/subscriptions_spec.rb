@@ -7,6 +7,7 @@ describe '/dummy_users/subscriptions', type: :request do
   include_context 'dummy_user'
   include_context 'dummy_user_is_authenticated'
   include_context 'dummy_user_with_subscription'
+  include_context 'subscription_for_users'
 
   path '/dummy_users/subscriptions' do
     get('List dummy user subscriptions') do
