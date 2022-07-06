@@ -23,11 +23,11 @@ describe '/dummy_users/products', type: :request do
     FactoryBot.create_list(:product, 3)
     product_names = Flatirons::Saas::Product.all.pluck(:name).sort
 
-    get "/dummy_users/products"
+    get '/dummy_users/products'
     payload = JSON.parse(response.body)
     expect(response.status).to eq 200
     expect(payload.size).to eq 3
-    request_names = payload.map {|product| product["name"]}.sort
-    expect(request_names === product_names).to eq(true)
+    request_names = payload.map { |product| product['name'] }.sort
+    expect(request_names == product_names).to eq(true)
   end
 end

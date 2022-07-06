@@ -7,6 +7,7 @@ module Flatirons
         mattr_accessor :mappings
         @@mappings = {} # rubocop:disable Style/ClassVars
       end
+
       module Product
         mattr_accessor :mappings
         @@mappings = {} # rubocop:disable Style/ClassVars
@@ -62,7 +63,6 @@ module ActionDispatch::Routing
       resource_module_name = 'subscriptable'
 
       resources.each do |resource|
-
         ensure_modulable! resource.to_s.classify.to_s.constantize, resource_module_name
         ref = extract_resource_ref resource, options, 'subscription', resource_module_name
         routing_resource_scope(symbol: ref[:symbol], resource_class_name: 'Subscription') do
@@ -112,14 +112,15 @@ module ActionDispatch::Routing
       @scope = current_scope
     end
 
-    def extract_resource_ref(auth_resource, options, resource_name, resource_module_name) # :nodoc:
+    def extract_resource_ref(auth_resource, options, resource_name, _resource_module_name) # :nodoc:
       name = auth_resource.to_s.singularize.to_s
       symbol = name.to_sym
       klass = (options[:class_name] || auth_resource.to_s.classify).to_s.constantize
       path = (options[:path] || auth_resource).to_s
       ensure_devise_for_resource! auth_resource, symbol, klass, resource_name
 
-      "Flatirons::Saas::Rails::#{resource_name.singularize.camelcase}".constantize.mappings[symbol] = { symbol: symbol, name: name, path: path, klass: klass, resource: auth_resource }
+      "Flatirons::Saas::Rails::#{resource_name.singularize.camelcase}".constantize.mappings[symbol] =
+        { symbol: symbol, name: name, path: path, klass: klass, resource: auth_resource }
       "Flatirons::Saas::Rails::#{resource_name.singularize.camelcase}".constantize.mappings[symbol]
     end
 

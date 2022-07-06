@@ -201,7 +201,6 @@ describe 'RouteSet', type: :routing  do
               .to route_to(controller: 'flatirons/saas/products', action: 'index')
           end
         end
-
       end
     end
   end
