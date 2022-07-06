@@ -9,10 +9,12 @@ describe 'RouteSet', type: :routing  do
     after(:each) do
       Devise.mappings.delete(:user) if defined?(Devise)
       Flatirons::Saas::Rails::Subscription.mappings.delete(:user)
+      Flatirons::Saas::Rails::Product.mappings.delete(:user)
     end
 
     context 'devise is not available' do
       it 'should raise devise is not available' do
+        User.subscriptable
         without_const('Devise') do
           expect do
             routes = ActionDispatch::Routing::RouteSet.new
