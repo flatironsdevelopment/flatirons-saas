@@ -5,7 +5,7 @@ module Flatirons
     class InstallGenerator < ::Rails::Generators::Base
       source_root File.expand_path('templates', __dir__)
 
-      desc 'Flatirons saas install.'
+      desc 'Flatirons saas install, sets up engime mount route config, copy default migrations, create flatirons_saas initializer.'
 
       def install
         copy_file 'flatirons_saas.erb', 'config/initializers/flatirons_saas.rb'
