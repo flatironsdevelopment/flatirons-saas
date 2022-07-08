@@ -3,6 +3,7 @@
 require 'money-rails'
 require 'devise'
 require 'rswag'
+require 'stripe'
 require 'devise/orm/active_record'
 require 'flatirons/saas/rails/routes'
 require 'flatirons/saas/services/stripe_service'

@@ -6,6 +6,10 @@ module Flatirons::Saas::Services
       Stripe::Customer.create extra_fields.merge({ name: name }), stripe_opts
     end
 
+    def destroy_customer(customer_id)
+      Stripe::Customer.delete customer_id
+    end
+
     private
 
     def stripe_opts
