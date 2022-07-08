@@ -9,14 +9,18 @@ module Flatirons::Saas::Services
     let!(:service) { StripeService.new }
 
     context 'when stripe API key is not set' do
-      it 'should raise an error' do
-        allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
-        expect { service.create_customer 'test' }.to raise_error 'Stripe API key not configured'
+      describe 'create_customer' do
+        it 'should raise an error' do
+          allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
+          expect { service.create_customer 'test' }.to raise_error 'Stripe API key not configured'
+        end
       end
 
-      it 'should raise an error' do
-        allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
-        expect { service.destroy_customer 'test' }.to raise_error 'Stripe API key not configured'
+      describe 'destroy_customer' do
+        it 'should raise an error' do
+          allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
+          expect { service.destroy_customer 'test' }.to raise_error 'Stripe API key not configured'
+        end
       end
     end
 
