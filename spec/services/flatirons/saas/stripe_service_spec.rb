@@ -13,6 +13,11 @@ module Flatirons::Saas::Services
         allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
         expect { service.create_customer 'test' }.to raise_error 'Stripe API key not configured'
       end
+
+      it 'should raise an error' do
+        allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
+        expect { service.destroy_customer 'test' }.to raise_error 'Stripe API key not configured'
+      end
     end
 
     describe 'customer' do

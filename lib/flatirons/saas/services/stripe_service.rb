@@ -7,7 +7,7 @@ module Flatirons::Saas::Services
     end
 
     def destroy_customer(customer_id)
-      Stripe::Customer.delete customer_id
+      Stripe::Customer.delete customer_id, {}, stripe_opts
     end
 
     private
