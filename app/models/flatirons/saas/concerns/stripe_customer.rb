@@ -99,7 +99,7 @@ module Flatirons
         def payment_methods
           assert_stripe_customer_id_attribute!
 
-          return true if stripe_customer_id.nil?
+          return [] if stripe_customer_id.nil?
 
           stripe_service.list_payment_methods stripe_customer_id
         end
