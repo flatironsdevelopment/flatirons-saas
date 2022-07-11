@@ -78,6 +78,19 @@ module Flatirons
           result ? self : false
         end
 
+        #
+        # Attach a payment method
+        #
+        # @return [Hash]
+        #
+        def attach_payment_method(payment_method_id, set_as_default: false)
+          raise 'stripe_customer_id attribute not found.' unless has_attribute? :stripe_customer_id
+
+          return true if stripe_customer_id.nil?
+
+          stripe_service.attach_payment_method stripe_customer_id, payment_method_id, set_as_default: set_as_default
+        end
+
         module Callbacks
           def self.extended(klazz)
             klazz.define_callbacks :stripe_customer_creation

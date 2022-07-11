@@ -195,6 +195,54 @@ describe Flatirons::Saas::Concerns::Subscriptable do
     end
   end
 
+  describe 'attach_payment_method' do
+    let!(:customer) { Stripe::Customer.create({ name: 'organization_1' }) }
+    let!(:organization) { Organization.create(name: 'Flatirons', stripe_customer_id: stripe_customer_id) }
+    let!(:payment_method_id) { Stripe::PaymentMethod.create(stripe_credit_card).id }
+
+    context 'when stripe customer does not exist' do
+      let!(:stripe_customer_id) { nil }
+
+      it 'should not attach the payment method' do
+        service = instance_double(Flatirons::Saas::Services::StripeService)
+        allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+        expect(service).to_not receive(:attach_payment_method)
+
+        organization.attach_payment_method(payment_method_id)
+      end
+    end
+
+    context 'when stripe customer exist' do
+      let!(:stripe_customer_id) { customer.id }
+
+      it 'should attach the payment method' do
+        service = instance_double(Flatirons::Saas::Services::StripeService)
+        allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+        expect(service).to receive(:attach_payment_method).with(stripe_customer_id, payment_method_id, set_as_default: false)
+
+        organization.attach_payment_method payment_method_id
+      end
+
+      it 'should attach the payment method and set as default' do
+        service = instance_double(Flatirons::Saas::Services::StripeService)
+        allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+        expect(service).to receive(:attach_payment_method).with(stripe_customer_id, payment_method_id, set_as_default: true)
+
+        organization.attach_payment_method payment_method_id, set_as_default: true
+      end
+    end
+
+    context 'when stripe_customer_id attribute does not exist' do
+      let!(:stripe_customer_id) { nil }
+
+      it 'should raise stripe_customer_id attribute not found.' do
+        allow(organization).to receive(:has_attribute?).with(:stripe_customer_id).and_return false
+
+        expect { organization.attach_payment_method(payment_method_id) }.to raise_error 'stripe_customer_id attribute not found.'
+      end
+    end
+  end
+
   context 'with one organization' do
     let!(:organization) { Organization.create(name: 'Flatirons') }
 
