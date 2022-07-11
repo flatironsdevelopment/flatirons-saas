@@ -138,6 +138,12 @@ describe Flatirons::Saas::Services::StripeService do
           expect(payment_methods[1].id).to eq(second_payment_method_id)
         end
       end
+
+      context 'without customer' do
+        it 'should not be' do
+          expect(service.list_payment_methods(nil)).to_not be
+        end
+      end
     end
   end
 end
