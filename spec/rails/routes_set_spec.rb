@@ -97,6 +97,10 @@ describe 'RouteSet', type: :routing  do
           it 'should route to index' do
             expect(get: '/users/subscriptions')
               .to route_to(controller: 'flatirons/saas/subscriptions', action: 'index')
+            expect(get: '/users/payment_methods')
+              .to route_to(controller: 'flatirons/saas/payment_methods', action: 'index')
+            expect(post: '/users/payment_methods')
+              .to route_to(controller: 'flatirons/saas/payment_methods', action: 'create')
           end
         end
       end
