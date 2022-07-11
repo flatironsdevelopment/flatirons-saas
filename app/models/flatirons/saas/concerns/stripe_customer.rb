@@ -94,7 +94,7 @@ module Flatirons
         #
         # List payment methods
         #
-        # @return [Hash]
+        # @return [Array]
         #
         def payment_methods
           assert_stripe_customer_id_attribute!
