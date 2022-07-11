@@ -9,6 +9,7 @@ module Flatirons
 
       rescue_from ActiveRecord::RecordNotFound,       with: :not_found
       rescue_from ActionController::ParameterMissing, with: :missing_param_error
+      rescue_from Stripe::InvalidRequestError,        with: :stripe_error
 
       def not_found(exception)
         render_error exception.message, :not_found
@@ -18,8 +19,12 @@ module Flatirons
         render_error exception.message, :unprocessable_entity
       end
 
+      def stripe_error(exception)
+        render_error exception.message, :unprocessable_entity
+      end
+
       def render_error(message, status)
-        render json: { message: message }, status: status
+        render json: { success: false, message: message }, status: status
       end
 
       private
