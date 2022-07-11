@@ -67,7 +67,7 @@ module Flatirons
           delete_customer_on_destroy = subscriptable_options[:delete_customer_on_destroy]
           stripe_customer_id = self[:stripe_customer_id]
 
-          return false if stripe_customer_id.nil? || delete_customer_on_destroy != true
+          return true if stripe_customer_id.nil? || delete_customer_on_destroy != true
 
           result = transaction do
             run_callbacks :stripe_customer_deletion do
