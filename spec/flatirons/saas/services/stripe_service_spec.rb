@@ -33,6 +33,13 @@ describe Flatirons::Saas::Services::StripeService do
         expect { service.attach_payment_method 'test', 'test', set_as_default: true }.to raise_error 'Stripe API key not configured'
       end
     end
+
+    describe 'list_payment_methods' do
+      it 'should raise an error' do
+        allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
+        expect { service.list_payment_methods 'test' }.to raise_error 'Stripe API key not configured'
+      end
+    end
   end
 
   describe 'customer' do

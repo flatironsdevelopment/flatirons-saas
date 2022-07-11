@@ -22,7 +22,8 @@ module Flatirons::Saas::Services
       return unless stripe_customer_id
 
       Stripe::PaymentMethod.list(
-        { customer: stripe_customer_id, type: 'card' }
+        { customer: stripe_customer_id, type: 'card' },
+        stripe_opts
       ).data
     end
 
