@@ -38,6 +38,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'solargraph', '~> 0.45'
   spec.add_dependency 'stripe', '~> 5.55'
   spec.add_development_dependency 'faker', '~> 2.21'
+  spec.add_development_dependency 'figaro', '~> 1.2'
   spec.add_development_dependency 'simplecov', '~> 0.21'
   spec.add_development_dependency 'simplecov-cobertura', '~> 2.1'
   spec.add_development_dependency 'with_model', '~> 2.1'

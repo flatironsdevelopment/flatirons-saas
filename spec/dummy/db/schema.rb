@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_23_194739) do
+ActiveRecord::Schema.define(version: 2022_06_23_174145) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 2022_06_23_194739) do
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
+    t.string "stripe_customer_id"
     t.datetime "remember_created_at"
     t.datetime "deleted_at"
     t.datetime "created_at", precision: 6, null: false
@@ -35,6 +36,8 @@ ActiveRecord::Schema.define(version: 2022_06_23_194739) do
     t.bigint "subscriptable_id"
     t.datetime "deleted_at"
     t.datetime "canceled_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["deleted_at"], name: "index_flatirons_saas_subscriptions_on_deleted_at"
     t.index ["status"], name: "index_flatirons_saas_subscriptions_on_status"
     t.index ["stripe_subscription_id"], name: "index_flatirons_saas_subscriptions_on_stripe_subscription_id", unique: true
