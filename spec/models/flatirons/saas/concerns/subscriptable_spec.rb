@@ -246,6 +246,48 @@ describe Flatirons::Saas::Concerns::Subscriptable do
     end
   end
 
+  describe 'payment_methods' do
+    let!(:customer) { Stripe::Customer.create({ name: 'organization_1' }) }
+    let!(:organization) { Organization.new(name: 'Flatirons', stripe_customer_id: stripe_customer_id) }
+    let!(:payment_method) { Stripe::PaymentMethod.create(stripe_credit_card) }
+    let!(:payment_method_id) { payment_method.id }
+
+    context 'when stripe customer does not exist' do
+      let!(:stripe_customer_id) { nil }
+
+      it 'should return empty' do
+        service = instance_double(Flatirons::Saas::Services::StripeService)
+        allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+        expect(service).to_not receive(:list_payment_methods)
+
+        expect(organization.payment_methods).to eq []
+      end
+    end
+
+    context 'when stripe customer exists' do
+      let!(:stripe_customer_id) { customer.id }
+
+      it 'should return the payment methods' do
+        service = instance_double(Flatirons::Saas::Services::StripeService)
+        allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+        expect(service).to receive(:list_payment_methods).with(stripe_customer_id).and_return [payment_method]
+
+        payment_methods = organization.payment_methods
+        expect(payment_methods[0].id).to eq payment_method_id
+      end
+    end
+
+    context 'when stripe_customer_id attribute does not exist' do
+      let!(:stripe_customer_id) { nil }
+
+      it 'should raise stripe_customer_id attribute not found.' do
+        allow(organization).to receive(:has_attribute?).with(:stripe_customer_id).and_return false
+
+        expect { organization.payment_methods }.to raise_error 'stripe_customer_id attribute not found.'
+      end
+    end
+  end
+
   context 'with one organization' do
     let!(:organization) { Organization.create(name: 'Flatirons') }
 
