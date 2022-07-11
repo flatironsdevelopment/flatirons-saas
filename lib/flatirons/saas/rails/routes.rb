@@ -68,6 +68,7 @@ module ActionDispatch::Routing
         routing_resource_scope(symbol: ref[:symbol], resource_class_name: 'Subscription') do
           with_exclusive_scope ref do
             resources 'subscriptions', controller: 'flatirons/saas/subscriptions', only: %i[index create update]
+            resources 'payment_methods', controller: 'flatirons/saas/payment_methods', only: %i[index create]
           end
         end
       end
