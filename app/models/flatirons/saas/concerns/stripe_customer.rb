@@ -40,7 +40,7 @@ module Flatirons
         # @return [Hash]
         #
         def create_stripe_customer
-          raise 'stripe_customer_id attribute not found.' unless has_attribute? :stripe_customer_id
+          assert_stripe_customer_id_attribute!
 
           stripe_customer_id = self[:stripe_customer_id]
 
@@ -62,7 +62,7 @@ module Flatirons
         # @return [Hash]
         #
         def destroy_stripe_customer
-          raise 'stripe_customer_id attribute not found.' unless has_attribute? :stripe_customer_id
+          assert_stripe_customer_id_attribute!
 
           delete_customer_on_destroy = subscriptable_options[:delete_customer_on_destroy]
           stripe_customer_id = self[:stripe_customer_id]
@@ -84,7 +84,7 @@ module Flatirons
         # @return [Hash]
         #
         def attach_payment_method(payment_method_id, set_as_default: false)
-          raise 'stripe_customer_id attribute not found.' unless has_attribute? :stripe_customer_id
+          assert_stripe_customer_id_attribute!
 
           return true if stripe_customer_id.nil?
 
@@ -115,6 +115,12 @@ module Flatirons
               set_callback(:stripe_customer_deletion, :after, *args, &block)
             end
           end
+        end
+
+        private
+
+        def assert_stripe_customer_id_attribute!
+          raise 'stripe_customer_id attribute not found.' unless has_attribute? :stripe_customer_id
         end
       end
     end
