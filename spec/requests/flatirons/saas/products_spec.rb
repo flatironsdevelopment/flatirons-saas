@@ -18,7 +18,6 @@ describe '/dummy_users/products', type: :request do
     end
   end
 
-  include_context 'products_for_users'
   it 'lists all products' do
     FactoryBot.create_list(:product, 3)
     product_names = Flatirons::Saas::Product.all.pluck(:name).sort
