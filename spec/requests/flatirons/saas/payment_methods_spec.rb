@@ -40,11 +40,17 @@ describe '/dummy_users/payment_methods', type: :request do
         end
 
         after do |example|
-          example.metadata[:response][:content] = {
+          content = example.metadata[:response][:content] || {}
+          example_spec = {
             'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
+              examples: {
+                test_example: {
+                  value: JSON.parse(response.body, symbolize_names: true)
+                }
+              }
             }
           }
+          example.metadata[:response][:content] = content.deep_merge(example_spec)
         end
       end
     end
@@ -75,11 +81,17 @@ describe '/dummy_users/payment_methods', type: :request do
         end
 
         after do |example|
-          example.metadata[:response][:content] = {
+          content = example.metadata[:response][:content] || {}
+          example_spec = {
             'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
+              examples: {
+                test_example: {
+                  value: JSON.parse(response.body, symbolize_names: true)
+                }
+              }
             }
           }
+          example.metadata[:response][:content] = content.deep_merge(example_spec)
         end
       end
     end
