@@ -18,6 +18,14 @@ module Flatirons::Saas::Services
       Stripe::PaymentMethod.attach(payment_method_id, { customer: stripe_customer_id }, stripe_opts)
     end
 
+    def list_payment_methods(stripe_customer_id)
+      return unless stripe_customer_id
+
+      Stripe::PaymentMethod.list(
+        { customer: stripe_customer_id, type: 'card' }
+      ).data
+    end
+
     private
 
     def set_default_payment_method(stripe_customer_id, payment_method_id)

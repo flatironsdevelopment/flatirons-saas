@@ -118,5 +118,26 @@ describe Flatirons::Saas::Services::StripeService do
         end
       end
     end
+
+    describe 'list_payment_methods' do
+      context 'given a customer with payment methods' do
+        let!(:stripe_customer_id) { Stripe::Customer.create({ name: 'Flatirons Test' }).id }
+        let!(:first_payment_method_id) { Stripe::PaymentMethod.create(stripe_credit_card).id }
+        let!(:second_payment_method_id) { Stripe::PaymentMethod.create(stripe_credit_card).id }
+
+        before(:each) do
+          stripe_opts = { api_key: 'test' }
+          Stripe::PaymentMethod.attach(first_payment_method_id, { customer: stripe_customer_id }, stripe_opts)
+          Stripe::PaymentMethod.attach(second_payment_method_id, { customer: stripe_customer_id }, stripe_opts)
+        end
+
+        it 'should list the payment methods' do
+          payment_methods = service.list_payment_methods stripe_customer_id
+
+          expect(payment_methods[0].id).to eq(first_payment_method_id)
+          expect(payment_methods[1].id).to eq(second_payment_method_id)
+        end
+      end
+    end
   end
 end
