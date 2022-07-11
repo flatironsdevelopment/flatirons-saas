@@ -67,7 +67,7 @@ module Flatirons
           delete_customer_on_destroy = subscriptable_options[:delete_customer_on_destroy]
           stripe_customer_id = self[:stripe_customer_id]
 
-          return true if stripe_customer_id.nil? || delete_customer_on_destroy != true
+          return false if stripe_customer_id.nil? || delete_customer_on_destroy != true
 
           result = transaction do
             run_callbacks :stripe_customer_deletion do
@@ -86,9 +86,22 @@ module Flatirons
         def attach_payment_method(payment_method_id, set_as_default: false)
           assert_stripe_customer_id_attribute!
 
-          return true if stripe_customer_id.nil?
+          return false if stripe_customer_id.nil?
 
           stripe_service.attach_payment_method stripe_customer_id, payment_method_id, set_as_default: set_as_default
+        end
+
+        #
+        # List payment methods
+        #
+        # @return [Hash]
+        #
+        def payment_methods
+          assert_stripe_customer_id_attribute!
+
+          return true if stripe_customer_id.nil?
+
+          stripe_service.list_payment_methods stripe_customer_id
         end
 
         module Callbacks
