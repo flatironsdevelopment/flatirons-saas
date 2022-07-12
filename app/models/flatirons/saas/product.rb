@@ -10,7 +10,5 @@ module Flatirons::Saas
   #
   class Product < ApplicationRecord
     productable
-
-    validates :name, presence: true
   end
 end
