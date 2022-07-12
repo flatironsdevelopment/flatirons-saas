@@ -165,7 +165,7 @@ describe 'RouteSet', type: :routing  do
             routes = ActionDispatch::Routing::RouteSet.new
             routes.draw do
               devise_for :users
-              products_for :users, resource_class_name: 'SomeProduct'
+              products_for :users, productable_class_name: 'SomeProduct'
             end
           end
             .to raise_error 'SomeProduct does not respond to \'productable\' method.'
