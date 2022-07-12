@@ -2,6 +2,7 @@
 
 shared_context 'with_productable_plan_model' do
   include_context 'stripe'
+
   with_model :Plan do
     table do |t|
       t.string :name
