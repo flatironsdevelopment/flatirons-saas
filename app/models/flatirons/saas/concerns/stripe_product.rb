@@ -63,7 +63,7 @@ module Flatirons
         def destroy_stripe_product
           raise 'stripe_product_id attribute not found.' unless has_attribute? :stripe_product_id
 
-          delete_product_on_destroy = subscriptable_options[:delete_product_on_destroy]
+          delete_product_on_destroy = productable_options[:delete_product_on_destroy]
           stripe_product_id = self[:stripe_product_id]
 
           return true if stripe_product_id.nil? || delete_product_on_destroy != true
