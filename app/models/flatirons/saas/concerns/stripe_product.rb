@@ -39,7 +39,7 @@ module Flatirons
         # @return [Hash]
         #
         def create_stripe_product
-          raise 'stripe_product_id attribute not found.' unless has_attribute? :stripe_product_id
+          assert_stripe_product_id_attribute!
 
           stripe_product_id = self[:stripe_product_id]
 
@@ -61,7 +61,7 @@ module Flatirons
         # @return [Hash]
         #
         def destroy_stripe_product
-          raise 'stripe_product_id attribute not found.' unless has_attribute? :stripe_product_id
+          assert_stripe_product_id_attribute!
 
           delete_product_on_destroy = productable_options[:delete_product_on_destroy]
           stripe_product_id = self[:stripe_product_id]
@@ -101,6 +101,12 @@ module Flatirons
               set_callback(:stripe_product_deletion, :after, *args, &block)
             end
           end
+        end
+
+        private
+
+        def assert_stripe_product_id_attribute!
+          raise 'stripe_product_id attribute not found.' unless has_attribute? :stripe_product_id
         end
       end
     end
