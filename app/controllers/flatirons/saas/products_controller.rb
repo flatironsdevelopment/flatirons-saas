@@ -6,7 +6,8 @@ module Flatirons::Saas
 
     # GET /resource/products
     def index
-      render json: Product.all
+      klass = mapping[:productable_klass]
+      render json: klass.all
     end
   end
 end

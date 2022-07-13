@@ -153,4 +153,40 @@ describe Flatirons::Saas::Services::StripeService do
       end
     end
   end
+
+  describe 'product' do
+    describe 'create_product' do
+      let!(:product_name) { 'Flatirons' }
+
+      it 'should create a product' do
+        product = service.create_product product_name
+        expect(product.id).to be
+        expect(product.name).to eq product_name
+      end
+
+      context 'given extra fields' do
+        let!(:extra_fields) { { description: 'Flatirons Product Description' } }
+
+        it 'should create a product' do
+          product = service.create_product product_name, extra_fields
+          expect(product.id).to be
+          expect(product.name).to eq product_name
+          expect(product.description).to eq extra_fields[:description]
+        end
+      end
+    end
+
+    describe 'destroy_product' do
+      let!(:product) { Stripe::Product.create({ name: 'flatirons' }) }
+
+      it 'should destroy the product' do
+        expect(Stripe::Product.retrieve(product.id).deleted?).to be false
+
+        deleted_product = service.destroy_product(product.id)
+        expect(deleted_product.deleted?).to be true
+
+        expect { Stripe::Product.retrieve(product.id) }.to raise_error "No such product: #{product.id}"
+      end
+    end
+  end
 end

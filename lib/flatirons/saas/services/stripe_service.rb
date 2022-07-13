@@ -27,6 +27,14 @@ module Flatirons::Saas::Services
       ).data
     end
 
+    def create_product(name, extra_fields = {})
+      Stripe::Product.create extra_fields.merge({ name: name }), stripe_opts
+    end
+
+    def destroy_product(product_id)
+      Stripe::Product.delete product_id, {}, stripe_opts
+    end
+
     private
 
     def set_default_payment_method(stripe_customer_id, payment_method_id)

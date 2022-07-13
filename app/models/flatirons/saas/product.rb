@@ -11,6 +11,13 @@ module Flatirons::Saas
   class Product < ApplicationRecord
     productable
 
-    validates :name, presence: true
+    #
+    # Define stripe product extra attributes
+    #
+    # @return [Hash]
+    #
+    def stripe_product_attrs
+      { description: description }
+    end
   end
 end

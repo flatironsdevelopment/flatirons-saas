@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_23_174145) do
+ActiveRecord::Schema.define(version: 2022_07_12_180445) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,17 @@ ActiveRecord::Schema.define(version: 2022_06_23_174145) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_dummy_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_dummy_users_on_reset_password_token", unique: true
+  end
+
+  create_table "flatirons_saas_products", force: :cascade do |t|
+    t.string "name"
+    t.string "stripe_product_id"
+    t.text "description"
+    t.datetime "deleted_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_flatirons_saas_products_on_name"
+    t.index ["stripe_product_id"], name: "index_flatirons_saas_products_on_stripe_product_id"
   end
 
   create_table "flatirons_saas_subscriptions", force: :cascade do |t|

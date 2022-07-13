@@ -60,12 +60,15 @@ module ActionDispatch::Routing
     def subscription_for(*resources)
       options = resources.extract_options!
       resources.map!(&:to_sym)
-      resource_module_name = 'subscriptable'
+      concern_name = 'subscriptable'
+      method_prefix = 'subscription'
+      module_class = Flatirons::Saas::Rails::Subscription
 
       resources.each do |resource|
-        ensure_modulable! resource.to_s.classify.to_s.constantize, resource_module_name
-        ref = extract_resource_ref resource, options, 'subscription', resource_module_name
-        routing_resource_scope(symbol: ref[:symbol], resource_class_name: 'Subscription') do
+        ref = extract_resource_ref resource, options, module_class, method_prefix
+        ensure_concern! ref[:klass], concern_name
+
+        routing_resource_scope(symbol: ref[:symbol], module_class: module_class) do
           with_exclusive_scope ref do
             resources 'subscriptions', controller: 'flatirons/saas/subscriptions', only: %i[index create update]
             resources 'payment_methods', controller: 'flatirons/saas/payment_methods', only: %i[index create]
@@ -77,13 +80,17 @@ module ActionDispatch::Routing
     def products_for(*resources)
       options = resources.extract_options!
       resources.map!(&:to_sym)
-      resource_module_name = 'productable'
-      resource_klass = options[:resource_class_name]&.constantize || Product
+      concern_name = 'productable'
+      method_prefix = 'products'
+      module_class = Flatirons::Saas::Rails::Product
+
+      productable_klass = options[:productable_class_name]&.constantize || Flatirons::Saas::Product
 
       resources.each do |resource|
-        ensure_modulable! resource_klass, resource_module_name
-        ref = extract_resource_ref resource, options, 'products', resource_module_name
-        routing_resource_scope(symbol: ref[:symbol], resource_class_name: 'Product') do
+        ref = extract_resource_ref resource, options, module_class, method_prefix, { productable_klass: productable_klass }
+        ensure_concern! ref[:productable_klass], concern_name
+
+        routing_resource_scope(symbol: ref[:symbol], module_class: module_class) do
           with_exclusive_scope ref do
             resources 'products', controller: 'flatirons/saas/products', only: %i[index]
           end
@@ -95,8 +102,9 @@ module ActionDispatch::Routing
 
     def routing_resource_scope(**args, &block) # :nodoc:
       symbol = args[:symbol]
+      module_class = args[:module_class]
       constraint = lambda do |request|
-        request.env['flatirons.saas.mapping'] = "Flatirons::Saas::Rails::#{args[:resource_class_name]}".constantize.mappings[symbol]
+        request.env['flatirons.saas.mapping'] = module_class.mappings[symbol]
         true
       end
       constraints(constraint, &block)
@@ -113,33 +121,34 @@ module ActionDispatch::Routing
       @scope = current_scope
     end
 
-    def extract_resource_ref(auth_resource, options, resource_name, _resource_module_name) # :nodoc:
-      name = auth_resource.to_s.singularize.to_s
+    def extract_resource_ref(resource, options, module_class, method_prefix, extra_mapping = {}) # :nodoc:
+      name = resource.to_s.singularize.to_s
       symbol = name.to_sym
-      klass = (options[:class_name] || auth_resource.to_s.classify).to_s.constantize
-      path = (options[:path] || auth_resource).to_s
-      ensure_devise_for_resource! auth_resource, symbol, klass, resource_name
+      klass = (options[:class_name] || resource.to_s.classify).to_s.constantize
+      path = (options[:path] || resource).to_s
 
-      "Flatirons::Saas::Rails::#{resource_name.singularize.camelcase}".constantize.mappings[symbol] =
-        { symbol: symbol, name: name, path: path, klass: klass, resource: auth_resource }
-      "Flatirons::Saas::Rails::#{resource_name.singularize.camelcase}".constantize.mappings[symbol]
+      ensure_devise_for_resource! resource, symbol, klass, method_prefix
+
+      module_class.mappings[symbol] =
+        { symbol: symbol, name: name, path: path, klass: klass, resource: resource }.merge(extra_mapping)
+      module_class.mappings[symbol]
     end
 
-    def ensure_devise_for_resource!(auth_resource, symbol, klass, resource_name) # :nodoc:
+    def ensure_devise_for_resource!(resource, symbol, klass, method_prefix) # :nodoc:
       raise 'Devise is not available, please include devise gem to get work.' unless Object.const_defined?('Devise')
-      raise "Devise for :#{auth_resource} not found, please check your #{resource_name}_for/devise_for route configuration." unless Devise.mappings[symbol]
+      raise "Devise for :#{resource} not found, please check your #{method_prefix}_for/devise_for route configuration." unless Devise.mappings[symbol]
 
       klass_name = klass.name
       devise_mapping = Devise.mappings[symbol]
       devise_klass_name = devise_mapping.class_name
       unless devise_klass_name == klass_name # rubocop:disable Style/GuardClause
-        raise "Devise resource type [#{devise_klass_name}] is not the same of #{resource_name}_for [#{klass_name}],"\
-        " check your #{resource_name}_for/devise_for route configuration."
+        raise "Devise resource type [#{devise_klass_name}] is not the same of #{method_prefix}_for [#{klass_name}],"\
+        " check your #{method_prefix}_for/devise_for route configuration."
       end
     end
 
-    def ensure_modulable!(klass, module_name) # :nodoc:
-      raise "#{klass} does not respond to '#{module_name}' method." unless klass.respond_to?("#{module_name}?") && klass.send("#{module_name}?")
+    def ensure_concern!(klass, concern_name) # :nodoc:
+      raise "#{klass} does not respond to '#{concern_name}' method." unless klass.respond_to?("#{concern_name}?") && klass.send("#{concern_name}?")
     end
   end
 end

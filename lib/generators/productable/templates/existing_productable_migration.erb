@@ -2,8 +2,11 @@
 
 class AddProductableTo<%= table_name.camelize %> < ActiveRecord::Migration[<%= rails_version %>]
   def up
-    add_column :<%= table_name %>, :title, :string
-    add_index :<%= table_name %>, :title
+    add_column :<%= table_name %>, :name, :string
+    add_index :<%= table_name %>, :name
+
+    add_column :<%= table_name %>, :stripe_product_id, :string
+    add_index :<%= table_name %>, :stripe_product_id, unique: true
   end
 
   def down
