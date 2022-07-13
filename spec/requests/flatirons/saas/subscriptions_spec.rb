@@ -7,7 +7,6 @@ describe '/dummy_users/subscriptions', type: :request do
   include_context 'dummy_user'
   include_context 'dummy_user_is_authenticated'
   include_context 'dummy_user_with_subscription'
-  include_context 'subscription_for_users'
 
   path '/dummy_users/subscriptions' do
     get('List dummy user subscriptions') do
@@ -39,11 +38,17 @@ describe '/dummy_users/subscriptions', type: :request do
         end
 
         after do |example|
-          example.metadata[:response][:content] = {
+          content = example.metadata[:response][:content] || {}
+          example_spec = {
             'application/json' => {
-              example: JSON.parse(response.body, symbolize_names: true)
+              examples: {
+                test_example: {
+                  value: JSON.parse(response.body, symbolize_names: true)
+                }
+              }
             }
           }
+          example.metadata[:response][:content] = content.deep_merge(example_spec)
         end
       end
     end
