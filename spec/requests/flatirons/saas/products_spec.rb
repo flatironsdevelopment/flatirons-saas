@@ -6,7 +6,6 @@ require 'rails_helper'
 describe '/dummy_users/products', type: :request do
   include_context 'dummy_user'
   include_context 'dummy_user_is_authenticated'
-  include_context 'products_for_users'
 
   it 'lists all products' do
     FactoryBot.create_list(:product, 3)
