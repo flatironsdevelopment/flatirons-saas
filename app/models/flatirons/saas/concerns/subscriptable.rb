@@ -38,9 +38,9 @@ module Flatirons
           # @param delete_customer_on_destroy [Boolean]
           #
           def subscriptable(*opts)
-            @@subscriptable_options = opts.extract_options! # rubocop:disable Style/ClassVars
-
             return if subscriptable?
+
+            @@subscriptable_options = opts.extract_options! # rubocop:disable Style/ClassVars
 
             include Flatirons::Saas::Concerns::Stripe
             include Flatirons::Saas::Concerns::StripeCustomer
