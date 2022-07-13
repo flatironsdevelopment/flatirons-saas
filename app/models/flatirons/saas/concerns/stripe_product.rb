@@ -21,7 +21,7 @@ module Flatirons
         # @return [String]
         #
         def stripe_product_name
-          send(:name)
+          public_send(:name)
         end
 
         #
