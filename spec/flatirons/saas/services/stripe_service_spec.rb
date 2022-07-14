@@ -211,6 +211,18 @@ describe Flatirons::Saas::Services::StripeService do
           expect(price.unit_amount).to eq unit_amount
           expect(price.currency).to eq currency
         end
+
+        it 'should create a price without recurring interval' do
+          price = service.create_price(
+            product_id: product.id,
+            unit_amount: unit_amount,
+            currency: currency
+          )
+          expect(price).to be
+          expect(price.id).to be
+          expect(price.unit_amount).to eq unit_amount
+          expect(price.currency).to eq currency
+        end
       end
     end
   end

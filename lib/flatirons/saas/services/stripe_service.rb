@@ -35,7 +35,7 @@ module Flatirons::Saas::Services
       Stripe::Product.delete product_id, {}, stripe_opts
     end
 
-    def create_price(product_id:, unit_amount:, currency:, recurring_interval:, extra_fields: {})
+    def create_price(product_id:, unit_amount:, currency:, recurring_interval: nil, extra_fields: {})
       return if product_id.nil? || unit_amount.nil? || currency.nil?
 
       price_attrs = {
