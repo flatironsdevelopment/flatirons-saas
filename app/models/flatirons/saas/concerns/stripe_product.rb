@@ -34,6 +34,37 @@ module Flatirons
         end
 
         #
+        # Create a price for given product
+        #
+        # @return [Hash]
+        #
+        def create_price(unit_amount:, currency:, recurring_interval: nil, extra_fields: {})
+          assert_stripe_product_id_attribute!
+
+          stripe_product_id = self[:stripe_product_id]
+
+          return unless stripe_product_id
+
+          stripe_service.create_price(product_id: stripe_product_id, unit_amount: unit_amount, currency: currency, recurring_interval: recurring_interval,
+                                      extra_fields: extra_fields)
+        end
+
+        #
+        # List prices for given product
+        #
+        # @return [Hash]
+        #
+        def prices
+          assert_stripe_product_id_attribute!
+
+          stripe_product_id = self[:stripe_product_id]
+
+          return unless stripe_product_id
+
+          stripe_service.list_prices stripe_product_id
+        end
+
+        #
         # Create the stripe product before commit
         #
         # @return [Hash]
