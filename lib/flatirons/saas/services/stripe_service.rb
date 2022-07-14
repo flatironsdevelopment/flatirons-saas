@@ -48,6 +48,12 @@ module Flatirons::Saas::Services
       Stripe::Price.create price_attrs.merge(extra_fields), stripe_opts
     end
 
+    def list_prices(product_id)
+      return if product_id.nil?
+
+      Stripe::Price.list({ product: product_id }, stripe_opts).data
+    end
+
     private
 
     def set_default_payment_method(stripe_customer_id, payment_method_id)

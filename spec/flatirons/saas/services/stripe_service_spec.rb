@@ -40,6 +40,24 @@ describe Flatirons::Saas::Services::StripeService do
         expect { service.list_payment_methods 'test' }.to raise_error 'Stripe API key not configured'
       end
     end
+
+    describe 'create_price' do
+      it 'should raise an error' do
+        allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
+        expect do
+          service.create_price(product_id: 'product.id',
+                               unit_amount: 'unit_amount',
+                               currency: 'currency')
+        end.to raise_error 'Stripe API key not configured'
+      end
+    end
+
+    describe 'list_prices' do
+      it 'should raise an error' do
+        allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
+        expect { service.list_prices('product.id') }.to raise_error 'Stripe API key not configured'
+      end
+    end
   end
 
   describe 'customer' do
@@ -191,13 +209,13 @@ describe Flatirons::Saas::Services::StripeService do
   end
 
   describe 'price' do
-    context 'given a product' do
-      let!(:product) { Stripe::Product.create({ name: 'Beer' }) }
-      let!(:unit_amount) { 1099 }
-      let!(:currency) { 'usd' }
-      let!(:recurring_interval) { 'month' }
+    describe 'create_price' do
+      context 'given a product' do
+        let!(:product) { Stripe::Product.create({ name: 'Beer' }) }
+        let!(:unit_amount) { 1099 }
+        let!(:currency) { 'usd' }
+        let!(:recurring_interval) { 'month' }
 
-      describe 'create_price' do
         it 'should create a price' do
           price = service.create_price(
             product_id: product.id,
@@ -212,7 +230,7 @@ describe Flatirons::Saas::Services::StripeService do
           expect(price.currency).to eq currency
         end
 
-        it 'should create a price without recurring interval' do
+        it 'should create a price without recurring_interval' do
           price = service.create_price(
             product_id: product.id,
             unit_amount: unit_amount,
@@ -222,6 +240,72 @@ describe Flatirons::Saas::Services::StripeService do
           expect(price.id).to be
           expect(price.unit_amount).to eq unit_amount
           expect(price.currency).to eq currency
+        end
+      end
+
+      context 'invalid paramenters' do
+        let!(:product) { Stripe::Product.create({ name: 'Beer' }) }
+
+        it 'should not create a price without product_id' do
+          price = service.create_price(
+            product_id: nil,
+            unit_amount: 100,
+            currency: 'usd'
+          )
+          expect(price).to_not be
+        end
+
+        it 'should not create a price without unit_amount' do
+          price = service.create_price(
+            product_id: product.id,
+            unit_amount: nil,
+            currency: 'usd'
+          )
+          expect(price).to_not be
+        end
+
+        it 'should not create a price without unit_amount' do
+          price = service.create_price(
+            product_id: product.id,
+            unit_amount: 900,
+            currency: nil
+          )
+          expect(price).to_not be
+        end
+      end
+    end
+
+    describe 'list_prices' do
+      context 'given a product with prices' do
+        let!(:product) { Stripe::Product.create({ name: 'Beer' }) }
+        let!(:first_price) do
+          Stripe::Price.create({
+                                 unit_amount: 4000,
+                                 currency: 'usd',
+                                 product: product.id,
+                               })
+        end
+        let!(:second_price) do
+          Stripe::Price.create({
+                                 unit_amount: 4000,
+                                 currency: 'usd',
+                                 product: product.id,
+                               })
+        end
+
+        it 'should list prices to given product' do
+          prices = service.list_prices(product.id)
+          expect(prices).to be
+          expect(prices.length).to eq 2
+          expect(prices[1].id).to eq(first_price.id)
+          expect(prices[0].id).to eq(second_price.id)
+        end
+      end
+
+      context 'invalid parameters' do
+        it 'should not list prices' do
+          prices = service.list_prices(nil)
+          expect(prices).to_not be
         end
       end
     end
