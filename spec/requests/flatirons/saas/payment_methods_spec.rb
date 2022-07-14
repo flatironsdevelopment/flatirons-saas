@@ -94,6 +94,29 @@ describe '/dummy_users/payment_methods', type: :request do
           example.metadata[:response][:content] = content.deep_merge(example_spec)
         end
       end
+
+      response(422, 'unprocessable_entity') do
+        let(:payment_method_params) { { id: nil } }
+
+        run_test! do |response|
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response.body).to_not include_json({ id: new_payment_method.id })
+        end
+
+        after do |example|
+          content = example.metadata[:response][:content] || {}
+          example_spec = {
+            'application/json' => {
+              examples: {
+                test_example: {
+                  value: JSON.parse(response.body, symbolize_names: true)
+                }
+              }
+            }
+          }
+          example.metadata[:response][:content] = content.deep_merge(example_spec)
+        end
+      end
     end
 
     let!(:second_payment_method_id) { Stripe::PaymentMethod.create(stripe_credit_card).id }
