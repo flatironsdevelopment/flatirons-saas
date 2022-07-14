@@ -26,8 +26,7 @@ describe Flatirons::Saas::Concerns::Subscriptable do
 
       describe 'customer creation' do
         it 'should create stripe customer' do
-          service = instance_double(Flatirons::Saas::Services::StripeService)
-          allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+          service = mock_stripe_service
           expect(service).to receive(:create_customer).with("#{Organization.table_name}_1", {}).and_return(customer)
 
           organization.save
@@ -42,8 +41,7 @@ describe Flatirons::Saas::Concerns::Subscriptable do
       let!(:stripe_customer_id) { customer.id }
 
       it 'should not create stripe customer' do
-        service = instance_double(Flatirons::Saas::Services::StripeService)
-        allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+        service = mock_stripe_service
         expect(service).to_not receive(:create_customer)
 
         organization.save
@@ -81,8 +79,7 @@ describe Flatirons::Saas::Concerns::Subscriptable do
       end
 
       it 'should run callbacks' do
-        service = instance_double(Flatirons::Saas::Services::StripeService)
-        allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+        service = mock_stripe_service
         expect(service).to receive(:create_customer).with("#{Organization.table_name}_1", {}).and_return(customer)
 
         organization.save
@@ -105,8 +102,7 @@ describe Flatirons::Saas::Concerns::Subscriptable do
       let!(:stripe_customer_id) { nil }
 
       it 'should not destroy the stripe customer' do
-        service = instance_double(Flatirons::Saas::Services::StripeService)
-        allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+        service = mock_stripe_service
         expect(service).to_not receive(:destroy_customer)
 
         organization.destroy
@@ -117,8 +113,7 @@ describe Flatirons::Saas::Concerns::Subscriptable do
       let!(:stripe_customer_id) { customer.id }
 
       it 'should destroy the stripe customer' do
-        service = instance_double(Flatirons::Saas::Services::StripeService)
-        allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+        service = mock_stripe_service
         expect(service).to receive(:destroy_customer).with(stripe_customer_id)
 
         organization.destroy
@@ -141,8 +136,7 @@ describe Flatirons::Saas::Concerns::Subscriptable do
       let!(:stripe_customer_id) { nil }
 
       it 'should not destroy the stripe customer' do
-        service = instance_double(Flatirons::Saas::Services::StripeService)
-        allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+        service = mock_stripe_service
         allow(organization).to receive(:subscriptable_options).and_return({})
 
         expect(service).to_not receive(:destroy_customer)
@@ -151,8 +145,7 @@ describe Flatirons::Saas::Concerns::Subscriptable do
       end
 
       it 'should not destroy the stripe customer' do
-        service = instance_double(Flatirons::Saas::Services::StripeService)
-        allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+        service = mock_stripe_service
         allow(organization).to receive(:subscriptable_options).and_return({ delete_customer_on_destroy: false })
 
         expect(service).to_not receive(:destroy_customer)
@@ -180,8 +173,7 @@ describe Flatirons::Saas::Concerns::Subscriptable do
       end
 
       it 'should run callbacks' do
-        service = instance_double(Flatirons::Saas::Services::StripeService)
-        allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+        service = mock_stripe_service
         expect(service).to receive(:destroy_customer).with(stripe_customer_id)
 
         organization.destroy
@@ -205,8 +197,7 @@ describe Flatirons::Saas::Concerns::Subscriptable do
       let!(:stripe_customer_id) { nil }
 
       it 'should not attach the payment method' do
-        service = instance_double(Flatirons::Saas::Services::StripeService)
-        allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+        service = mock_stripe_service
         expect(service).to_not receive(:attach_payment_method)
 
         expect(organization.attach_payment_method(payment_method_id)).to be false
@@ -217,8 +208,7 @@ describe Flatirons::Saas::Concerns::Subscriptable do
       let!(:stripe_customer_id) { customer.id }
 
       it 'should attach the payment method' do
-        service = instance_double(Flatirons::Saas::Services::StripeService)
-        allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+        service = mock_stripe_service
         expect(service).to receive(:attach_payment_method).with(stripe_customer_id, payment_method_id, set_as_default: false).and_return payment_method
 
         payment_method = organization.attach_payment_method payment_method_id
@@ -226,8 +216,7 @@ describe Flatirons::Saas::Concerns::Subscriptable do
       end
 
       it 'should attach the payment method and set as default' do
-        service = instance_double(Flatirons::Saas::Services::StripeService)
-        allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+        service = mock_stripe_service
         expect(service).to receive(:attach_payment_method).with(stripe_customer_id, payment_method_id, set_as_default: true).and_return payment_method
 
         payment_method = organization.attach_payment_method payment_method_id, set_as_default: true
@@ -256,8 +245,7 @@ describe Flatirons::Saas::Concerns::Subscriptable do
       let!(:stripe_customer_id) { nil }
 
       it 'should return empty' do
-        service = instance_double(Flatirons::Saas::Services::StripeService)
-        allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+        service = mock_stripe_service
         expect(service).to_not receive(:list_payment_methods)
 
         expect(organization.payment_methods).to eq []
@@ -268,8 +256,7 @@ describe Flatirons::Saas::Concerns::Subscriptable do
       let!(:stripe_customer_id) { customer.id }
 
       it 'should return the payment methods' do
-        service = instance_double(Flatirons::Saas::Services::StripeService)
-        allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+        service = mock_stripe_service
         expect(service).to receive(:list_payment_methods).with(stripe_customer_id).and_return [payment_method]
 
         payment_methods = organization.payment_methods
