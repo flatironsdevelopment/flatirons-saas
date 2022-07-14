@@ -189,4 +189,29 @@ describe Flatirons::Saas::Services::StripeService do
       end
     end
   end
+
+  describe 'price' do
+    context 'given a product' do
+      let!(:product) { Stripe::Product.create({ name: 'Beer' }) }
+      let!(:unit_amount) { 1099 }
+      let!(:currency) { 'usd' }
+      let!(:recurring_interval) { 'month' }
+
+      describe 'create_price' do
+        it 'should create a price' do
+          price = service.create_price(
+            product_id: product.id,
+            unit_amount: unit_amount,
+            currency: currency,
+            recurring_interval: recurring_interval
+          )
+          expect(price).to be
+          expect(price.id).to be
+          expect(price.recurring.interval).to eq recurring_interval
+          expect(price.unit_amount).to eq unit_amount
+          expect(price.currency).to eq currency
+        end
+      end
+    end
+  end
 end
