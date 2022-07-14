@@ -7,15 +7,53 @@ describe '/dummy_users/products', type: :request do
   include_context 'dummy_user'
   include_context 'dummy_user_is_authenticated'
 
-  it 'lists all products' do
-    FactoryBot.create_list(:product, 3)
-    product_names = Flatirons::Saas::Product.all.pluck(:name).sort
+  context 'given products' do
+    let!(:products) { FactoryBot.create_list(:product, 3) }
 
-    get '/dummy_users/products'
-    payload = JSON.parse(response.body)
-    expect(response.status).to eq 200
-    expect(payload.size).to eq 3
-    request_names = payload.map { |product| product['name'] }.sort
-    expect(request_names == product_names).to eq(true)
+    path '/dummy_users/products' do
+      get('List products') do
+        tags 'Product'
+        description 'Lists products.'
+        consumes 'application/json'
+        produces 'application/json'
+        security [bearer: []]
+
+        response(200, 'successful') do
+          schema type: :array,
+                 items: {
+                   type: :object,
+                   properties: {
+                     id: { type: :integer },
+                     stripe_product_id: { type: :string },
+                     name: { type: :string },
+                     description: { type: :string, nullable: true },
+                     deleted_at: { type: :string, nullable: true },
+                     created_at: { type: :string },
+                     updated_at: { type: :string }
+                   },
+                 }
+
+          run_test! do |response|
+            expect(response).to have_http_status(:ok)
+            products = Flatirons::Saas::Product.all.map(&:as_json)
+            expect(response.body).to include_json(products)
+          end
+
+          after do |example|
+            content = example.metadata[:response][:content] || {}
+            example_spec = {
+              'application/json' => {
+                examples: {
+                  test_example: {
+                    value: JSON.parse(response.body, symbolize_names: true)
+                  }
+                }
+              }
+            }
+            example.metadata[:response][:content] = content.deep_merge(example_spec)
+          end
+        end
+      end
+    end
   end
 end
