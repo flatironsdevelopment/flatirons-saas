@@ -17,8 +17,7 @@ module Flatirons::Saas
 
       describe 'product creation' do
         it 'should create stripe product with description' do
-          service = instance_double(Flatirons::Saas::Services::StripeService)
-          allow(Flatirons::Saas::Services::StripeService).to receive(:new).and_return(service)
+          service = mock_stripe_service
           expect(service).to receive(:create_product).with(product.name, { description: description }).and_return(stripe_product)
 
           product.save!

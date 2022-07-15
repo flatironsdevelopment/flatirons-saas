@@ -40,6 +40,24 @@ describe Flatirons::Saas::Services::StripeService do
         expect { service.list_payment_methods 'test' }.to raise_error 'Stripe API key not configured'
       end
     end
+
+    describe 'create_price' do
+      it 'should raise an error' do
+        allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
+        expect do
+          service.create_price(product_id: 'product.id',
+                               unit_amount: 'unit_amount',
+                               currency: 'currency')
+        end.to raise_error 'Stripe API key not configured'
+      end
+    end
+
+    describe 'list_prices' do
+      it 'should raise an error' do
+        allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
+        expect { service.list_prices('product.id') }.to raise_error 'Stripe API key not configured'
+      end
+    end
   end
 
   describe 'customer' do
@@ -49,7 +67,7 @@ describe Flatirons::Saas::Services::StripeService do
       it 'should create a stripe customer' do
         customer = service.create_customer customer_name
         expect(customer.name).to eq(customer_name)
-        expect(customer.id).to be
+        expect(customer.id).to_not be_nil
       end
 
       context 'given extra fields' do
@@ -58,7 +76,7 @@ describe Flatirons::Saas::Services::StripeService do
           customer = service.create_customer customer_name, { email: customer_email }
           expect(customer.name).to eq(customer_name)
           expect(customer.email).to eq(customer_email)
-          expect(customer.id).to be
+          expect(customer.id).to_not be_nil
         end
       end
     end
@@ -87,14 +105,14 @@ describe Flatirons::Saas::Services::StripeService do
 
           it 'should attach a payment method' do
             payment_method = service.attach_payment_method(stripe_customer_id, payment_method_id)
-            expect(payment_method).to be
+            expect(payment_method).to_not be_nil
             expect(payment_method.id).to eq(payment_method_id)
           end
 
           describe 'set_as_default' do
             it 'should set as default the payment method' do
               payment_method = service.attach_payment_method(stripe_customer_id, payment_method_id, set_as_default: true)
-              expect(payment_method).to be
+              expect(payment_method).to_not be_nil
               expect(payment_method.id).to eq(payment_method_id)
 
               updated_customer = Stripe::Customer.retrieve(stripe_customer_id)
@@ -108,7 +126,7 @@ describe Flatirons::Saas::Services::StripeService do
 
           it 'should not attach a payment method' do
             payment_method = service.attach_payment_method(stripe_customer_id, payment_method_id)
-            expect(payment_method).to_not be
+            expect(payment_method).to be_nil
           end
         end
       end
@@ -120,7 +138,7 @@ describe Flatirons::Saas::Services::StripeService do
 
           it 'should not attach a payment method' do
             payment_method = service.attach_payment_method(stripe_customer_id, payment_method_id)
-            expect(payment_method).to_not be
+            expect(payment_method).to be_nil
           end
         end
       end
@@ -147,8 +165,8 @@ describe Flatirons::Saas::Services::StripeService do
       end
 
       context 'without customer' do
-        it 'should not be' do
-          expect(service.list_payment_methods(nil)).to_not be
+        it 'should be nil' do
+          expect(service.list_payment_methods(nil)).to be_nil
         end
       end
     end
@@ -160,7 +178,7 @@ describe Flatirons::Saas::Services::StripeService do
 
       it 'should create a product' do
         product = service.create_product product_name
-        expect(product.id).to be
+        expect(product.id).to_not be_nil
         expect(product.name).to eq product_name
       end
 
@@ -169,7 +187,7 @@ describe Flatirons::Saas::Services::StripeService do
 
         it 'should create a product' do
           product = service.create_product product_name, extra_fields
-          expect(product.id).to be
+          expect(product.id).to_not be_nil
           expect(product.name).to eq product_name
           expect(product.description).to eq extra_fields[:description]
         end
@@ -186,6 +204,109 @@ describe Flatirons::Saas::Services::StripeService do
         expect(deleted_product.deleted?).to be true
 
         expect { Stripe::Product.retrieve(product.id) }.to raise_error "No such product: #{product.id}"
+      end
+    end
+  end
+
+  describe 'price' do
+    describe 'create_price' do
+      context 'given a product' do
+        let!(:product) { Stripe::Product.create({ name: 'Beer' }) }
+        let!(:unit_amount) { 1099 }
+        let!(:currency) { 'usd' }
+        let!(:recurring_interval) { 'month' }
+
+        it 'should create a price' do
+          price = service.create_price(
+            product_id: product.id,
+            unit_amount: unit_amount,
+            currency: currency,
+            recurring_interval: recurring_interval
+          )
+          expect(price).to_not be_nil
+          expect(price.id).to_not be_nil
+          expect(price.recurring.interval).to eq recurring_interval
+          expect(price.unit_amount).to eq unit_amount
+          expect(price.currency).to eq currency
+        end
+
+        it 'should create a price without recurring_interval' do
+          price = service.create_price(
+            product_id: product.id,
+            unit_amount: unit_amount,
+            currency: currency
+          )
+          expect(price).to_not be_nil
+          expect(price.id).to_not be_nil
+          expect(price.unit_amount).to eq unit_amount
+          expect(price.currency).to eq currency
+        end
+      end
+
+      context 'invalid paramenters' do
+        let!(:product) { Stripe::Product.create({ name: 'Beer' }) }
+
+        it 'should not create a price without product_id' do
+          price = service.create_price(
+            product_id: nil,
+            unit_amount: 100,
+            currency: 'usd'
+          )
+          expect(price).to be_nil
+        end
+
+        it 'should not create a price without unit_amount' do
+          price = service.create_price(
+            product_id: product.id,
+            unit_amount: nil,
+            currency: 'usd'
+          )
+          expect(price).to be_nil
+        end
+
+        it 'should not create a price without unit_amount' do
+          price = service.create_price(
+            product_id: product.id,
+            unit_amount: 900,
+            currency: nil
+          )
+          expect(price).to be_nil
+        end
+      end
+    end
+
+    describe 'list_prices' do
+      context 'given a product with prices' do
+        let!(:product) { Stripe::Product.create({ name: 'Beer' }) }
+        let!(:first_price) do
+          Stripe::Price.create({
+                                 unit_amount: 4000,
+                                 currency: 'usd',
+                                 product: product.id,
+                               })
+        end
+        let!(:second_price) do
+          Stripe::Price.create({
+                                 unit_amount: 4000,
+                                 currency: 'usd',
+                                 product: product.id,
+                               })
+        end
+
+        it 'should list prices to given product' do
+          prices = service.list_prices(product.id)
+          expect(prices).to_not be_nil
+          expect(prices.size).to eq 2
+          expect(prices[1].id).to eq(first_price.id)
+          expect(prices[0].id).to eq(second_price.id)
+        end
+      end
+
+      context 'invalid parameters' do
+        it 'should not list prices' do
+          prices = service.list_prices(nil)
+          expect(prices).to be_nil
+        end
       end
     end
   end

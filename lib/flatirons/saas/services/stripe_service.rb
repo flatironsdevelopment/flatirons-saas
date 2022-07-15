@@ -35,6 +35,25 @@ module Flatirons::Saas::Services
       Stripe::Product.delete product_id, {}, stripe_opts
     end
 
+    def create_price(product_id:, unit_amount:, currency:, recurring_interval: nil, extra_fields: {})
+      return if product_id.nil? || unit_amount.nil? || currency.nil?
+
+      price_attrs = {
+        unit_amount: unit_amount,
+        currency: currency,
+        product: product_id,
+      }
+      price_attrs = price_attrs.merge({ recurring: { interval: recurring_interval } }) if recurring_interval
+
+      Stripe::Price.create price_attrs.merge(extra_fields), stripe_opts
+    end
+
+    def list_prices(product_id)
+      return if product_id.nil?
+
+      Stripe::Price.list({ product: product_id }, stripe_opts).data
+    end
+
     private
 
     def set_default_payment_method(stripe_customer_id, payment_method_id)

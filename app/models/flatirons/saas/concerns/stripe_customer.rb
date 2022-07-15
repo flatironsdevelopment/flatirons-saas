@@ -21,7 +21,7 @@ module Flatirons
         # @return [String]
         #
         def stripe_customer_name
-          id = send(@primary_key)
+          id = public_send(@primary_key)
           "#{self.class.table_name}_#{id}"
         end
 
