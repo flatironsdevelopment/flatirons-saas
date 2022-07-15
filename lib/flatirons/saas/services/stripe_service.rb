@@ -6,23 +6,23 @@ module Flatirons::Saas::Services
       Stripe::Customer.create extra_fields.merge({ name: name }), stripe_opts
     end
 
-    def destroy_customer(stripe_customer_id)
-      Stripe::Customer.delete stripe_customer_id, {}, stripe_opts
+    def destroy_customer(customer_id)
+      Stripe::Customer.delete customer_id, {}, stripe_opts
     end
 
-    def attach_payment_method(stripe_customer_id, payment_method_id, set_as_default: false)
-      return if stripe_customer_id.nil? || payment_method_id.nil?
+    def attach_payment_method(customer_id, payment_method_id, set_as_default: false)
+      return unless customer_id && payment_method_id
 
-      set_default_payment_method(stripe_customer_id, payment_method_id) if set_as_default
+      set_default_payment_method(customer_id, payment_method_id) if set_as_default
 
-      Stripe::PaymentMethod.attach(payment_method_id, { customer: stripe_customer_id }, stripe_opts)
+      Stripe::PaymentMethod.attach(payment_method_id, { customer: customer_id }, stripe_opts)
     end
 
-    def list_payment_methods(stripe_customer_id)
-      return unless stripe_customer_id
+    def list_payment_methods(customer_id)
+      return unless customer_id
 
       Stripe::PaymentMethod.list(
-        { customer: stripe_customer_id, type: 'card' },
+        { customer: customer_id, type: 'card' },
         stripe_opts
       ).data
     end
@@ -36,7 +36,7 @@ module Flatirons::Saas::Services
     end
 
     def create_price(product_id:, unit_amount:, currency:, recurring_interval: nil, extra_fields: {})
-      return if product_id.nil? || unit_amount.nil? || currency.nil?
+      return unless product_id && unit_amount && currency
 
       price_attrs = {
         unit_amount: unit_amount,
@@ -49,21 +49,28 @@ module Flatirons::Saas::Services
     end
 
     def list_prices(product_id)
-      return if product_id.nil?
+      return unless product_id
 
       Stripe::Price.list({ product: product_id }, stripe_opts).data
     end
 
+    def create_subscription(customer_id, price_id)
+      return unless customer_id && price_id
+
+      subscription_params = { customer: customer_id, items: [{ price: price_id }], expand: ['latest_invoice.payment_intent'] }
+      Stripe::Subscription.create subscription_params, stripe_opts
+    end
+
     private
 
-    def set_default_payment_method(stripe_customer_id, payment_method_id)
+    def set_default_payment_method(customer_id, payment_method_id)
       settings = {
         invoice_settings: {
           default_payment_method: payment_method_id
         }
       }
       Stripe::Customer.update(
-        stripe_customer_id,
+        customer_id,
         settings,
         stripe_opts
       )

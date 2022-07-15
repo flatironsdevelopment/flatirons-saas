@@ -58,6 +58,13 @@ describe Flatirons::Saas::Services::StripeService do
         expect { service.list_prices('product.id') }.to raise_error 'Stripe API key not configured'
       end
     end
+
+    describe 'create_subscription' do
+      it 'should raise an error' do
+        allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
+        expect { service.create_subscription('customer', 'price') }.to raise_error 'Stripe API key not configured'
+      end
+    end
   end
 
   describe 'customer' do
@@ -243,7 +250,7 @@ describe Flatirons::Saas::Services::StripeService do
         end
       end
 
-      context 'invalid paramenters' do
+      context 'invalid parameters' do
         let!(:product) { Stripe::Product.create({ name: 'Beer' }) }
 
         it 'should not create a price without product_id' do
@@ -306,6 +313,33 @@ describe Flatirons::Saas::Services::StripeService do
         it 'should not list prices' do
           prices = service.list_prices(nil)
           expect(prices).to be_nil
+        end
+      end
+    end
+  end
+
+  describe 'subscription' do
+    describe 'create_subscription' do
+      context 'given a customer with payment method and price' do
+        let!(:customer) { Stripe::Customer.create({ name: 'flatirons', source: stripe_helper.generate_card_token }) }
+        let!(:product) { Stripe::Product.create({ name: 'Beer' }) }
+        let!(:price) { Stripe::Price.create({  unit_amount: 4000, currency: 'usd', product: product.id }) }
+
+        it 'should create a subscription' do
+          subscription = service.create_subscription(customer.id, price.id)
+          expect(subscription).to_not be_nil
+
+          expect(subscription.id).to_not be_nil
+          expect(subscription.plan.id).to eq price.id
+        end
+      end
+
+      context 'invalid parameters' do
+        it 'should not create a subscription without customer_id' do
+          expect(service.create_subscription(nil, 'price_id')).to be_nil
+        end
+        it 'should not create a subscription without price_id' do
+          expect(service.create_subscription('customer_id', nil)).to be_nil
         end
       end
     end
