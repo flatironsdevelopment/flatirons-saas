@@ -236,8 +236,8 @@ describe Flatirons::Saas::Services::StripeService do
             unit_amount: unit_amount,
             currency: currency
           )
-          expect(price).to be
-          expect(price.id).to be
+          expect(price).to_not be_nil
+          expect(price.id).to_not be_nil
           expect(price.unit_amount).to eq unit_amount
           expect(price.currency).to eq currency
         end
@@ -296,7 +296,7 @@ describe Flatirons::Saas::Services::StripeService do
         it 'should list prices to given product' do
           prices = service.list_prices(product.id)
           expect(prices).to be
-          expect(prices.length).to eq 2
+          expect(prices.size).to eq 2
           expect(prices[1].id).to eq(first_price.id)
           expect(prices[0].id).to eq(second_price.id)
         end
