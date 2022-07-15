@@ -6,7 +6,7 @@ describe Flatirons::Saas::Concerns::Subscriptable do
   include_context 'with_subscriptable_organization_model'
 
   it 'can be accessed as a constant' do
-    expect(Organization).to be
+    expect(Organization).to_not be_nil
   end
 
   it 'should be subscriptable' do

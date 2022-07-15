@@ -21,7 +21,7 @@ module Flatirons
         # @return [String]
         #
         def stripe_product_name
-          public_send(:name)
+          name
         end
 
         #
@@ -41,8 +41,6 @@ module Flatirons
         def create_price(unit_amount:, currency:, recurring_interval: nil, extra_fields: {})
           assert_stripe_product_id_attribute!
 
-          stripe_product_id = self[:stripe_product_id]
-
           return unless stripe_product_id
 
           stripe_service.create_price(product_id: stripe_product_id, unit_amount: unit_amount, currency: currency, recurring_interval: recurring_interval,
@@ -57,8 +55,6 @@ module Flatirons
         def prices
           assert_stripe_product_id_attribute!
 
-          stripe_product_id = self[:stripe_product_id]
-
           return unless stripe_product_id
 
           stripe_service.list_prices stripe_product_id
@@ -71,8 +67,6 @@ module Flatirons
         #
         def create_stripe_product
           assert_stripe_product_id_attribute!
-
-          stripe_product_id = self[:stripe_product_id]
 
           return true unless stripe_product_id.nil?
 
@@ -95,8 +89,6 @@ module Flatirons
           assert_stripe_product_id_attribute!
 
           delete_product_on_destroy = productable_options[:delete_product_on_destroy]
-          stripe_product_id = self[:stripe_product_id]
-
           return true if stripe_product_id.nil? || delete_product_on_destroy != true
 
           result = transaction do
