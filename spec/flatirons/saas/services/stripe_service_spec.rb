@@ -8,42 +8,40 @@ describe Flatirons::Saas::Services::StripeService do
   let!(:service) { Flatirons::Saas::Services::StripeService.new }
 
   context 'when stripe API key is not set' do
+    before(:each) do
+      allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
+    end
+
     describe 'create_customer' do
       it 'should raise an error' do
-        allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
         expect { service.create_customer 'test' }.to raise_error 'Stripe API key not configured'
       end
     end
 
     describe 'destroy_customer' do
       it 'should raise an error' do
-        allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
         expect { service.destroy_customer 'test' }.to raise_error 'Stripe API key not configured'
       end
     end
 
     describe 'attach_payment_method' do
       it 'should raise an error' do
-        allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
         expect { service.attach_payment_method 'test', 'test' }.to raise_error 'Stripe API key not configured'
       end
 
       it 'should raise an error' do
-        allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
         expect { service.attach_payment_method 'test', 'test', set_as_default: true }.to raise_error 'Stripe API key not configured'
       end
     end
 
     describe 'list_payment_methods' do
       it 'should raise an error' do
-        allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
         expect { service.list_payment_methods 'test' }.to raise_error 'Stripe API key not configured'
       end
     end
 
     describe 'create_price' do
       it 'should raise an error' do
-        allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
         expect do
           service.create_price(product_id: 'product.id',
                                unit_amount: 'unit_amount',
@@ -54,14 +52,12 @@ describe Flatirons::Saas::Services::StripeService do
 
     describe 'list_prices' do
       it 'should raise an error' do
-        allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
         expect { service.list_prices('product.id') }.to raise_error 'Stripe API key not configured'
       end
     end
 
     describe 'create_subscription' do
       it 'should raise an error' do
-        allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
         expect { service.create_subscription('customer', 'price') }.to raise_error 'Stripe API key not configured'
       end
     end
