@@ -61,6 +61,22 @@ module Flatirons::Saas::Services
       Stripe::Subscription.create subscription_params, stripe_opts
     end
 
+    def update_subscription(subscription_id, price_id, proration_behavior = 'always_invoice')
+      return unless subscription_id && price_id
+
+      items_to_remove = Stripe::SubscriptionItem.list({ subscription: subscription_id }).data
+
+      subscription = Stripe::Subscription.update(
+        subscription_id,
+        proration_behavior: proration_behavior,
+        items: [{ price: price_id }]
+      )
+
+      items_to_remove.each { |item| Stripe::SubscriptionItem.delete(item.id) }
+
+      subscription
+    end
+
     private
 
     def set_default_payment_method(customer_id, payment_method_id)

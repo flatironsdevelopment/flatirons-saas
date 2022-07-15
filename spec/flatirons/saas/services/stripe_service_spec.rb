@@ -315,18 +315,19 @@ describe Flatirons::Saas::Services::StripeService do
   end
 
   describe 'subscription' do
+    let!(:customer) { Stripe::Customer.create({ name: 'flatirons', source: stripe_helper.generate_card_token }) }
+    let!(:product) { Stripe::Product.create({ name: 'Beer' }) }
+    let!(:price) { Stripe::Price.create({  unit_amount: 4000, currency: 'usd', product: product.id }) }
+
     describe 'create_subscription' do
       context 'given a customer with payment method and price' do
-        let!(:customer) { Stripe::Customer.create({ name: 'flatirons', source: stripe_helper.generate_card_token }) }
-        let!(:product) { Stripe::Product.create({ name: 'Beer' }) }
-        let!(:price) { Stripe::Price.create({  unit_amount: 4000, currency: 'usd', product: product.id }) }
-
         it 'should create a subscription' do
           subscription = service.create_subscription(customer.id, price.id)
           expect(subscription).to_not be_nil
 
           expect(subscription.id).to_not be_nil
           expect(subscription.plan.id).to eq price.id
+          expect(subscription.items.count).to eq 1
         end
       end
 
@@ -336,6 +337,40 @@ describe Flatirons::Saas::Services::StripeService do
         end
         it 'should not create a subscription without price_id' do
           expect(service.create_subscription('customer_id', nil)).to be_nil
+        end
+      end
+    end
+
+    describe 'update_subscription' do
+      context 'given a subscription and a new price' do
+        let!(:subscription) { Stripe::Subscription.create({ customer: customer.id, items: [{ price: price.id }], expand: ['latest_invoice.payment_intent'] }) }
+        let!(:new_price) { Stripe::Price.create({  unit_amount: 5000, currency: 'usd', product: product.id }) }
+
+        it 'should update the subscription' do
+          updated_subscription = service.update_subscription(subscription.id, new_price.id)
+          expect(updated_subscription).to_not be_nil
+
+          expect(updated_subscription.id).to_not be_nil
+          expect(updated_subscription.plan.id).to eq new_price.id
+          expect(subscription.items.count).to eq 1
+        end
+
+        it 'should update the subscription with other proration behavior' do
+          updated_subscription = service.update_subscription(subscription.id, new_price.id, 'create_prorations')
+          expect(updated_subscription).to_not be_nil
+
+          expect(updated_subscription.id).to_not be_nil
+          expect(updated_subscription.plan.id).to eq new_price.id
+          expect(subscription.items.count).to eq 1
+        end
+      end
+
+      context 'invalid parameters' do
+        it 'should not create a subscription without customer_id' do
+          expect(service.update_subscription(nil, 'price_id')).to be_nil
+        end
+        it 'should not create a subscription without price_id' do
+          expect(service.update_subscription('customer_id', nil)).to be_nil
         end
       end
     end
