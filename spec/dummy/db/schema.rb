@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_12_180445) do
+ActiveRecord::Schema.define(version: 2022_07_15_150706) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,15 +42,20 @@ ActiveRecord::Schema.define(version: 2022_07_12_180445) do
 
   create_table "flatirons_saas_subscriptions", force: :cascade do |t|
     t.string "stripe_subscription_id", null: false
+    t.string "stripe_price_id", null: false
     t.string "status", null: false
     t.string "subscriptable_type"
     t.bigint "subscriptable_id"
+    t.string "product_type"
+    t.bigint "product_id"
     t.datetime "deleted_at"
     t.datetime "canceled_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["deleted_at"], name: "index_flatirons_saas_subscriptions_on_deleted_at"
+    t.index ["product_type", "product_id"], name: "index_flatirons_saas_subscriptions_on_product"
     t.index ["status"], name: "index_flatirons_saas_subscriptions_on_status"
+    t.index ["stripe_price_id"], name: "index_flatirons_saas_subscriptions_on_stripe_price_id"
     t.index ["stripe_subscription_id"], name: "index_flatirons_saas_subscriptions_on_stripe_subscription_id", unique: true
     t.index ["subscriptable_type", "subscriptable_id"], name: "index_flatirons_saas_subscriptions_on_subscriptable"
   end
