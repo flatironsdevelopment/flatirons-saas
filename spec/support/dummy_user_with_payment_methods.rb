@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 shared_context 'dummy_user_with_payment_methods' do
-  let!(:subscription) { FactoryBot.create(:subscription, subscriptable: current_dummy_user) }
-
   let!(:first_payment_method_id) { Stripe::PaymentMethod.create(stripe_credit_card).id }
   let!(:second_payment_method_id) { Stripe::PaymentMethod.create(stripe_credit_card).id }
 
