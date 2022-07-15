@@ -9,10 +9,6 @@ module Flatirons
       module Productable
         extend ActiveSupport::Concern
 
-        included do
-          validates :name, presence: true
-        end
-
         def productable_options
           self.class.productable_options
         end
