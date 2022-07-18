@@ -195,27 +195,27 @@ paths:
               examples:
                 test_example:
                   value:
-                  - id: 251
-                    name: Claudette Will
+                  - id: 649
+                    name: Rev. Rutha Orn
                     stripe_product_id: test_prod_4
                     description: 
                     deleted_at: 
-                    created_at: '2022-07-18T12:37:39.199Z'
-                    updated_at: '2022-07-18T12:37:39.199Z'
-                  - id: 252
-                    name: Leroy Batz
+                    created_at: '2022-07-18T14:11:11.126Z'
+                    updated_at: '2022-07-18T14:11:11.126Z'
+                  - id: 650
+                    name: Tony Legros
                     stripe_product_id: test_prod_5
                     description: 
                     deleted_at: 
-                    created_at: '2022-07-18T12:37:39.213Z'
-                    updated_at: '2022-07-18T12:37:39.213Z'
-                  - id: 253
-                    name: Willard Treutel Sr.
+                    created_at: '2022-07-18T14:11:11.137Z'
+                    updated_at: '2022-07-18T14:11:11.137Z'
+                  - id: 651
+                    name: Pres. Mohamed O'Reilly
                     stripe_product_id: test_prod_6
                     description: 
                     deleted_at: 
-                    created_at: '2022-07-18T12:37:39.222Z'
-                    updated_at: '2022-07-18T12:37:39.222Z'
+                    created_at: '2022-07-18T14:11:11.146Z'
+                    updated_at: '2022-07-18T14:11:11.146Z'
               schema:
                 type: array
                 items:
@@ -270,18 +270,18 @@ paths:
               examples:
                 test_example:
                   value:
-                    id: 106
+                    id: 329
                     stripe_subscription_id: test_su_6
                     stripe_price_id: test_price_5
                     status: active
                     subscriptable_type: DummyUser
-                    subscriptable_id: 236
+                    subscriptable_id: 534
                     product_type: Flatirons::Saas::Product
-                    product_id: 256
+                    product_id: 654
                     deleted_at: 
                     canceled_at: 
-                    created_at: '2022-07-18T12:37:39.388Z'
-                    updated_at: '2022-07-18T12:37:39.388Z'
+                    created_at: '2022-07-18T14:11:11.284Z'
+                    updated_at: '2022-07-18T14:11:11.284Z'
       requestBody:
         content:
           application/json:
@@ -310,18 +310,18 @@ paths:
               examples:
                 test_example:
                   value:
-                  - id: 107
+                  - id: 330
                     stripe_subscription_id: test_su_6
                     stripe_price_id: test_price_5
                     status: active
                     subscriptable_type: DummyUser
-                    subscriptable_id: 237
+                    subscriptable_id: 535
                     product_type: Flatirons::Saas::Product
-                    product_id: 257
+                    product_id: 655
                     deleted_at: 
                     canceled_at: 
-                    created_at: '2022-07-18T12:37:39.424Z'
-                    updated_at: '2022-07-18T12:37:39.424Z'
+                    created_at: '2022-07-18T14:11:11.322Z'
+                    updated_at: '2022-07-18T14:11:11.322Z'
               schema:
                 type: array
                 items:
@@ -349,6 +349,71 @@ paths:
                     canceled_at:
                       type: string
                       nullable: true
+  "/dummy_users/subscriptions/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    put:
+      summary: Update subscription
+      tags:
+      - Subscription
+      description: Update subscription.
+      security:
+      - bearer: []
+      parameters: []
+      responses:
+        '404':
+          description: not found
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    message: Product not found
+        '422':
+          description: unprocessable_entity
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    errors: Stripe price can't be blank
+        '200':
+          description: successful
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    product_id: 661
+                    product_type: Flatirons::Saas::Product
+                    stripe_price_id: test_price_10
+                    id: 334
+                    stripe_subscription_id: test_su_6
+                    status: active
+                    subscriptable_type: DummyUser
+                    subscriptable_id: 539
+                    deleted_at: 
+                    canceled_at: 
+                    created_at: '2022-07-18T14:11:11.524Z'
+                    updated_at: '2022-07-18T14:11:11.550Z'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: integer
+                stripe_price_id:
+                  type: string
+              require:
+              - product_id
+              - stripe_price_id
 servers:
 - url: "{defaultHost}"
   variables:
