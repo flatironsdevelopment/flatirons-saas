@@ -40,6 +40,24 @@ describe Flatirons::Saas::Services::StripeService do
       end
     end
 
+    describe 'create_product' do
+      it 'should raise an error' do
+        expect { service.create_product 'test' }.to raise_error 'Stripe API key not configured'
+      end
+    end
+
+    describe 'destroy_product' do
+      it 'should raise an error' do
+        expect { service.destroy_product 'test' }.to raise_error 'Stripe API key not configured'
+      end
+    end
+
+    describe 'retrieve_product' do
+      it 'should raise an error' do
+        expect { service.retrieve_product('product_id') }.to raise_error 'Stripe API key not configured'
+      end
+    end
+
     describe 'create_price' do
       it 'should raise an error' do
         expect do
@@ -219,6 +237,18 @@ describe Flatirons::Saas::Services::StripeService do
         expect(deleted_product.deleted?).to be true
 
         expect { Stripe::Product.retrieve(product.id) }.to raise_error "No such product: #{product.id}"
+      end
+    end
+
+    describe 'retrieve_product' do
+      context 'given a product' do
+        let!(:product) { Stripe::Product.create({ name: 'flatirons' }) }
+
+        it 'should retrieve the product' do
+          product_found = service.retrieve_product(product.id)
+          expect(product_found).to_not be_nil
+          expect(product_found.id).to eq(product.id)
+        end
       end
     end
   end

@@ -35,6 +35,10 @@ module Flatirons::Saas::Services
       Stripe::Product.delete product_id, {}, stripe_opts
     end
 
+    def retrieve_product(product_id)
+      Stripe::Product.retrieve(product_id, stripe_opts)
+    end
+
     def create_price(product_id:, unit_amount:, currency:, recurring_interval: nil, extra_fields: {})
       return unless product_id && unit_amount && currency
 
