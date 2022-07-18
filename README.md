@@ -7,7 +7,7 @@ Common functionalities that can be reused across projects
 
 ## Documentation
 
-- [Getting Started](https://github.com/flatironsdevelopment/flatirons-saas/wiki/Getting-started)
+- [Getting Started](https://github.com/flatironsdevelopment/flatirons-saas/wiki/wiki#getting-started)
 
 - [Soft Deletable](https://github.com/flatironsdevelopment/flatirons-saas/wiki/SoftDeletable)
 
