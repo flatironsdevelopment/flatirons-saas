@@ -29,7 +29,7 @@ module Flatirons::Saas
     end
 
     def create_stripe_subscription
-      subscription = stripe_service.create_subscription subscriptable.stripe_customer_id, stripe_price_id
+      subscription = stripe_service.create_subscription(subscriptable.stripe_customer_id, stripe_price_id)
       self[:stripe_subscription_id] = subscription.id
     end
   end
