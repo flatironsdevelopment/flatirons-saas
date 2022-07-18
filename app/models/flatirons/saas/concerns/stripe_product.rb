@@ -41,7 +41,7 @@ module Flatirons
         def stripe_product
           return unless stripe_product_id
 
-          stripe_service.retrieve_product stripe_product_id
+          stripe_service.retrieve_product(stripe_product_id)
         end
 
         #

@@ -31,7 +31,7 @@ module Flatirons::Saas
     def stripe_subscription
       return unless stripe_subscription_id
 
-      stripe_service.retrieve_subscription stripe_subscription_id
+      stripe_service.retrieve_subscription(stripe_subscription_id)
     end
 
     private
