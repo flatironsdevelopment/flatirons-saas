@@ -181,6 +181,29 @@ describe Flatirons::Saas::Concerns::Productable do
       end
     end
 
+    describe 'stripe_product' do
+      context 'when stripe_product_id is not nil' do
+        let!(:stripe_product_id) { product.id }
+
+        it 'should retrieve the stripe product' do
+          expect(@service).to receive(:retrieve_product).with(product.id).and_return(product)
+
+          found_stripe_product = plan.stripe_product
+
+          expect(found_stripe_product).to_not be_nil
+          expect(found_stripe_product.id).to eq(product.id)
+        end
+      end
+      context 'when stripe_product_id is nil' do
+        let!(:stripe_product_id) { nil }
+
+        it 'should not retrieve the stripe product' do
+          expect(@service).to_not receive(:retrieve_product).with(product.id)
+          expect(plan.stripe_product).to be_nil
+        end
+      end
+    end
+
     describe 'create_price' do
       let!(:price) { Stripe::Price.create({ unit_amount: 4000, currency: 'usd', product: product.id, }) }
 
