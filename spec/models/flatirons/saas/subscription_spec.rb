@@ -59,7 +59,7 @@ module Flatirons::Saas
             expect(subscription.id).to be_nil
             expect(subscription.stripe_subscription_id).to be_nil
             expect(subscription.errors.size).to eq 1
-            expect(subscription.errors.full_messages.to_sentence).to eq 'Subscriptable stripe_customer_id is not valid'
+            expect(subscription.errors.full_messages.to_sentence).to eq 'Subscriptable stripe_customer_id is required'
             expect(Subscription.count).to eq 0
           end
         end

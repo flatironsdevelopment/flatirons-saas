@@ -25,7 +25,7 @@ module Flatirons::Saas
     private
 
     def stripe_customer_id
-      errors.add(:subscriptable, 'stripe_customer_id is not valid') unless subscriptable&.stripe_customer_id
+      errors.add(:subscriptable, 'stripe_customer_id is required') unless subscriptable&.stripe_customer_id
     end
 
     def create_stripe_subscription
