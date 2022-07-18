@@ -53,8 +53,6 @@ module Flatirons
         def create_stripe_customer
           assert_stripe_customer_id_attribute!
 
-          stripe_customer_id = self[:stripe_customer_id]
-
           return true unless stripe_customer_id.nil?
 
           result = transaction do
@@ -76,8 +74,6 @@ module Flatirons
           assert_stripe_customer_id_attribute!
 
           delete_customer_on_destroy = subscriptable_options[:delete_customer_on_destroy]
-          stripe_customer_id = self[:stripe_customer_id]
-
           return true if stripe_customer_id.nil? || delete_customer_on_destroy != true
 
           result = transaction do
