@@ -24,6 +24,12 @@ describe Flatirons::Saas::Services::StripeService do
       end
     end
 
+    describe 'retrieve_customer' do
+      it 'should raise an error' do
+        expect { service.retrieve_customer('customer_id') }.to raise_error 'Stripe API key not configured'
+      end
+    end
+
     describe 'attach_payment_method' do
       it 'should raise an error' do
         expect { service.attach_payment_method 'test', 'test' }.to raise_error 'Stripe API key not configured'
@@ -124,6 +130,18 @@ describe Flatirons::Saas::Services::StripeService do
         expect(deleted_customer.deleted?).to be true
 
         expect(Stripe::Customer.retrieve(customer.id).deleted?).to be true
+      end
+    end
+
+    describe 'retrieve_customer' do
+      context 'given a customer' do
+        let!(:customer) { Stripe::Customer.create({ name: 'flatirons' }) }
+
+        it 'should retrieve the customer' do
+          customer_found = service.retrieve_customer(customer.id)
+          expect(customer_found).to_not be_nil
+          expect(customer_found.id).to eq(customer.id)
+        end
       end
     end
   end

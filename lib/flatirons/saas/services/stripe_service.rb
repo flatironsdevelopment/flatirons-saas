@@ -10,6 +10,10 @@ module Flatirons::Saas::Services
       Stripe::Customer.delete customer_id, {}, stripe_opts
     end
 
+    def retrieve_customer(customer_id)
+      Stripe::Customer.retrieve(customer_id, stripe_opts)
+    end
+
     def attach_payment_method(customer_id, payment_method_id, set_as_default: false)
       return unless customer_id && payment_method_id
 
