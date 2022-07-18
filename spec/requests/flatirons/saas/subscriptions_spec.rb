@@ -14,7 +14,7 @@ describe '/dummy_users/subscriptions', type: :request do
   path '/dummy_users/subscriptions' do
     post('Create a new subscription') do
       tags 'Subscription'
-      description 'Lists current user payment methods.'
+      description 'Create a subscription.'
       consumes 'application/json'
       produces 'application/json'
       security [bearer: []]
