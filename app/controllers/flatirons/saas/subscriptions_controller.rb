@@ -3,7 +3,7 @@
 module Flatirons::Saas
   class SubscriptionsController < ApplicationController
     before_action :authenticate!
-    before_action :set_product, only: [:create]
+    before_action :find_product, only: [:create]
 
     # GET /resource/subscriptions
     def index
@@ -20,7 +20,7 @@ module Flatirons::Saas
       end
     end
 
-    def set_product
+    def find_product
       product_klass = mapping[:productable_klass]
 
       @product = product_klass.find_by(id: params[:product_id])
