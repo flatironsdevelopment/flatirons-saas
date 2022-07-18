@@ -185,6 +185,29 @@ describe Flatirons::Saas::Concerns::Subscriptable do
       end
     end
 
+    describe 'stripe_customer' do
+      context 'when stripe_customer_id is not nil' do
+        let!(:stripe_customer_id) { customer.id }
+
+        it 'should retrieve the stripe customer' do
+          expect(@service).to receive(:retrieve_customer).with(customer.id).and_return(customer)
+
+          found_stripe_customer = organization.stripe_customer
+
+          expect(found_stripe_customer).to_not be_nil
+          expect(found_stripe_customer.id).to eq(customer.id)
+        end
+      end
+      context 'when stripe_customer_id is nil' do
+        let!(:stripe_customer_id) { nil }
+
+        it 'should not retrieve the stripe customer' do
+          expect(@service).to_not receive(:retrieve_customer).with(customer.id)
+          expect(organization.stripe_customer).to be_nil
+        end
+      end
+    end
+
     describe 'attach_payment_method' do
       let!(:payment_method) { Stripe::PaymentMethod.create(stripe_credit_card) }
       let!(:payment_method_id) { payment_method.id }
@@ -265,7 +288,7 @@ describe Flatirons::Saas::Concerns::Subscriptable do
     end
   end
 
-  describe 'relatioship' do
+  describe 'relationships' do
     let!(:organization) { Organization.create(name: 'Flatirons', stripe_customer_id: 'stripe_customer_id') }
 
     it 'should return 1' do

@@ -35,6 +35,17 @@ module Flatirons
         end
 
         #
+        # Retrieve the stripe customer
+        #
+        # @return [Hash]
+        #
+        def stripe_customer
+          return unless stripe_customer_id
+
+          stripe_service.retrieve_customer stripe_customer_id
+        end
+
+        #
         # Create the stripe customer before commit
         #
         # @return [Hash]
