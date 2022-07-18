@@ -35,7 +35,7 @@ module Flatirons::Saas
     end
 
     def update_stripe_subscription
-      stripe_service.update_subscription stripe_subscription_id, stripe_price_id if stripe_price_id_changed?
+      stripe_service.update_subscription(stripe_subscription_id, stripe_price_id) if stripe_price_id_changed?
     end
   end
 end
