@@ -94,6 +94,28 @@ module Flatirons::Saas
             expect(subscription.stripe_price_id).to eq(new_stripe_price_id)
           end
         end
+
+        describe 'stripe_subscription' do
+          context 'when stripe_subscription_id is not nil' do
+            it 'should retrieve the stripe subscription' do
+              expect(Subscription.count).to eq 1
+              expect(@service).to receive(:retrieve_subscription).with(stripe_subscription.id).and_return(stripe_subscription)
+
+              found_stripe_subscription = subscription.stripe_subscription
+
+              expect(found_stripe_subscription).to_not be_nil
+              expect(found_stripe_subscription.id).to eq(stripe_subscription.id)
+            end
+          end
+          context 'when stripe_subscription_id is nil' do
+            it 'should not retrieve the stripe subscription' do
+              allow(subscription).to receive(:stripe_subscription_id).and_return(nil)
+              expect(Subscription.count).to eq 1
+              expect(@service).to_not receive(:retrieve_subscription).with(stripe_subscription.id)
+              expect(subscription.stripe_subscription).to be_nil
+            end
+          end
+        end
       end
     end
   end

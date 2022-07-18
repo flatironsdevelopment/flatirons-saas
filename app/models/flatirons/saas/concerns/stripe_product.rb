@@ -34,6 +34,17 @@ module Flatirons
         end
 
         #
+        # Retrieve the stripe product
+        #
+        # @return [Hash]
+        #
+        def stripe_product
+          return unless stripe_product_id
+
+          stripe_service.retrieve_product(stripe_product_id)
+        end
+
+        #
         # Create a price for given product
         #
         # @return [Hash]

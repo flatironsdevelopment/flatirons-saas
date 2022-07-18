@@ -10,6 +10,10 @@ module Flatirons::Saas::Services
       Stripe::Customer.delete customer_id, {}, stripe_opts
     end
 
+    def retrieve_customer(customer_id)
+      Stripe::Customer.retrieve(customer_id, stripe_opts)
+    end
+
     def attach_payment_method(customer_id, payment_method_id, set_as_default: false)
       return unless customer_id && payment_method_id
 
@@ -35,6 +39,10 @@ module Flatirons::Saas::Services
       Stripe::Product.delete product_id, {}, stripe_opts
     end
 
+    def retrieve_product(product_id)
+      Stripe::Product.retrieve(product_id, stripe_opts)
+    end
+
     def create_price(product_id:, unit_amount:, currency:, recurring_interval: nil, extra_fields: {})
       return unless product_id && unit_amount && currency
 
@@ -54,6 +62,10 @@ module Flatirons::Saas::Services
       Stripe::Price.list({ product: product_id }, stripe_opts).data
     end
 
+    def retrieve_subscription(subscription_id)
+      Stripe::Subscription.retrieve(subscription_id, stripe_opts)
+    end
+
     def create_subscription(customer_id, price_id)
       return unless customer_id && price_id
 
@@ -66,11 +78,12 @@ module Flatirons::Saas::Services
 
       items_to_remove = Stripe::SubscriptionItem.list({ subscription: subscription_id }).data
 
-      subscription = Stripe::Subscription.update(
-        subscription_id,
+      subscription_params = {
         proration_behavior: proration_behavior,
         items: [{ price: price_id }]
-      )
+      }
+
+      subscription = Stripe::Subscription.update(subscription_id, subscription_params, stripe_opts)
 
       items_to_remove.each { |item| Stripe::SubscriptionItem.delete(item.id) }
 

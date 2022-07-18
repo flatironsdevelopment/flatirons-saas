@@ -24,6 +24,12 @@ describe Flatirons::Saas::Services::StripeService do
       end
     end
 
+    describe 'retrieve_customer' do
+      it 'should raise an error' do
+        expect { service.retrieve_customer('customer_id') }.to raise_error 'Stripe API key not configured'
+      end
+    end
+
     describe 'attach_payment_method' do
       it 'should raise an error' do
         expect { service.attach_payment_method 'test', 'test' }.to raise_error 'Stripe API key not configured'
@@ -37,6 +43,24 @@ describe Flatirons::Saas::Services::StripeService do
     describe 'list_payment_methods' do
       it 'should raise an error' do
         expect { service.list_payment_methods 'test' }.to raise_error 'Stripe API key not configured'
+      end
+    end
+
+    describe 'create_product' do
+      it 'should raise an error' do
+        expect { service.create_product 'test' }.to raise_error 'Stripe API key not configured'
+      end
+    end
+
+    describe 'destroy_product' do
+      it 'should raise an error' do
+        expect { service.destroy_product 'test' }.to raise_error 'Stripe API key not configured'
+      end
+    end
+
+    describe 'retrieve_product' do
+      it 'should raise an error' do
+        expect { service.retrieve_product('product_id') }.to raise_error 'Stripe API key not configured'
       end
     end
 
@@ -59,6 +83,18 @@ describe Flatirons::Saas::Services::StripeService do
     describe 'create_subscription' do
       it 'should raise an error' do
         expect { service.create_subscription('customer', 'price') }.to raise_error 'Stripe API key not configured'
+      end
+    end
+
+    describe 'update_subscription' do
+      it 'should raise an error' do
+        expect { service.update_subscription('subscription_id', 'price') }.to raise_error 'Stripe API key not configured'
+      end
+    end
+
+    describe 'retrieve_subscription' do
+      it 'should raise an error' do
+        expect { service.retrieve_subscription('subscription_id') }.to raise_error 'Stripe API key not configured'
       end
     end
   end
@@ -94,6 +130,18 @@ describe Flatirons::Saas::Services::StripeService do
         expect(deleted_customer.deleted?).to be true
 
         expect(Stripe::Customer.retrieve(customer.id).deleted?).to be true
+      end
+    end
+
+    describe 'retrieve_customer' do
+      context 'given a customer' do
+        let!(:customer) { Stripe::Customer.create({ name: 'flatirons' }) }
+
+        it 'should retrieve the customer' do
+          customer_found = service.retrieve_customer(customer.id)
+          expect(customer_found).to_not be_nil
+          expect(customer_found.id).to eq(customer.id)
+        end
       end
     end
   end
@@ -207,6 +255,18 @@ describe Flatirons::Saas::Services::StripeService do
         expect(deleted_product.deleted?).to be true
 
         expect { Stripe::Product.retrieve(product.id) }.to raise_error "No such product: #{product.id}"
+      end
+    end
+
+    describe 'retrieve_product' do
+      context 'given a product' do
+        let!(:product) { Stripe::Product.create({ name: 'flatirons' }) }
+
+        it 'should retrieve the product' do
+          product_found = service.retrieve_product(product.id)
+          expect(product_found).to_not be_nil
+          expect(product_found.id).to eq(product.id)
+        end
       end
     end
   end
@@ -371,6 +431,18 @@ describe Flatirons::Saas::Services::StripeService do
         end
         it 'should not create a subscription without price_id' do
           expect(service.update_subscription('customer_id', nil)).to be_nil
+        end
+      end
+    end
+
+    describe 'retrieve_subscription' do
+      context 'given a subscription' do
+        let!(:subscription) { Stripe::Subscription.create({ customer: customer.id, items: [{ price: price.id }], expand: ['latest_invoice.payment_intent'] }) }
+
+        it 'should retrieve the subscription' do
+          subscription_found = service.retrieve_subscription(subscription.id)
+          expect(subscription_found).to_not be_nil
+          expect(subscription_found.id).to eq(subscription.id)
         end
       end
     end
