@@ -8,6 +8,7 @@ module Flatirons::Saas
       it { should validate_presence_of(:stripe_price_id) }
       it { should validate_presence_of(:status) }
     end
+
     describe 'relationships' do
       it { is_expected.to have_db_column(:subscriptable_id).of_type(:integer) }
       it { is_expected.to have_db_column(:subscriptable_type).of_type(:string) }
@@ -32,11 +33,12 @@ module Flatirons::Saas
         @service = mock_stripe_service
         allow(@service).to receive(:create_customer).and_return(stripe_customer)
         allow(@service).to receive(:create_product).and_return(stripe_product)
+        allow(@service).to receive(:create_subscription).with(stripe_customer.id, stripe_price.id).and_return(stripe_subscription)
       end
 
       context 'given a subscriptable and product and price' do
         it 'should create a subscription on database and stripe' do
-          expect(@service).to receive(:create_subscription).with(stripe_customer.id, stripe_price.id).and_return(stripe_subscription)
+          expect(@service).to receive(:create_subscription).with(stripe_customer.id, stripe_price.id)
 
           subscription = Subscription.create(subscriptable: subscriptable, product: product, stripe_price_id: stripe_price.id, status: :active)
 
@@ -61,6 +63,35 @@ module Flatirons::Saas
             expect(subscription.errors.size).to eq 1
             expect(subscription.errors.full_messages.to_sentence).to eq 'Subscriptable stripe_customer_id is required'
             expect(Subscription.count).to eq 0
+          end
+        end
+      end
+
+      context 'given a subscription' do
+        let!(:subscription) { Subscription.create(subscriptable: subscriptable, product: product, stripe_price_id: stripe_price.id, status: :active) }
+        let!(:new_stripe_price_id) { 'test_new_price' }
+
+        context 'with same stripe_price_id' do
+          it 'should update not update the stripe subscription' do
+            expect(Subscription.count).to eq 1
+            expect(@service).to_not receive(:update_subscription).with(stripe_subscription.id, stripe_price.id)
+
+            subscription.update(stripe_price_id: stripe_price.id)
+
+            expect(subscription.errors.size).to eq 0
+            expect(subscription.stripe_price_id).to eq(stripe_price.id)
+          end
+        end
+
+        context 'with a new stripe_price_id' do
+          it 'should update the stripe subscription' do
+            expect(Subscription.count).to eq 1
+            expect(@service).to receive(:update_subscription).with(stripe_subscription.id, new_stripe_price_id)
+
+            subscription.update(stripe_price_id: new_stripe_price_id)
+
+            expect(subscription.errors.size).to eq 0
+            expect(subscription.stripe_price_id).to eq(new_stripe_price_id)
           end
         end
       end

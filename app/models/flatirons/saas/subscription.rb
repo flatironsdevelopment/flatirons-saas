@@ -21,6 +21,7 @@ module Flatirons::Saas
     validate :stripe_customer_id, on: :create
 
     before_create :create_stripe_subscription, prepend: true
+    before_update :update_stripe_subscription, prepend: true
 
     private
 
@@ -31,6 +32,10 @@ module Flatirons::Saas
     def create_stripe_subscription
       subscription = stripe_service.create_subscription(subscriptable.stripe_customer_id, stripe_price_id)
       self[:stripe_subscription_id] = subscription.id
+    end
+
+    def update_stripe_subscription
+      stripe_service.update_subscription stripe_subscription_id, stripe_price_id if stripe_price_id_changed?
     end
   end
 end
