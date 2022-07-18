@@ -17,12 +17,15 @@ describe Flatirons::Saas::Concerns::Subscriptable do
     expect(Organization.subscriptable).to be_nil
   end
 
+  before(:each) do
+    @service = mock_stripe_service
+  end
+
   describe 'stripe integration' do
     let!(:customer) { Stripe::Customer.create({ name: 'organization_1' }) }
     let!(:organization) { Organization.new(name: 'Flatirons', stripe_customer_id: stripe_customer_id) }
 
     before(:each) do
-      @service = mock_stripe_service
       allow(@service).to receive(:create_customer).and_return(customer)
     end
 
@@ -260,15 +263,16 @@ describe Flatirons::Saas::Concerns::Subscriptable do
         end
       end
     end
+  end
 
-    context 'with one organization' do
-      let!(:stripe_customer_id) { customer.id }
-      before(:each) { organization.save }
+  describe 'relatioship' do
+    let!(:organization) { Organization.create(name: 'Flatirons', stripe_customer_id: 'stripe_customer_id') }
 
-      it 'should return 1' do
-        expect(Organization.count).to eq(1)
-      end
+    it 'should return 1' do
+      expect(Organization.count).to eq(1)
+    end
 
+    describe 'subscriptions' do
       context 'without subscriptions' do
         it 'should return 0' do
           expect(organization.subscriptions.count).to eq(0)
@@ -276,7 +280,13 @@ describe Flatirons::Saas::Concerns::Subscriptable do
       end
 
       context 'with subscriptions' do
-        let!(:subscription) { FactoryBot.create(:subscription, subscriptable: organization) }
+        before(:each) do
+          stripe_return_mocked = Struct.new(:id).new('test_stripe_return_mocked')
+          allow(@service).to receive(:create_product).and_return stripe_return_mocked
+          allow(@service).to receive(:create_subscription).and_return stripe_return_mocked
+          product = FactoryBot.create(:product)
+          FactoryBot.create(:subscription, subscriptable: organization, product: product, stripe_price_id: 'test_price_id')
+        end
 
         it 'should return 1' do
           expect(organization.subscriptions.count).to eq(1)

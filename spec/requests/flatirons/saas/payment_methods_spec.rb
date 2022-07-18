@@ -118,7 +118,5 @@ describe '/dummy_users/payment_methods', type: :request do
         end
       end
     end
-
-    let!(:second_payment_method_id) { Stripe::PaymentMethod.create(stripe_credit_card).id }
   end
 end

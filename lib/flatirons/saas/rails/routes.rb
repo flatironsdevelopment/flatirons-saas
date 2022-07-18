@@ -84,10 +84,8 @@ module ActionDispatch::Routing
       method_prefix = 'products'
       module_class = Flatirons::Saas::Rails::Product
 
-      productable_klass = options[:productable_class_name]&.constantize || Flatirons::Saas::Product
-
       resources.each do |resource|
-        ref = extract_resource_ref resource, options, module_class, method_prefix, { productable_klass: productable_klass }
+        ref = extract_resource_ref resource, options, module_class, method_prefix
         ensure_concern! ref[:productable_klass], concern_name
 
         routing_resource_scope(symbol: ref[:symbol], module_class: module_class) do
@@ -121,16 +119,17 @@ module ActionDispatch::Routing
       @scope = current_scope
     end
 
-    def extract_resource_ref(resource, options, module_class, method_prefix, extra_mapping = {}) # :nodoc:
+    def extract_resource_ref(resource, options, module_class, method_prefix) # :nodoc:
       name = resource.to_s.singularize.to_s
       symbol = name.to_sym
       klass = (options[:class_name] || resource.to_s.classify).to_s.constantize
       path = (options[:path] || resource).to_s
+      productable_klass = options[:productable_class_name]&.constantize || Flatirons::Saas::Product
 
       ensure_devise_for_resource! resource, symbol, klass, method_prefix
 
       module_class.mappings[symbol] =
-        { symbol: symbol, name: name, path: path, klass: klass, resource: resource }.merge(extra_mapping)
+        { symbol: symbol, name: name, path: path, klass: klass, resource: resource, productable_klass: productable_klass }
       module_class.mappings[symbol]
     end
 

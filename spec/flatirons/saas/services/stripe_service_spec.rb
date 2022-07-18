@@ -8,42 +8,40 @@ describe Flatirons::Saas::Services::StripeService do
   let!(:service) { Flatirons::Saas::Services::StripeService.new }
 
   context 'when stripe API key is not set' do
+    before(:each) do
+      allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
+    end
+
     describe 'create_customer' do
       it 'should raise an error' do
-        allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
         expect { service.create_customer 'test' }.to raise_error 'Stripe API key not configured'
       end
     end
 
     describe 'destroy_customer' do
       it 'should raise an error' do
-        allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
         expect { service.destroy_customer 'test' }.to raise_error 'Stripe API key not configured'
       end
     end
 
     describe 'attach_payment_method' do
       it 'should raise an error' do
-        allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
         expect { service.attach_payment_method 'test', 'test' }.to raise_error 'Stripe API key not configured'
       end
 
       it 'should raise an error' do
-        allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
         expect { service.attach_payment_method 'test', 'test', set_as_default: true }.to raise_error 'Stripe API key not configured'
       end
     end
 
     describe 'list_payment_methods' do
       it 'should raise an error' do
-        allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
         expect { service.list_payment_methods 'test' }.to raise_error 'Stripe API key not configured'
       end
     end
 
     describe 'create_price' do
       it 'should raise an error' do
-        allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
         expect do
           service.create_price(product_id: 'product.id',
                                unit_amount: 'unit_amount',
@@ -54,8 +52,13 @@ describe Flatirons::Saas::Services::StripeService do
 
     describe 'list_prices' do
       it 'should raise an error' do
-        allow(Flatirons::Saas).to receive(:stripe_api_key).and_return(nil)
         expect { service.list_prices('product.id') }.to raise_error 'Stripe API key not configured'
+      end
+    end
+
+    describe 'create_subscription' do
+      it 'should raise an error' do
+        expect { service.create_subscription('customer', 'price') }.to raise_error 'Stripe API key not configured'
       end
     end
   end
@@ -243,7 +246,7 @@ describe Flatirons::Saas::Services::StripeService do
         end
       end
 
-      context 'invalid paramenters' do
+      context 'invalid parameters' do
         let!(:product) { Stripe::Product.create({ name: 'Beer' }) }
 
         it 'should not create a price without product_id' do
@@ -306,6 +309,68 @@ describe Flatirons::Saas::Services::StripeService do
         it 'should not list prices' do
           prices = service.list_prices(nil)
           expect(prices).to be_nil
+        end
+      end
+    end
+  end
+
+  describe 'subscription' do
+    let!(:customer) { Stripe::Customer.create({ name: 'flatirons', source: stripe_helper.generate_card_token }) }
+    let!(:product) { Stripe::Product.create({ name: 'Beer' }) }
+    let!(:price) { Stripe::Price.create({  unit_amount: 4000, currency: 'usd', product: product.id }) }
+
+    describe 'create_subscription' do
+      context 'given a customer with payment method and price' do
+        it 'should create a subscription' do
+          subscription = service.create_subscription(customer.id, price.id)
+          expect(subscription).to_not be_nil
+
+          expect(subscription.id).to_not be_nil
+          expect(subscription.plan.id).to eq price.id
+          expect(subscription.items.count).to eq 1
+        end
+      end
+
+      context 'invalid parameters' do
+        it 'should not create a subscription without customer_id' do
+          expect(service.create_subscription(nil, 'price_id')).to be_nil
+        end
+        it 'should not create a subscription without price_id' do
+          expect(service.create_subscription('customer_id', nil)).to be_nil
+        end
+      end
+    end
+
+    describe 'update_subscription' do
+      context 'given a subscription and a new price' do
+        let!(:subscription) { Stripe::Subscription.create({ customer: customer.id, items: [{ price: price.id }], expand: ['latest_invoice.payment_intent'] }) }
+        let!(:new_price) { Stripe::Price.create({  unit_amount: 5000, currency: 'usd', product: product.id }) }
+
+        it 'should update the subscription' do
+          updated_subscription = service.update_subscription(subscription.id, new_price.id)
+          expect(updated_subscription).to_not be_nil
+
+          expect(updated_subscription.id).to_not be_nil
+          expect(updated_subscription.plan.id).to eq new_price.id
+          expect(subscription.items.count).to eq 1
+        end
+
+        it 'should update the subscription with other proration behavior' do
+          updated_subscription = service.update_subscription(subscription.id, new_price.id, 'create_prorations')
+          expect(updated_subscription).to_not be_nil
+
+          expect(updated_subscription.id).to_not be_nil
+          expect(updated_subscription.plan.id).to eq new_price.id
+          expect(subscription.items.count).to eq 1
+        end
+      end
+
+      context 'invalid parameters' do
+        it 'should not create a subscription without customer_id' do
+          expect(service.update_subscription(nil, 'price_id')).to be_nil
+        end
+        it 'should not create a subscription without price_id' do
+          expect(service.update_subscription('customer_id', nil)).to be_nil
         end
       end
     end
