@@ -23,6 +23,11 @@ module Flatirons::Saas
     before_create :create_stripe_subscription, prepend: true
     before_update :update_stripe_subscription, prepend: true
 
+    #
+    # Retrieve the stripe subscription
+    #
+    # @return [Hash]
+    #
     def stripe_subscription
       return unless stripe_subscription_id
 
