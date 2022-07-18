@@ -61,6 +61,18 @@ describe Flatirons::Saas::Services::StripeService do
         expect { service.create_subscription('customer', 'price') }.to raise_error 'Stripe API key not configured'
       end
     end
+
+    describe 'update_subscription' do
+      it 'should raise an error' do
+        expect { service.update_subscription('subscription_id', 'price') }.to raise_error 'Stripe API key not configured'
+      end
+    end
+
+    describe 'retrieve_subscription' do
+      it 'should raise an error' do
+        expect { service.retrieve_subscription('subscription_id') }.to raise_error 'Stripe API key not configured'
+      end
+    end
   end
 
   describe 'customer' do
@@ -371,6 +383,18 @@ describe Flatirons::Saas::Services::StripeService do
         end
         it 'should not create a subscription without price_id' do
           expect(service.update_subscription('customer_id', nil)).to be_nil
+        end
+      end
+    end
+
+    describe 'retrieve_subscription' do
+      context 'given a subscription' do
+        let!(:subscription) { Stripe::Subscription.create({ customer: customer.id, items: [{ price: price.id }], expand: ['latest_invoice.payment_intent'] }) }
+
+        it 'should retrieve the subscription' do
+          subscription_found = service.retrieve_subscription(subscription.id)
+          expect(subscription_found).to_not be_nil
+          expect(subscription_found.id).to eq(subscription.id)
         end
       end
     end
