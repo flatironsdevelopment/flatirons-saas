@@ -42,7 +42,7 @@ module Flatirons
         def stripe_customer
           return unless stripe_customer_id
 
-          stripe_service.retrieve_customer stripe_customer_id
+          stripe_service.retrieve_customer(stripe_customer_id)
         end
 
         #
