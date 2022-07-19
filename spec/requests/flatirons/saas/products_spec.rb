@@ -3,14 +3,17 @@
 require 'swagger_helper'
 require 'rails_helper'
 
-describe '/dummy_users/products', type: :request do
+describe '/{resource}/products', type: :request do
   include_context 'dummy_user'
   include_context 'dummy_user_is_authenticated'
 
   context 'given products' do
     let!(:products) { FactoryBot.create_list(:product, 3) }
 
-    path '/dummy_users/products' do
+    path '/{resource}/products' do
+      parameter name: :resource, in: :path, type: :string, description: 'resource name. e.g: products_for: users # resource = users'
+      let!(:resource) { 'dummy_users' }
+
       get('List products') do
         tags 'Product'
         description 'Lists products.'

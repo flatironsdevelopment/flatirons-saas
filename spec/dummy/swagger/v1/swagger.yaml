@@ -4,7 +4,14 @@ info:
   title: API V1
   version: v1
 paths:
-  "/dummy_users/payment_methods":
+  "/{resource}/payment_methods":
+    parameters:
+    - name: resource
+      in: path
+      description: 'resource name. e.g: subscription_for: users # resource = users'
+      required: true
+      schema:
+        type: string
     get:
       summary: List payment methods
       tags:
@@ -179,7 +186,14 @@ paths:
                   nullable: true
               require:
               - id
-  "/dummy_users/products":
+  "/{resource}/products":
+    parameters:
+    - name: resource
+      in: path
+      description: 'resource name. e.g: products_for: users # resource = users'
+      required: true
+      schema:
+        type: string
     get:
       summary: List products
       tags:
@@ -195,27 +209,27 @@ paths:
               examples:
                 test_example:
                   value:
-                  - id: 649
-                    name: Rev. Rutha Orn
+                  - id: 393
+                    name: Joetta Boyer
                     stripe_product_id: test_prod_4
                     description: 
                     deleted_at: 
-                    created_at: '2022-07-18T14:11:11.126Z'
-                    updated_at: '2022-07-18T14:11:11.126Z'
-                  - id: 650
-                    name: Tony Legros
+                    created_at: '2022-07-19T19:16:57.114Z'
+                    updated_at: '2022-07-19T19:16:57.114Z'
+                  - id: 394
+                    name: Thi Kiehn
                     stripe_product_id: test_prod_5
                     description: 
                     deleted_at: 
-                    created_at: '2022-07-18T14:11:11.137Z'
-                    updated_at: '2022-07-18T14:11:11.137Z'
-                  - id: 651
-                    name: Pres. Mohamed O'Reilly
+                    created_at: '2022-07-19T19:16:57.122Z'
+                    updated_at: '2022-07-19T19:16:57.122Z'
+                  - id: 395
+                    name: Lean Graham
                     stripe_product_id: test_prod_6
                     description: 
                     deleted_at: 
-                    created_at: '2022-07-18T14:11:11.146Z'
-                    updated_at: '2022-07-18T14:11:11.146Z'
+                    created_at: '2022-07-19T19:16:57.128Z'
+                    updated_at: '2022-07-19T19:16:57.128Z'
               schema:
                 type: array
                 items:
@@ -237,7 +251,14 @@ paths:
                       type: string
                     updated_at:
                       type: string
-  "/dummy_users/subscriptions":
+  "/{resource}/subscriptions":
+    parameters:
+    - name: resource
+      in: path
+      description: 'resource name. e.g: subscription_for: users # resource = users'
+      required: true
+      schema:
+        type: string
     post:
       summary: Create a new subscription
       tags:
@@ -270,18 +291,18 @@ paths:
               examples:
                 test_example:
                   value:
-                    id: 329
+                    id: 221
                     stripe_subscription_id: test_su_6
                     stripe_price_id: test_price_5
                     status: active
                     subscriptable_type: DummyUser
-                    subscriptable_id: 534
+                    subscriptable_id: 296
                     product_type: Flatirons::Saas::Product
-                    product_id: 654
+                    product_id: 398
                     deleted_at: 
                     canceled_at: 
-                    created_at: '2022-07-18T14:11:11.284Z'
-                    updated_at: '2022-07-18T14:11:11.284Z'
+                    created_at: '2022-07-19T19:16:57.260Z'
+                    updated_at: '2022-07-19T19:16:57.260Z'
       requestBody:
         content:
           application/json:
@@ -310,18 +331,18 @@ paths:
               examples:
                 test_example:
                   value:
-                  - id: 330
+                  - id: 222
                     stripe_subscription_id: test_su_6
                     stripe_price_id: test_price_5
                     status: active
                     subscriptable_type: DummyUser
-                    subscriptable_id: 535
+                    subscriptable_id: 297
                     product_type: Flatirons::Saas::Product
-                    product_id: 655
+                    product_id: 399
                     deleted_at: 
                     canceled_at: 
-                    created_at: '2022-07-18T14:11:11.322Z'
-                    updated_at: '2022-07-18T14:11:11.322Z'
+                    created_at: '2022-07-19T19:16:57.299Z'
+                    updated_at: '2022-07-19T19:16:57.299Z'
               schema:
                 type: array
                 items:
@@ -349,8 +370,14 @@ paths:
                     canceled_at:
                       type: string
                       nullable: true
-  "/dummy_users/subscriptions/{id}":
+  "/{resource}/subscriptions/{id}":
     parameters:
+    - name: resource
+      in: path
+      description: 'resource name. e.g: subscription_for: users # resource = users'
+      required: true
+      schema:
+        type: string
     - name: id
       in: path
       description: id
@@ -389,18 +416,18 @@ paths:
               examples:
                 test_example:
                   value:
-                    product_id: 661
+                    product_id: 405
                     product_type: Flatirons::Saas::Product
                     stripe_price_id: test_price_10
-                    id: 334
+                    id: 226
                     stripe_subscription_id: test_su_6
                     status: active
                     subscriptable_type: DummyUser
-                    subscriptable_id: 539
+                    subscriptable_id: 301
                     deleted_at: 
                     canceled_at: 
-                    created_at: '2022-07-18T14:11:11.524Z'
-                    updated_at: '2022-07-18T14:11:11.550Z'
+                    created_at: '2022-07-19T19:16:57.484Z'
+                    updated_at: '2022-07-19T19:16:57.512Z'
       requestBody:
         content:
           application/json:
