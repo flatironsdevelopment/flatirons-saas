@@ -9,6 +9,8 @@ module Flatirons
         included do
           before_create :create_stripe_product, prepend: true
           after_destroy :destroy_stripe_product
+
+          validate :stripe_product_name_required
         end
 
         def self.included(klazz)
@@ -130,6 +132,10 @@ module Flatirons
         end
 
         private
+
+        def stripe_product_name_required
+          errors.add(:base, 'stripe_product_name is required') unless stripe_product_name
+        end
 
         def assert_stripe_product_id_attribute!
           raise 'stripe_product_id attribute not found.' unless has_attribute? :stripe_product_id

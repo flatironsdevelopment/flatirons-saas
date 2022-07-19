@@ -328,4 +328,14 @@ describe Flatirons::Saas::Concerns::Subscriptable do
       end
     end
   end
+
+  describe 'validation' do
+    let!(:organization) { Organization.new(name: 'Flatirons', stripe_customer_id: 'stripe_customer_id') }
+
+    it 'should validate the presence of stripe_customer_name' do
+      allow(organization).to receive(:stripe_customer_name).and_return(nil)
+      expect(organization.save).to be false
+      expect(organization.errors.full_messages.to_sentence).to eq('stripe_customer_name is required')
+    end
+  end
 end

@@ -303,4 +303,14 @@ describe Flatirons::Saas::Concerns::Productable do
       end
     end
   end
+
+  describe 'validation' do
+    let!(:plan) { Plan.new(name: 'Flatirons', stripe_product_id: 'stripe_product_id') }
+
+    it 'should validate the presence of stripe_product_name' do
+      allow(plan).to receive(:stripe_product_name).and_return(nil)
+      expect(plan.save).to be false
+      expect(plan.errors.full_messages.to_sentence).to eq('stripe_product_name is required')
+    end
+  end
 end
