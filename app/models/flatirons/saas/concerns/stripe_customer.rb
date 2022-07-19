@@ -7,7 +7,7 @@ module Flatirons
         extend ActiveSupport::Concern
 
         included do
-          before_commit :create_stripe_customer, on: :create
+          before_create :create_stripe_customer, prepend: true
           after_destroy :destroy_stripe_customer
         end
 
@@ -21,8 +21,7 @@ module Flatirons
         # @return [String]
         #
         def stripe_customer_name
-          id = public_send(@primary_key)
-          "#{self.class.table_name}_#{id}"
+          name
         end
 
         #
@@ -55,14 +54,10 @@ module Flatirons
 
           return true unless stripe_customer_id.nil?
 
-          result = transaction do
-            run_callbacks :stripe_customer_creation do
-              customer = stripe_service.create_customer stripe_customer_name, stripe_customer_attrs
-              update_column(:stripe_customer_id, customer.id)  # rubocop:disable Rails/SkipsModelValidations
-            end
+          run_callbacks :stripe_customer_creation do
+            customer = stripe_service.create_customer stripe_customer_name, stripe_customer_attrs
+            self[:stripe_customer_id] = customer.id
           end
-
-          result ? self : false
         end
 
         #
@@ -76,13 +71,9 @@ module Flatirons
           delete_customer_on_destroy = subscriptable_options[:delete_customer_on_destroy]
           return true if stripe_customer_id.nil? || delete_customer_on_destroy != true
 
-          result = transaction do
-            run_callbacks :stripe_customer_deletion do
-              stripe_service.destroy_customer stripe_customer_id
-            end
+          run_callbacks :stripe_customer_deletion do
+            stripe_service.destroy_customer stripe_customer_id
           end
-
-          result ? self : false
         end
 
         #

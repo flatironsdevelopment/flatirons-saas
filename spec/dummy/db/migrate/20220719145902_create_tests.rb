@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class Create<%= table_name.camelize %> < ActiveRecord::Migration[<%= rails_version %>]
+class CreateTests < ActiveRecord::Migration[6.1]
   def change
-    create_table :<%= table_name %> do |t|
+    create_table :tests do |t|
       t.string :name, index: true, null: false
       t.string :stripe_product_id, index: true, unique: true, null: false
 

@@ -2,7 +2,10 @@
 
 class AddSubscriptableTo<%= table_name.camelize %> < ActiveRecord::Migration[<%= rails_version %>]
   def change
-    add_column :<%= table_name %>, :stripe_customer_id, :string
+    add_column :<%= table_name %>, :name, :string, null: false
+    add_index :<%= table_name %>, :name
+
+    add_column :<%= table_name %>, :stripe_customer_id, :string, null: false
     add_index :<%= table_name %>, :stripe_customer_id, unique: true
   end
 end

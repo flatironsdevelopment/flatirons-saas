@@ -53,6 +53,19 @@ module Flatirons::Saas
         end
       end
 
+      context 'when stripe raise an error' do
+        it 'should not create the subscripiton' do
+          expect(@service).to receive(:create_subscription).with(stripe_customer.id, stripe_price.id).and_raise('Fail to create the subscription')
+
+          expect do
+            Subscription.create(subscriptable: subscriptable, product: product, stripe_price_id: stripe_price.id,
+                                status: :active)
+          end.to raise_error 'Fail to create the subscription'
+
+          expect(Subscription.count).to eq 0
+        end
+      end
+
       context 'invalid parameters' do
         context 'given a subscriptable without stripe_customer_id' do
           it 'should not create a subscription' do

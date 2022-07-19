@@ -7,7 +7,7 @@ module Flatirons
         extend ActiveSupport::Concern
 
         included do
-          before_commit :create_stripe_product, on: :create
+          before_create :create_stripe_product, prepend: true
           after_destroy :destroy_stripe_product
         end
 
@@ -81,14 +81,10 @@ module Flatirons
 
           return true unless stripe_product_id.nil?
 
-          result = transaction do
-            run_callbacks :stripe_product_creation do
-              product = stripe_service.create_product stripe_product_name, stripe_product_attrs
-              update_column(:stripe_product_id, product.id)  # rubocop:disable Rails/SkipsModelValidations
-            end
+          run_callbacks :stripe_product_creation do
+            product = stripe_service.create_product stripe_product_name, stripe_product_attrs
+            self[:stripe_product_id] = product.id
           end
-
-          result ? self : false
         end
 
         #
@@ -102,13 +98,9 @@ module Flatirons
           delete_product_on_destroy = productable_options[:delete_product_on_destroy]
           return true if stripe_product_id.nil? || delete_product_on_destroy != true
 
-          result = transaction do
-            run_callbacks :stripe_product_deletion do
-              stripe_service.destroy_product stripe_product_id
-            end
+          run_callbacks :stripe_product_deletion do
+            stripe_service.destroy_product stripe_product_id
           end
-
-          result ? self : false
         end
 
         module Callbacks
