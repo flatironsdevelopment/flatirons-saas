@@ -1,0 +1,448 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/{resource}/payment_methods":
+    parameters:
+    - name: resource
+      in: path
+      description: 'resource name. e.g: subscription_for: users # resource = users'
+      required: true
+      schema:
+        type: string
+    get:
+      summary: List payment methods
+      tags:
+      - Payment Methods
+      description: Lists current user payment methods.
+      security:
+      - bearer: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                  - id: test_pm_9
+                    object: payment_method
+                    type: card
+                    billing_details:
+                      address:
+                        city: New Orleans
+                        country: US
+                        line1: Bourbon Street 23
+                        line2: 
+                        postal_code: '10000'
+                        state: 
+                      email: foo@bar.com
+                      name: John Dolton
+                      phone: 
+                    customer: test_cus_3
+                    metadata:
+                      order_id: '123456789'
+                    card:
+                      brand: visa
+                      checks:
+                        address_line1_check: 
+                        address_postal_code_check: 
+                        cvc_check: pass
+                      country: FR
+                      exp_month: 10
+                      exp_year: 2050
+                      fingerprint: Hr3Ly5z5IYxsokWA
+                      funding: credit
+                      generated_from: 
+                      last4: '4242'
+                      three_d_secure_usage:
+                        supported: true
+                      wallet: 
+                  - id: test_pm_10
+                    object: payment_method
+                    type: card
+                    billing_details:
+                      address:
+                        city: New Orleans
+                        country: US
+                        line1: Bourbon Street 23
+                        line2: 
+                        postal_code: '10000'
+                        state: 
+                      email: foo@bar.com
+                      name: John Dolton
+                      phone: 
+                    customer: test_cus_3
+                    metadata:
+                      order_id: '123456789'
+                    card:
+                      brand: visa
+                      checks:
+                        address_line1_check: 
+                        address_postal_code_check: 
+                        cvc_check: pass
+                      country: FR
+                      exp_month: 10
+                      exp_year: 2050
+                      fingerprint: Hr3Ly5z5IYxsokWA
+                      funding: credit
+                      generated_from: 
+                      last4: '4242'
+                      three_d_secure_usage:
+                        supported: true
+                      wallet: 
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    object:
+                      type: string
+                    billing_details:
+                      type: object
+                    card:
+                      type: object
+                    created:
+                      type: integer
+                    customer:
+                      type: string
+                    livemode:
+                      type: boolean
+                    metadata:
+                      type: object
+                    type:
+                      type: string
+    post:
+      summary: Attach payment method
+      tags:
+      - Payment Methods
+      description: Lists current user payment methods.
+      security:
+      - bearer: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    id: test_pm_11
+                    object: payment_method
+                    type: card
+                    billing_details:
+                      address:
+                        city: New Orleans
+                        country: US
+                        line1: Bourbon Street 23
+                        line2: 
+                        postal_code: '10000'
+                        state: 
+                      email: foo@bar.com
+                      name: John Dolton
+                      phone: 
+                    customer: test_cus_3
+                    metadata:
+                      order_id: '123456789'
+                    card:
+                      brand: visa
+                      checks:
+                        address_line1_check: 
+                        address_postal_code_check: 
+                        cvc_check: pass
+                      country: FR
+                      exp_month: 10
+                      exp_year: 2050
+                      fingerprint: Hr3Ly5z5IYxsokWA
+                      funding: credit
+                      generated_from: 
+                      last4: '4242'
+                      three_d_secure_usage:
+                        supported: true
+                      wallet: 
+        '422':
+          description: unprocessable_entity
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    success: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                set_as_default:
+                  type: boolean
+                  nullable: true
+              require:
+              - id
+  "/{resource}/products":
+    parameters:
+    - name: resource
+      in: path
+      description: 'resource name. e.g: products_for: users # resource = users'
+      required: true
+      schema:
+        type: string
+    get:
+      summary: List products
+      tags:
+      - Product
+      description: Lists products.
+      security:
+      - bearer: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                  - id: 505
+                    name: Mrs. Francis Gorczany
+                    stripe_product_id: test_prod_4
+                    description: 
+                    deleted_at: 
+                    created_at: '2022-07-19T20:04:04.072Z'
+                    updated_at: '2022-07-19T20:04:04.072Z'
+                  - id: 506
+                    name: Adam Hilll
+                    stripe_product_id: test_prod_5
+                    description: 
+                    deleted_at: 
+                    created_at: '2022-07-19T20:04:04.081Z'
+                    updated_at: '2022-07-19T20:04:04.081Z'
+                  - id: 507
+                    name: Jackson Tillman
+                    stripe_product_id: test_prod_6
+                    description: 
+                    deleted_at: 
+                    created_at: '2022-07-19T20:04:04.088Z'
+                    updated_at: '2022-07-19T20:04:04.088Z'
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    stripe_product_id:
+                      type: string
+                    name:
+                      type: string
+                    description:
+                      type: string
+                      nullable: true
+                    deleted_at:
+                      type: string
+                      nullable: true
+                    created_at:
+                      type: string
+                    updated_at:
+                      type: string
+  "/{resource}/subscriptions":
+    parameters:
+    - name: resource
+      in: path
+      description: 'resource name. e.g: subscription_for: users # resource = users'
+      required: true
+      schema:
+        type: string
+    post:
+      summary: Create a new subscription
+      tags:
+      - Subscription
+      description: Create a subscription.
+      security:
+      - bearer: []
+      parameters: []
+      responses:
+        '404':
+          description: not found
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    message: Product not found
+        '422':
+          description: unprocessable_entity
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    errors: Stripe price can't be blank
+        '200':
+          description: successful
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    id: 284
+                    stripe_subscription_id: test_su_6
+                    stripe_price_id: test_price_5
+                    status: active
+                    subscriptable_type: DummyUser
+                    subscriptable_id: 380
+                    product_type: Flatirons::Saas::Product
+                    product_id: 510
+                    deleted_at: 
+                    canceled_at: 
+                    created_at: '2022-07-19T20:04:04.235Z'
+                    updated_at: '2022-07-19T20:04:04.235Z'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: integer
+                stripe_price_id:
+                  type: string
+              require:
+              - product_id
+              - stripe_price_id
+    get:
+      summary: List dummy user subscriptions
+      tags:
+      - Subscription
+      description: Lists current user subscriptions.
+      security:
+      - bearer: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                  - id: 285
+                    stripe_subscription_id: test_su_6
+                    stripe_price_id: test_price_5
+                    status: active
+                    subscriptable_type: DummyUser
+                    subscriptable_id: 381
+                    product_type: Flatirons::Saas::Product
+                    product_id: 511
+                    deleted_at: 
+                    canceled_at: 
+                    created_at: '2022-07-19T20:04:04.270Z'
+                    updated_at: '2022-07-19T20:04:04.270Z'
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    stripe_subscription_id:
+                      type: string
+                    stripe_price_id:
+                      type: string
+                    subscriptable_type:
+                      type: string
+                    subscriptable_id:
+                      type: integer
+                    product_type:
+                      type: string
+                    product_id:
+                      type: integer
+                    status:
+                      type: string
+                    deleted_at:
+                      type: string
+                      nullable: true
+                    canceled_at:
+                      type: string
+                      nullable: true
+  "/{resource}/subscriptions/{id}":
+    parameters:
+    - name: resource
+      in: path
+      description: 'resource name. e.g: subscription_for: users # resource = users'
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    put:
+      summary: Update subscription
+      tags:
+      - Subscription
+      description: Update subscription.
+      security:
+      - bearer: []
+      parameters: []
+      responses:
+        '404':
+          description: not found
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    message: Product not found
+        '422':
+          description: unprocessable_entity
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    errors: Stripe price can't be blank
+        '200':
+          description: successful
+          content:
+            application/json:
+              examples:
+                test_example:
+                  value:
+                    product_id: 517
+                    product_type: Flatirons::Saas::Product
+                    stripe_price_id: test_price_10
+                    id: 289
+                    stripe_subscription_id: test_su_6
+                    status: active
+                    subscriptable_type: DummyUser
+                    subscriptable_id: 385
+                    deleted_at: 
+                    canceled_at: 
+                    created_at: '2022-07-19T20:04:04.456Z'
+                    updated_at: '2022-07-19T20:04:04.482Z'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: integer
+                stripe_price_id:
+                  type: string
+              require:
+              - product_id
+              - stripe_price_id
+servers:
+- url: "{defaultHost}"
+  variables:
+    defaultHost:
+      default: http://localhost:3001
