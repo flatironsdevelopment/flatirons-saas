@@ -446,5 +446,18 @@ describe Flatirons::Saas::Services::StripeService do
         end
       end
     end
+
+    describe 'delete subscription' do
+      let!(:subscription) { Stripe::Subscription.create({ customer: customer.id, items: [{ price: price.id }], expand: ['latest_invoice.payment_intent'] }) }
+      before do
+        expect(subscription.status).to eq 'active'
+      end
+
+      it 'should delete the subscription' do
+        deleted_subscription = service.delete_subscription(subscription.id)
+        expect(subscription.id).to eq deleted_subscription.id
+        expect(deleted_subscription.status).to eq 'canceled'
+      end
+    end
   end
 end
