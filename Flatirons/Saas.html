@@ -69,6 +69,11 @@
 
   
   
+  <dl>
+      <dt>Extended by:</dt>
+      <dd><span class='object_link'><a href="Saas/Configuration.html" title="Flatirons::Saas::Configuration (module)">Configuration</a></span></dd>
+  </dl>
+  
   
   
   
@@ -79,7 +84,7 @@
   <dl>
     <dt>Defined in:</dt>
     <dd>lib/flatirons/saas.rb<span class="defines">,<br />
-  lib/flatirons/saas/engine.rb,<br /> lib/flatirons/saas/version.rb,<br /> app/jobs/flatirons/saas/application_job.rb,<br /> app/models/flatirons/saas/application_record.rb,<br /> app/helpers/flatirons/saas/application_helper.rb,<br /> app/mailers/flatirons/saas/application_mailer.rb,<br /> app/models/flatirons/saas/concerns/soft_deletable.rb,<br /> app/controllers/flatirons/saas/application_controller.rb</span>
+  lib/flatirons/saas/engine.rb,<br /> lib/flatirons/saas/version.rb,<br /> lib/flatirons/saas/rails/routes.rb,<br /> lib/flatirons/saas/configuration.rb,<br /> app/models/flatirons/saas/product.rb,<br /> lib/flatirons/saas/devise/failure_app.rb,<br /> app/models/flatirons/saas/subscription.rb,<br /> app/jobs/flatirons/saas/application_job.rb,<br /> app/models/flatirons/saas/concerns/stripe.rb,<br /> app/models/flatirons/saas/application_record.rb,<br /> app/helpers/flatirons/saas/application_helper.rb,<br /> app/mailers/flatirons/saas/application_mailer.rb,<br /> app/models/flatirons/saas/concerns/productable.rb,<br /> app/models/flatirons/saas/concerns/subscriptable.rb,<br /> app/models/flatirons/saas/concerns/soft_deletable.rb,<br /> app/models/flatirons/saas/concerns/stripe_product.rb,<br /> app/controllers/flatirons/saas/products_controller.rb,<br /> app/models/flatirons/saas/concerns/stripe_customer.rb,<br /> app/controllers/flatirons/saas/application_controller.rb,<br /> app/controllers/flatirons/saas/subscriptions_controller.rb,<br /> app/controllers/flatirons/saas/payment_methods_controller.rb</span>
 </dd>
   </dl>
   
@@ -89,11 +94,11 @@
 <p class="children">
   
     
-      <strong class="modules">Modules:</strong> <span class='object_link'><a href="Saas/ApplicationHelper.html" title="Flatirons::Saas::ApplicationHelper (module)">ApplicationHelper</a></span>, <span class='object_link'><a href="Saas/Concerns.html" title="Flatirons::Saas::Concerns (module)">Concerns</a></span>
+      <strong class="modules">Modules:</strong> <span class='object_link'><a href="Saas/ApplicationHelper.html" title="Flatirons::Saas::ApplicationHelper (module)">ApplicationHelper</a></span>, <span class='object_link'><a href="Saas/Concerns.html" title="Flatirons::Saas::Concerns (module)">Concerns</a></span>, <span class='object_link'><a href="Saas/Configuration.html" title="Flatirons::Saas::Configuration (module)">Configuration</a></span>, <span class='object_link'><a href="Saas/Rails.html" title="Flatirons::Saas::Rails (module)">Rails</a></span>, <span class='object_link'><a href="Saas/Services.html" title="Flatirons::Saas::Services (module)">Services</a></span>
     
   
     
-      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Saas/ApplicationController.html" title="Flatirons::Saas::ApplicationController (class)">ApplicationController</a></span>, <span class='object_link'><a href="Saas/ApplicationJob.html" title="Flatirons::Saas::ApplicationJob (class)">ApplicationJob</a></span>, <span class='object_link'><a href="Saas/ApplicationMailer.html" title="Flatirons::Saas::ApplicationMailer (class)">ApplicationMailer</a></span>, <span class='object_link'><a href="Saas/ApplicationRecord.html" title="Flatirons::Saas::ApplicationRecord (class)">ApplicationRecord</a></span>, <span class='object_link'><a href="Saas/Engine.html" title="Flatirons::Saas::Engine (class)">Engine</a></span>
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Saas/ApplicationController.html" title="Flatirons::Saas::ApplicationController (class)">ApplicationController</a></span>, <span class='object_link'><a href="Saas/ApplicationJob.html" title="Flatirons::Saas::ApplicationJob (class)">ApplicationJob</a></span>, <span class='object_link'><a href="Saas/ApplicationMailer.html" title="Flatirons::Saas::ApplicationMailer (class)">ApplicationMailer</a></span>, <span class='object_link'><a href="Saas/ApplicationRecord.html" title="Flatirons::Saas::ApplicationRecord (class)">ApplicationRecord</a></span>, <span class='object_link'><a href="Saas/Engine.html" title="Flatirons::Saas::Engine (class)">Engine</a></span>, <span class='object_link'><a href="Saas/FailureApp.html" title="Flatirons::Saas::FailureApp (class)">FailureApp</a></span>, <span class='object_link'><a href="Saas/PaymentMethodsController.html" title="Flatirons::Saas::PaymentMethodsController (class)">PaymentMethodsController</a></span>, <span class='object_link'><a href="Saas/Product.html" title="Flatirons::Saas::Product (class)">Product</a></span>, <span class='object_link'><a href="Saas/ProductsController.html" title="Flatirons::Saas::ProductsController (class)">ProductsController</a></span>, <span class='object_link'><a href="Saas/Subscription.html" title="Flatirons::Saas::Subscription (class)">Subscription</a></span>, <span class='object_link'><a href="Saas/SubscriptionsController.html" title="Flatirons::Saas::SubscriptionsController (class)">SubscriptionsController</a></span>
     
   
 </p>
@@ -121,11 +126,22 @@
 
 
 
+  
+  
+  
+  
+  
+  
+  <h2>Method Summary</h2>
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="Saas/Configuration.html" title="Flatirons::Saas::Configuration (module)">Configuration</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="Saas/Configuration.html#configure-instance_method" title="Flatirons::Saas::Configuration#configure (method)">configure</a></span></p>
+
 
 </div>
 
       <div id="footer">
-  Generated on Tue Jun 21 18:17:25 2022 by
+  Generated on Tue Jul 19 18:44:24 2022 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-2.7.6).
 </div>

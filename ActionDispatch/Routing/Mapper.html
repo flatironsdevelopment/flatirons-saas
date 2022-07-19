@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: ActionDispatch::Routing::Mapper
+  
+    &mdash; Documentation by YARD 0.9.28
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "ActionDispatch::Routing::Mapper";
+  relpath = '../../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../../_index.html">Index (M)</a> &raquo;
+    <span class='title'>ActionDispatch</span> &raquo; <span class='title'><span class='object_link'><a href="../Routing.html" title="ActionDispatch::Routing (module)">Routing</a></span></span>
+     &raquo; 
+    <span class="title">Mapper</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: ActionDispatch::Routing::Mapper
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">ActionDispatch::Routing::Mapper</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/flatirons/saas/rails/routes.rb</dd>
+  </dl>
+  
+</div>
+
+
+
+
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#products_for-instance_method" title="#products_for (instance method)">#<strong>products_for</strong>(*resources)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#subscription_for-instance_method" title="#subscription_for (instance method)">#<strong>subscription_for</strong>(*resources)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Includes subscription_for method for routes.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="products_for-instance_method">
+  
+    #<strong>products_for</strong>(*resources)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/flatirons/saas/rails/routes.rb', line 80</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_products_for'>products_for</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_resources'>resources</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='id identifier rubyid_resources'>resources</span><span class='period'>.</span><span class='id identifier rubyid_extract_options!'>extract_options!</span>
+  <span class='id identifier rubyid_resources'>resources</span><span class='period'>.</span><span class='id identifier rubyid_map!'>map!</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_sym</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_concern_name'>concern_name</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>productable</span><span class='tstring_end'>&#39;</span></span>
+  <span class='id identifier rubyid_method_prefix'>method_prefix</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>products</span><span class='tstring_end'>&#39;</span></span>
+  <span class='id identifier rubyid_module_class'>module_class</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../Flatirons.html" title="Flatirons (module)">Flatirons</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Flatirons/Saas.html" title="Flatirons::Saas (module)">Saas</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Flatirons/Saas/Rails.html" title="Flatirons::Saas::Rails (module)">Rails</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Flatirons/Saas/Rails/Product.html" title="Flatirons::Saas::Rails::Product (module)">Product</a></span></span>
+
+  <span class='id identifier rubyid_resources'>resources</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_resource'>resource</span><span class='op'>|</span>
+    <span class='id identifier rubyid_ref'>ref</span> <span class='op'>=</span> <span class='id identifier rubyid_extract_resource_ref'>extract_resource_ref</span> <span class='id identifier rubyid_resource'>resource</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span><span class='comma'>,</span> <span class='id identifier rubyid_module_class'>module_class</span><span class='comma'>,</span> <span class='id identifier rubyid_method_prefix'>method_prefix</span>
+    <span class='id identifier rubyid_ensure_concern!'>ensure_concern!</span> <span class='id identifier rubyid_ref'>ref</span><span class='lbracket'>[</span><span class='symbol'>:productable_klass</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_concern_name'>concern_name</span>
+
+    <span class='id identifier rubyid_routing_resource_scope'>routing_resource_scope</span><span class='lparen'>(</span><span class='label'>symbol:</span> <span class='id identifier rubyid_ref'>ref</span><span class='lbracket'>[</span><span class='symbol'>:symbol</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>module_class:</span> <span class='id identifier rubyid_module_class'>module_class</span><span class='rparen'>)</span> <span class='kw'>do</span>
+      <span class='id identifier rubyid_with_exclusive_scope'>with_exclusive_scope</span> <span class='id identifier rubyid_ref'>ref</span> <span class='kw'>do</span>
+        <span class='id identifier rubyid_resources'>resources</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>products</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>controller:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>flatirons/saas/products</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>only:</span> <span class='qsymbols_beg'>%i[</span><span class='tstring_content'>index</span><span class='tstring_end'>]</span></span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="subscription_for-instance_method">
+  
+    #<strong>subscription_for</strong>(*resources)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Includes subscription_for method for routes. This method is responsible to generate all needed routes for subscription.</p>
+
+<h4 id="label-Devise+integration">Devise integration</h4>
+
+<p><code>subscription_for</code> is build to play with devise. For example, by calling <code>subscription_for</code> with a <code>devise_for</code>, it automatically nests your subscriptions with the authenticated resource.</p>
+
+<h4 id="label-Examples">Examples</h4>
+
+<p>Let&#39;s say you have an User model configured to use <code>subscriptable</code>, After creating this inside your routes:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_devise_for'>devise_for</span> <span class='symbol'>:users</span>
+<span class='id identifier rubyid_subscription_for'>subscription_for</span> <span class='symbol'>:users</span>
+</code></pre>
+
+<p>This method is going to look inside your User model and create the needed routes:</p>
+
+<pre class="code ruby"><code class="ruby"># Subscription routes for authenticated resource (default)
+user_subscriptions GET    /users/subscriptions             {controller:&quot;flatirons/saas/subscriptions&quot;, action:&quot;index&quot;}
+user_subscriptions GET    /users/subscriptions/:id         {controller:&quot;flatirons/saas/subscriptions&quot;, action:&quot;show&quot;}
+user_subscriptions POST   /users/subscriptions             {controller:&quot;flatirons/saas/subscriptions&quot;, action:&quot;create&quot;}
+user_subscriptions PUT    /users/subscriptions/:id         {controller:&quot;flatirons/saas/subscriptions&quot;, action:&quot;update&quot;}
+</code></pre>
+
+<h4 id="label-Options">Options</h4>
+
+<p>You can configure your routes with some options:</p>
+
+<pre class="code ruby"><code class="ruby">* class_name: set up a different class to be looked up by subscription, if it cannot be
+  properly found by the route name.
+
+    subscription_for :users, class_name: &#39;Account&#39;
+
+* path: allows you to set up path name that will be used, as rails routes does.
+  The following route configuration would set up your route as /accounts instead of /users:
+
+    subscription_for :users, path: &#39;accounts&#39;
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/flatirons/saas/rails/routes.rb', line 60</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_subscription_for'>subscription_for</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_resources'>resources</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='id identifier rubyid_resources'>resources</span><span class='period'>.</span><span class='id identifier rubyid_extract_options!'>extract_options!</span>
+  <span class='id identifier rubyid_resources'>resources</span><span class='period'>.</span><span class='id identifier rubyid_map!'>map!</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_sym</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_concern_name'>concern_name</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>subscriptable</span><span class='tstring_end'>&#39;</span></span>
+  <span class='id identifier rubyid_method_prefix'>method_prefix</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>subscription</span><span class='tstring_end'>&#39;</span></span>
+  <span class='id identifier rubyid_module_class'>module_class</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../Flatirons.html" title="Flatirons (module)">Flatirons</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Flatirons/Saas.html" title="Flatirons::Saas (module)">Saas</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Flatirons/Saas/Rails.html" title="Flatirons::Saas::Rails (module)">Rails</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Flatirons/Saas/Rails/Subscription.html" title="Flatirons::Saas::Rails::Subscription (module)">Subscription</a></span></span>
+
+  <span class='id identifier rubyid_resources'>resources</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_resource'>resource</span><span class='op'>|</span>
+    <span class='id identifier rubyid_ref'>ref</span> <span class='op'>=</span> <span class='id identifier rubyid_extract_resource_ref'>extract_resource_ref</span> <span class='id identifier rubyid_resource'>resource</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span><span class='comma'>,</span> <span class='id identifier rubyid_module_class'>module_class</span><span class='comma'>,</span> <span class='id identifier rubyid_method_prefix'>method_prefix</span>
+    <span class='id identifier rubyid_ensure_concern!'>ensure_concern!</span> <span class='id identifier rubyid_ref'>ref</span><span class='lbracket'>[</span><span class='symbol'>:klass</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_concern_name'>concern_name</span>
+
+    <span class='id identifier rubyid_routing_resource_scope'>routing_resource_scope</span><span class='lparen'>(</span><span class='label'>symbol:</span> <span class='id identifier rubyid_ref'>ref</span><span class='lbracket'>[</span><span class='symbol'>:symbol</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>module_class:</span> <span class='id identifier rubyid_module_class'>module_class</span><span class='rparen'>)</span> <span class='kw'>do</span>
+      <span class='id identifier rubyid_with_exclusive_scope'>with_exclusive_scope</span> <span class='id identifier rubyid_ref'>ref</span> <span class='kw'>do</span>
+        <span class='id identifier rubyid_resources'>resources</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>subscriptions</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>controller:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>flatirons/saas/subscriptions</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>only:</span> <span class='qsymbols_beg'>%i[</span><span class='tstring_content'>index</span><span class='words_sep'> </span><span class='tstring_content'>create</span><span class='words_sep'> </span><span class='tstring_content'>update</span><span class='tstring_end'>]</span></span>
+        <span class='id identifier rubyid_resources'>resources</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>payment_methods</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>controller:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>flatirons/saas/payment_methods</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>only:</span> <span class='qsymbols_beg'>%i[</span><span class='tstring_content'>index</span><span class='words_sep'> </span><span class='tstring_content'>create</span><span class='tstring_end'>]</span></span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Tue Jul 19 18:44:24 2022 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.28 (ruby-2.7.6).
+</div>
+
+    </div>
+  </body>
+</html>
