@@ -8,7 +8,10 @@ describe '/{resource}/products', type: :request do
   include_context 'dummy_user_is_authenticated'
 
   context 'given products' do
-    let!(:products) { FactoryBot.create_list(:product, 3) }
+    before(:each) do
+      basic_plan = Flatirons::Saas::Product.create(name: 'Basic Blog Product Plan', description: 'My Amazing Product basic plan')
+      basic_plan.create_price(unit_amount: 10_00, currency: 'usd', recurring_interval: 'month', extra_fields: {})
+    end
 
     path '/{resource}/products' do
       parameter name: :resource, in: :path, type: :string, description: 'resource name. e.g: products_for: users # resource = users'

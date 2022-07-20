@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_15_150706) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_07_15_150706) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,23 +18,23 @@ ActiveRecord::Schema.define(version: 2022_07_15_150706) do
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
+    t.datetime "reset_password_sent_at", precision: nil
     t.string "stripe_customer_id"
-    t.datetime "remember_created_at"
-    t.datetime "deleted_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "remember_created_at", precision: nil
+    t.datetime "deleted_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["email"], name: "index_dummy_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_dummy_users_on_reset_password_token", unique: true
   end
 
   create_table "flatirons_saas_products", force: :cascade do |t|
-    t.string "name"
-    t.string "stripe_product_id"
+    t.string "name", null: false
+    t.string "stripe_product_id", null: false
     t.text "description"
-    t.datetime "deleted_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["name"], name: "index_flatirons_saas_products_on_name"
     t.index ["stripe_product_id"], name: "index_flatirons_saas_products_on_stripe_product_id"
   end
@@ -48,10 +47,10 @@ ActiveRecord::Schema.define(version: 2022_07_15_150706) do
     t.bigint "subscriptable_id"
     t.string "product_type"
     t.bigint "product_id"
-    t.datetime "deleted_at"
-    t.datetime "canceled_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at", precision: nil
+    t.datetime "canceled_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["deleted_at"], name: "index_flatirons_saas_subscriptions_on_deleted_at"
     t.index ["product_type", "product_id"], name: "index_flatirons_saas_subscriptions_on_product"
     t.index ["status"], name: "index_flatirons_saas_subscriptions_on_status"

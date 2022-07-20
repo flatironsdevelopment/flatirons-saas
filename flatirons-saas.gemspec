@@ -51,4 +51,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency  'byebug', '~> 9.0', '>= 9.0.5'
   spec.add_development_dependency 'generator_spec', '~> 0.9'
   spec.add_development_dependency 'rswag-specs', '~> 2.5'
+  spec.add_dependency 'jbuilder', '~> 2.11'
 end
