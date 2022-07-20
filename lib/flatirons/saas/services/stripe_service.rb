@@ -90,10 +90,10 @@ module Flatirons::Saas::Services
       subscription
     end
 
-    def delete_subscription(subscription_id)
+    def delete_subscription(subscription_id, invoice_now: false, prorate: false)
       return unless subscription_id
 
-      Stripe::Subscription.delete(subscription_id)
+      Stripe::Subscription.delete(subscription_id, { invoice_now: invoice_now, prorate: prorate }, stripe_opts)
     end
 
     private

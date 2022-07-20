@@ -97,6 +97,12 @@ describe Flatirons::Saas::Services::StripeService do
         expect { service.retrieve_subscription('subscription_id') }.to raise_error 'Stripe API key not configured'
       end
     end
+
+    describe 'delete_subscription' do
+      it 'should raise an error' do
+        expect { service.delete_subscription('subscription_id') }.to raise_error 'Stripe API key not configured'
+      end
+    end
   end
 
   describe 'customer' do

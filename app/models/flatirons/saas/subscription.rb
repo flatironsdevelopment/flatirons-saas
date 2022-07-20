@@ -51,7 +51,9 @@ module Flatirons::Saas
     end
 
     def destroy_stripe_subscription
-      stripe_service.delete_subscription(stripe_subscription_id)
+      invoice_now = subscriptable.subscriptable_options[:invoice_now_on_cancel] || false
+      prorate = subscriptable.subscriptable_options[:prorate_on_cancel] || false
+      stripe_service.delete_subscription(stripe_subscription_id, { invoice_now: invoice_now, prorate: prorate })
     rescue StandardError => e
       errors.add :base, :invalid, message: e.to_s
       throw :abort
