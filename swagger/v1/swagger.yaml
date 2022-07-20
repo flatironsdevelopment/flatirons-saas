@@ -209,13 +209,13 @@ paths:
               examples:
                 test_example:
                   value:
-                  - id: 154
+                  - id: 168
                     name: Basic Blog Product Plan
                     stripe_product_id: test_prod_4
                     description: My Amazing Product basic plan
                     deleted_at: 
-                    created_at: '2022-07-20T14:01:33.886Z'
-                    updated_at: '2022-07-20T14:01:33.886Z'
+                    created_at: '2022-07-20T14:05:09.117Z'
+                    updated_at: '2022-07-20T14:05:09.117Z'
                     prices:
                     - id: test_price_5
                       object: price
@@ -246,6 +246,8 @@ paths:
                       type: string
                     name:
                       type: string
+                    prices:
+                      type: array
                     description:
                       type: string
                       nullable: true
@@ -296,18 +298,18 @@ paths:
               examples:
                 test_example:
                   value:
-                    id: 97
+                    id: 106
                     stripe_subscription_id: test_su_6
                     stripe_price_id: test_price_5
                     status: active
                     subscriptable_type: DummyUser
-                    subscriptable_id: 128
+                    subscriptable_id: 140
                     product_type: Flatirons::Saas::Product
-                    product_id: 157
+                    product_id: 171
                     deleted_at: 
                     canceled_at: 
-                    created_at: '2022-07-20T14:01:34.652Z'
-                    updated_at: '2022-07-20T14:01:34.652Z'
+                    created_at: '2022-07-20T14:05:09.916Z'
+                    updated_at: '2022-07-20T14:05:09.916Z'
       requestBody:
         content:
           application/json:
@@ -336,18 +338,18 @@ paths:
               examples:
                 test_example:
                   value:
-                  - id: 98
+                  - id: 107
                     stripe_subscription_id: test_su_6
                     stripe_price_id: test_price_5
                     status: active
                     subscriptable_type: DummyUser
-                    subscriptable_id: 129
+                    subscriptable_id: 141
                     product_type: Flatirons::Saas::Product
-                    product_id: 158
+                    product_id: 172
                     deleted_at: 
                     canceled_at: 
-                    created_at: '2022-07-20T14:01:34.690Z'
-                    updated_at: '2022-07-20T14:01:34.690Z'
+                    created_at: '2022-07-20T14:05:09.963Z'
+                    updated_at: '2022-07-20T14:05:09.963Z'
               schema:
                 type: array
                 items:
@@ -421,18 +423,18 @@ paths:
               examples:
                 test_example:
                   value:
-                    product_id: 164
+                    product_id: 178
                     product_type: Flatirons::Saas::Product
                     stripe_price_id: test_price_10
-                    id: 102
+                    id: 111
                     stripe_subscription_id: test_su_6
                     status: active
                     subscriptable_type: DummyUser
-                    subscriptable_id: 133
+                    subscriptable_id: 145
                     deleted_at: 
                     canceled_at: 
-                    created_at: '2022-07-20T14:01:34.900Z'
-                    updated_at: '2022-07-20T14:01:34.938Z'
+                    created_at: '2022-07-20T14:05:10.217Z'
+                    updated_at: '2022-07-20T14:05:10.261Z'
       requestBody:
         content:
           application/json:

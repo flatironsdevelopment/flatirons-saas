@@ -32,6 +32,7 @@ describe '/{resource}/products', type: :request do
                      id: { type: :integer },
                      stripe_product_id: { type: :string },
                      name: { type: :string },
+                     prices: { type: :array },
                      description: { type: :string, nullable: true },
                      deleted_at: { type: :string, nullable: true },
                      created_at: { type: :string },
