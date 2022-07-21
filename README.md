@@ -7,11 +7,19 @@ Common functionalities that can be reused across projects
 
 ## Documentation
 
-- [Getting Started](https://github.com/flatironsdevelopment/flatirons-saas/wiki/Getting-started)
-
-- [Soft Deletable](https://github.com/flatironsdevelopment/flatirons-saas/wiki/SoftDeletable)
+- [Getting Started](https://github.com/flatironsdevelopment/flatirons-saas/wiki/wiki#getting-started)
 
 - [Productable](https://github.com/flatironsdevelopment/flatirons-saas/wiki/Productable)
+
+- [Productable Routes](https://github.com/flatironsdevelopment/flatirons-saas/wiki/Product-Routes)
+
+- [Subscription](https://github.com/flatironsdevelopment/flatirons-saas/wiki/Subscription)
+
+- [Subscriptable](https://github.com/flatironsdevelopment/flatirons-saas/wiki/Subscriptable)
+
+- [Subscription and payment methods routes](https://github.com/flatironsdevelopment/flatirons-saas/wiki/Subscriptions-and-Payment-Methods-Routes)
+
+- [Soft Deletable](https://github.com/flatironsdevelopment/flatirons-saas/wiki/SoftDeletable)
 
 ## Contributing
 Contribution directions go here.
