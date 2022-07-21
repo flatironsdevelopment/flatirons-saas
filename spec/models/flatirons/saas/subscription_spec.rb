@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ModuleLength
+
 require 'rails_helper'
 
 module Flatirons::Saas
@@ -34,6 +36,7 @@ module Flatirons::Saas
         allow(@service).to receive(:create_customer).and_return(stripe_customer)
         allow(@service).to receive(:create_product).and_return(stripe_product)
         allow(@service).to receive(:create_subscription).with(stripe_customer.id, stripe_price.id).and_return(stripe_subscription)
+        allow(@service).to receive(:delete_subscription).with(stripe_subscription.id).and_return(stripe_subscription)
       end
 
       context 'given a subscriptable and product and price' do
@@ -115,8 +118,45 @@ module Flatirons::Saas
               expect(subscription.stripe_subscription).to be_nil
             end
           end
+          context 'destroy subscription' do
+            it 'stripe sucessfully deletes subscription' do
+              expect(Subscription.count).to eq 1
+              expect(@service).to receive(:delete_subscription).with(stripe_subscription.id, { invoice_now: false, prorate: false })
+              subscription.destroy
+              expect(subscription.errors.size).to eq 0
+              expect(Subscription.count).to eq 0
+            end
+            context 'given opts' do
+              it 'deletes subscription' do
+                allow(@service).to receive(:delete_subscription).with(stripe_subscription.id, { invoice_now: true, prorate: true }).and_return(nil)
+                allow(subscriptable).to receive(:subscriptable_options).and_return({ invoice_now_on_cancel: true, prorate_on_cancel: true })
+                expect(Subscription.count).to eq 1
+                expect(@service).to receive(:delete_subscription).with(stripe_subscription.id, { invoice_now: true, prorate: true })
+                subscription.destroy
+                expect(subscription.errors.size).to eq 0
+                expect(Subscription.count).to eq 0
+              end
+            end
+
+            context 'stripe raises error' do
+              before do
+                allow(@service).to receive(:delete_subscription).with(stripe_subscription.id,
+                                                                      { invoice_now: false, prorate: false }).and_raise('Stripe API Error')
+              end
+
+              it 'doesnt destroy subscription record' do
+                expect(Subscription.count).to eq 1
+                subscription.destroy
+                expect(subscription.errors.size).to eq 1
+                expect(subscription.errors.full_messages).to eq ['Stripe API Error']
+                expect(Subscription.count).to eq 1
+                expect(Subscription.last.stripe_subscription_id).to eq stripe_subscription.id
+              end
+            end
+          end
         end
       end
     end
   end
 end
+# rubocop:enable Metrics/ModuleLength

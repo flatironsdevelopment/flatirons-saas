@@ -97,6 +97,12 @@ describe Flatirons::Saas::Services::StripeService do
         expect { service.retrieve_subscription('subscription_id') }.to raise_error 'Stripe API key not configured'
       end
     end
+
+    describe 'delete_subscription' do
+      it 'should raise an error' do
+        expect { service.delete_subscription('subscription_id') }.to raise_error 'Stripe API key not configured'
+      end
+    end
   end
 
   describe 'customer' do
@@ -444,6 +450,19 @@ describe Flatirons::Saas::Services::StripeService do
           expect(subscription_found).to_not be_nil
           expect(subscription_found.id).to eq(subscription.id)
         end
+      end
+    end
+
+    describe 'delete subscription' do
+      let!(:subscription) { Stripe::Subscription.create({ customer: customer.id, items: [{ price: price.id }], expand: ['latest_invoice.payment_intent'] }) }
+      before do
+        expect(subscription.status).to eq 'active'
+      end
+
+      it 'should delete the subscription' do
+        deleted_subscription = service.delete_subscription(subscription.id)
+        expect(subscription.id).to eq deleted_subscription.id
+        expect(deleted_subscription.status).to eq 'canceled'
       end
     end
   end

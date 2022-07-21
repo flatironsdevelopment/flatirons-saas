@@ -22,6 +22,7 @@ module Flatirons::Saas
 
     before_create :create_stripe_subscription, prepend: true
     before_update :update_stripe_subscription, prepend: true
+    before_destroy :destroy_stripe_subscription, prepend: true
 
     #
     # Retrieve the stripe subscription
@@ -47,6 +48,15 @@ module Flatirons::Saas
 
     def update_stripe_subscription
       stripe_service.update_subscription(stripe_subscription_id, stripe_price_id) if stripe_price_id_changed?
+    end
+
+    def destroy_stripe_subscription
+      invoice_now = subscriptable.subscriptable_options[:invoice_now_on_cancel] || false
+      prorate = subscriptable.subscriptable_options[:prorate_on_cancel] || false
+      stripe_service.delete_subscription(stripe_subscription_id, { invoice_now: invoice_now, prorate: prorate })
+    rescue StandardError => e
+      errors.add :base, :invalid, message: e.to_s
+      throw :abort
     end
   end
 end

@@ -90,6 +90,12 @@ module Flatirons::Saas::Services
       subscription
     end
 
+    def delete_subscription(subscription_id, invoice_now: false, prorate: false)
+      return unless subscription_id
+
+      Stripe::Subscription.delete(subscription_id, { invoice_now: invoice_now, prorate: prorate }, stripe_opts)
+    end
+
     private
 
     def set_default_payment_method(customer_id, payment_method_id)
