@@ -7,7 +7,7 @@ Common functionalities that can be reused across projects
 
 ## Documentation
 
-- [Getting Started](https://github.com/flatironsdevelopment/flatirons-saas/wiki/wiki#getting-started)
+- [Getting Started](https://github.com/flatironsdevelopment/flatirons-saas/wiki#getting-started)
 
 - [Productable](https://github.com/flatironsdevelopment/flatirons-saas/wiki/Productable)
 
