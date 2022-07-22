@@ -11,7 +11,7 @@ GIT
 PATH
   remote: .
   specs:
-    flatirons-saas (0.1.2)
+    flatirons-saas (0.1.1)
       devise (~> 4.8)
       jbuilder (~> 2.11)
       money-rails (~> 1.12)
