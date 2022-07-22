@@ -131,21 +131,21 @@ RSpec.describe Flatirons::Saas::Subscription, type: :model do
           end
           context 'destroy subscription' do
             it 'stripe sucessfully deletes subscription' do
-              expect(Subscription.count).to eq 1
+              expect(Flatirons::Saas::Subscription.count).to eq 1
               expect(@service).to receive(:delete_subscription).with(stripe_subscription.id, { invoice_now: false, prorate: false })
               subscription.destroy
               expect(subscription.errors.size).to eq 0
-              expect(Subscription.count).to eq 0
+              expect(Flatirons::Saas::Subscription.count).to eq 0
             end
             context 'given opts' do
               it 'deletes subscription' do
                 allow(@service).to receive(:delete_subscription).with(stripe_subscription.id, { invoice_now: true, prorate: true }).and_return(nil)
                 allow(subscriptable).to receive(:subscriptable_options).and_return({ invoice_now_on_cancel: true, prorate_on_cancel: true })
-                expect(Subscription.count).to eq 1
+                expect(Flatirons::Saas::Subscription.count).to eq 1
                 expect(@service).to receive(:delete_subscription).with(stripe_subscription.id, { invoice_now: true, prorate: true })
                 subscription.destroy
                 expect(subscription.errors.size).to eq 0
-                expect(Subscription.count).to eq 0
+                expect(Flatirons::Saas::Subscription.count).to eq 0
               end
             end
 
@@ -156,12 +156,12 @@ RSpec.describe Flatirons::Saas::Subscription, type: :model do
               end
 
               it 'doesnt destroy subscription record' do
-                expect(Subscription.count).to eq 1
+                expect(Flatirons::Saas::Subscription.count).to eq 1
                 subscription.destroy
                 expect(subscription.errors.size).to eq 1
                 expect(subscription.errors.full_messages).to eq ['Stripe API Error']
-                expect(Subscription.count).to eq 1
-                expect(Subscription.last.stripe_subscription_id).to eq stripe_subscription.id
+                expect(Flatirons::Saas::Subscription.count).to eq 1
+                expect(Flatirons::Saas::Subscription.last.stripe_subscription_id).to eq stripe_subscription.id
               end
             end
           end
