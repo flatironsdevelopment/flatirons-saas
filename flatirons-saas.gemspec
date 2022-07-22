@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'lib/flatirons/saas/version'
+$LOAD_PATH.push File.expand_path('lib', __dir__)
+require 'flatirons/saas/version'
 
 Gem::Specification.new do |spec|
   spec.name        = 'flatirons-saas'
@@ -21,15 +22,16 @@ Gem::Specification.new do |spec|
   spec.metadata['changelog_uri'] = 'https://github.com/flatironsdevelopment/flatirons-saas'
 
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
-    Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
+    Dir['{app,config,db,lib,swagger}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
   end
+  spec.require_paths = ['lib']
 
   spec.required_ruby_version = '~> 2.7'
   spec.add_dependency 'money-rails', '~> 1.12'
   spec.add_dependency 'pg', '~> 1.1'
-  spec.add_dependency 'rails', '~> 6.1.4'
+  spec.add_dependency 'rails', '~> 7.0.0'
   spec.add_development_dependency 'factory_bot_rails', '~> 6.2'
-  spec.add_development_dependency 'rspec', '~> 3.11'
+  spec.add_dependency 'rspec', '~> 3.11'
   spec.add_development_dependency 'rspec-rails', '~> 5.1'
   spec.add_development_dependency 'rubocop', '~> 1.30'
   spec.add_development_dependency 'rubocop-rails', '~> 2.15'
@@ -49,4 +51,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency  'byebug', '~> 9.0', '>= 9.0.5'
   spec.add_development_dependency 'generator_spec', '~> 0.9'
   spec.add_development_dependency 'rswag-specs', '~> 2.5'
+  spec.add_dependency 'jbuilder', '~> 2.11'
 end

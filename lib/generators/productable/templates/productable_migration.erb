@@ -1,16 +1,12 @@
 # frozen_string_literal: true
 
 class Create<%= table_name.camelize %> < ActiveRecord::Migration[<%= rails_version %>]
-  def up
+  def change
     create_table :<%= table_name %> do |t|
-      t.string :name, index: true
-      t.string :stripe_product_id, index: true, unique: true
+      t.string :name, index: true, null: false
+      t.string :stripe_product_id, index: true, unique: true, null: false
 
       t.timestamps
     end
-  end
-
-  def down
-    raise ActiveRecord::IrreversibleMigration
   end
 end

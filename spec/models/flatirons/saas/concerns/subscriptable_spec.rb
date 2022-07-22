@@ -35,7 +35,7 @@ describe Flatirons::Saas::Concerns::Subscriptable do
 
         describe 'customer creation' do
           it 'should create stripe customer' do
-            expect(@service).to receive(:create_customer).with("#{Organization.table_name}_1", {}).and_return(customer)
+            expect(@service).to receive(:create_customer).with(organization.name, {}).and_return(customer)
 
             organization.save
 
@@ -67,6 +67,17 @@ describe Flatirons::Saas::Concerns::Subscriptable do
         end
       end
 
+      context 'when stripe raise an error' do
+        let!(:stripe_customer_id) { nil }
+
+        it 'should not create the organization' do
+          expect(@service).to receive(:create_customer).with(organization.name, {}).and_raise('Failed to create the customer')
+
+          expect { organization.save }.to raise_error 'Failed to create the customer'
+          expect(Organization.count).to eq 0
+        end
+      end
+
       describe 'callbacks' do
         let!(:stripe_customer_id) { nil }
         let!(:callbacks) { spy('callbacks') }
@@ -86,7 +97,7 @@ describe Flatirons::Saas::Concerns::Subscriptable do
         end
 
         it 'should run callbacks' do
-          expect(@service).to receive(:create_customer).with("#{Organization.table_name}_1", {}).and_return(customer)
+          expect(@service).to receive(:create_customer).with(organization.name, {}).and_return(customer)
 
           organization.save
 
@@ -315,6 +326,16 @@ describe Flatirons::Saas::Concerns::Subscriptable do
           expect(organization.subscriptions.count).to eq(1)
         end
       end
+    end
+  end
+
+  describe 'validation' do
+    let!(:organization) { Organization.new(name: 'Flatirons', stripe_customer_id: 'stripe_customer_id') }
+
+    it 'should validate the presence of stripe_customer_name' do
+      allow(organization).to receive(:stripe_customer_name).and_return(nil)
+      expect(organization.save).to be false
+      expect(organization.errors.full_messages.to_sentence).to eq('stripe_customer_name is required')
     end
   end
 end

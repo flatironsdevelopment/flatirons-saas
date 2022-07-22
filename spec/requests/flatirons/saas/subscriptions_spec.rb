@@ -3,7 +3,7 @@
 require 'swagger_helper'
 require 'rails_helper'
 
-describe '/dummy_users/subscriptions', type: :request do
+describe '/{resource}/subscriptions', type: :request do
   include_context 'dummy_user'
   include_context 'dummy_user_is_authenticated'
 
@@ -11,7 +11,10 @@ describe '/dummy_users/subscriptions', type: :request do
   let!(:stripe_price) { Stripe::Price.create({  unit_amount: 4000, currency: 'usd', product: stripe_product.id }) }
   let!(:product) { Flatirons::Saas::Product.create({ name: 'Beer', stripe_product_id: stripe_product.id }) }
 
-  path '/dummy_users/subscriptions' do
+  path '/{resource}/subscriptions' do
+    parameter name: :resource, in: :path, type: :string, description: 'resource name. e.g: subscription_for: users # resource = users'
+    let!(:resource) { 'dummy_users' }
+
     post('Create a new subscription') do
       tags 'Subscription'
       description 'Create a subscription.'
@@ -176,8 +179,10 @@ describe '/dummy_users/subscriptions', type: :request do
     end
   end
 
-  path '/dummy_users/subscriptions/{id}' do
+  path '/{resource}/subscriptions/{id}' do
+    parameter name: :resource, in: :path, type: :string, description: 'resource name. e.g: subscription_for: users # resource = users'
     parameter name: :id, in: :path, type: :string, description: 'id'
+    let!(:resource) { 'dummy_users' }
 
     put('Update subscription') do
       tags 'Subscription'

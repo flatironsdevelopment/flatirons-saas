@@ -3,7 +3,8 @@
 class Create<%= table_name.camelize %> < ActiveRecord::Migration[<%= rails_version %>]
   def change
     create_table :<%= table_name %> do |t|
-      t.string :stripe_customer_id, null: false, unique: true
+      t.string :name, :string, null: false, index: true
+      t.string :stripe_customer_id, index: true, null: false, unique: true
 
       t.timestamps
     end

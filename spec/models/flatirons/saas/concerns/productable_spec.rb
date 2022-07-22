@@ -63,6 +63,17 @@ describe Flatirons::Saas::Concerns::Productable do
         end
       end
 
+      context 'when stripe raise an error' do
+        let!(:stripe_product_id) { nil }
+
+        it 'should not create the product' do
+          expect(@service).to receive(:create_product).with(plan.name, {}).and_raise('Failed to create the product')
+
+          expect { plan.save }.to raise_error 'Failed to create the product'
+          expect(Plan.count).to eq 0
+        end
+      end
+
       describe 'callbacks' do
         let!(:stripe_product_id) { nil }
         let!(:callbacks) { spy('callbacks') }
@@ -290,6 +301,16 @@ describe Flatirons::Saas::Concerns::Productable do
           expect { plan.prices }.to raise_error 'stripe_product_id attribute not found.'
         end
       end
+    end
+  end
+
+  describe 'validation' do
+    let!(:plan) { Plan.new(name: 'Flatirons', stripe_product_id: 'stripe_product_id') }
+
+    it 'should validate the presence of stripe_product_name' do
+      allow(plan).to receive(:stripe_product_name).and_return(nil)
+      expect(plan.save).to be false
+      expect(plan.errors.full_messages.to_sentence).to eq('stripe_product_name is required')
     end
   end
 end

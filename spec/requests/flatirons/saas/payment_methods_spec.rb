@@ -3,13 +3,16 @@
 require 'swagger_helper'
 require 'rails_helper'
 
-describe '/dummy_users/payment_methods', type: :request do
+describe '/{resource}/payment_methods', type: :request do
   include_context 'dummy_user'
   include_context 'dummy_user_is_authenticated'
   include_context 'dummy_user_with_subscription'
   include_context 'dummy_user_with_payment_methods'
 
-  path '/dummy_users/payment_methods' do
+  path '/{resource}/payment_methods' do
+    parameter name: :resource, in: :path, type: :string, description: 'resource name. e.g: subscription_for: users # resource = users'
+    let!(:resource) { 'dummy_users' }
+
     get('List payment methods') do
       tags 'Payment Methods'
       description 'Lists current user payment methods.'

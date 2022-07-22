@@ -5,4 +5,8 @@ class DummyUser < ApplicationRecord
          :recoverable, :rememberable, :validatable
   soft_deletable
   subscriptable
+
+  def stripe_customer_name
+    email
+  end
 end

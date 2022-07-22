@@ -7,6 +7,7 @@ require 'stripe'
 require 'devise/orm/active_record'
 require 'flatirons/saas/rails/routes'
 require 'flatirons/saas/services/stripe_service'
+require 'jbuilder'
 
 module Flatirons
   module Saas
