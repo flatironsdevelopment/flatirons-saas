@@ -71,9 +71,9 @@ describe Flatirons::Saas::Concerns::Subscriptable do
         let!(:stripe_customer_id) { nil }
 
         it 'should not create the organization' do
-          expect(@service).to receive(:create_customer).with(organization.name, {}).and_raise('Fail to create the customer')
+          expect(@service).to receive(:create_customer).with(organization.name, {}).and_raise('Failed to create the customer')
 
-          expect { organization.save }.to raise_error 'Fail to create the customer'
+          expect { organization.save }.to raise_error 'Failed to create the customer'
           expect(Organization.count).to eq 0
         end
       end

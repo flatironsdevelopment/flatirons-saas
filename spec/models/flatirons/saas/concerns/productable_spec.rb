@@ -67,9 +67,9 @@ describe Flatirons::Saas::Concerns::Productable do
         let!(:stripe_product_id) { nil }
 
         it 'should not create the product' do
-          expect(@service).to receive(:create_product).with(plan.name, {}).and_raise('Fail to create the product')
+          expect(@service).to receive(:create_product).with(plan.name, {}).and_raise('Failed to create the product')
 
-          expect { plan.save }.to raise_error 'Fail to create the product'
+          expect { plan.save }.to raise_error 'Failed to create the product'
           expect(Plan.count).to eq 0
         end
       end

@@ -52,12 +52,12 @@ RSpec.describe Flatirons::Saas::Subscription, type: :model do
 
     context 'when stripe raise an error' do
       it 'should not create the subscripiton' do
-        expect(@service).to receive(:create_subscription).with(stripe_customer.id, stripe_price.id).and_raise('Fail to create the subscription')
+        expect(@service).to receive(:create_subscription).with(stripe_customer.id, stripe_price.id).and_raise('Failed to create the subscription')
 
         expect do
           Flatirons::Saas::Subscription.create(subscriptable: subscriptable, product: product, stripe_price_id: stripe_price.id,
                                                status: :active)
-        end.to raise_error 'Fail to create the subscription'
+        end.to raise_error 'Failed to create the subscription'
 
         expect(Flatirons::Saas::Subscription.count).to eq 0
       end
