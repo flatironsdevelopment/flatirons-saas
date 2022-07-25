@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '~> 2.7'
   spec.add_dependency 'money-rails', '~> 1.12'
   spec.add_dependency 'pg', '~> 1.1'
-  spec.add_dependency 'rails', '~>7.0', '<= 7.0.0'
+  spec.add_dependency 'rails', '~>7.0.3.1'
   spec.add_development_dependency 'factory_bot_rails', '~> 6.2'
   spec.add_dependency 'rspec', '~> 3.11'
   spec.add_development_dependency 'rspec-rails', '~> 5.1'
