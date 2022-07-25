@@ -16,7 +16,7 @@ PATH
       jbuilder (~> 2.11)
       money-rails (~> 1.12)
       pg (~> 1.1)
-      rails (~> 7.0.3.1)
+      rails
       rspec (~> 3.11)
       rswag (~> 2.5)
       stripe (~> 5.55)
